@@ -4,9 +4,12 @@ export type Env = EnvType<typeof schema>;
 
 export const schema = {
     NODE_ENV: ['production' as const, 'development' as const],
+    SERVER_PORT: Number,
+    SERVER_HOST: String,
     POSTGRES_PASSWORD: String,
     POSTGRES_USER: String,
     POSTGRES_DB: String,
+    DB_HOST: { type: String, optional: true },
 };
 
 export let env: Env;
