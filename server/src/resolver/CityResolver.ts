@@ -1,9 +1,7 @@
 import { Arg, Int, Mutation,Query, Resolver } from "type-graphql";
-import {City} from "../entity/City";
+import {City, CityInput} from "../entity/City";
 import datasource from "../db";
 import { ApolloError } from "apollo-server-errors";
-import { CityInput } from "../entity/City";
-
 
 
 @Resolver(City)
