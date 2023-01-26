@@ -1,16 +1,19 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
+import {Field, InputType, ObjectType} from "type-graphql";
+
+@InputType()
+export class CityInput {
+    @Field()
+    name: string;
+}
 
 @Entity()
-
-class City {
+@ObjectType()
+export class City {
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column()
+    @Field()
     name: string;
-
-    @Column({ nullable: true, length: 100 })
-    Photo: string;
 }
-
-export default City;

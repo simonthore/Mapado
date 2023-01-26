@@ -1,6 +1,6 @@
 import { DataSource } from "typeorm";
 import { loadEnv } from "./env";
-//import { City } from "./entity/City";
+import { City } from "./entity/City";
 
 loadEnv();
 
@@ -12,6 +12,6 @@ export default new DataSource({
   password: "postgres",
   database: "postgres",
   synchronize: true,
-  //entities: [City],
+  entities: [City],
   logging: ["error"],
 });

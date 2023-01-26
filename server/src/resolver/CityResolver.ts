@@ -1,27 +1,39 @@
-import {Resolver, Query, Mutation, Arg} from "type-graphql"
+import { Arg, Int, Mutation,Query, Resolver } from "type-graphql";
+import {City} from "../entity/City";
 import datasource from "../db";
-import {ApolloError} from "apollo-server-errors";
-import City from "../entity/City";
-import {promises} from "dns";
+import { ApolloError } from "apollo-server-errors";
+import { CityInput } from "../entity/City";
 
-@Resolver()
+
+
+@Resolver(City)
 export class CityResolver {
     @Query(() => [City])
     async cities(): Promise<City[]> {
-        const cities = await datasource
-            .getRepository(City)
-            .find();
-
-        return cities.map((c) => ({
-            ...c,
-            name: c.name
-        }))
+        return await datasource.getRepository(City).find();
+    }
+    @Mutation(() => City)
+    async createCity(@Arg("data") data: CityInput): Promise<City> {
+        return await datasource.getRepository(City).save(data);
+    }
+    @Mutation(() => Boolean)
+    async deleteCity(@Arg("id", () => Int) id: number): Promise<boolean> {
+        const { affected } = await datasource.getRepository(City).delete(id);
+        if (affected === 0) throw new ApolloError("City not found", "NOT_FOUND");
+        return true;
     }
 
-    @Mutation(() => String)
-    async register(
-        @Arg("name") name: string
-    ) {
-        return name;
+    @Mutation(() => City)
+    async updateCity(
+        @Arg("id", () => Int) id: number,
+        @Arg("data") { name }: CityInput
+    ): Promise<City> {
+        const { affected } = await datasource
+            .getRepository(City)
+            .update(id, { name });
+
+        if (affected === 0) throw new ApolloError("City not found", "NOT_FOUND");
+
+        return { id, name };
     }
 }
