@@ -1,15 +1,17 @@
 import { DataSource } from "typeorm";
-import { env } from "./env";
-import { entities } from "./entity";
+import { loadEnv } from "./env";
+//import { City } from "./entity/City";
+
+loadEnv();
 
 export default new DataSource({
   type: "postgres",
-  host: typeof env.DB_HOST !== "undefined" ? env.DB_HOST : "db",
+  host: "db",
   port: 5432,
   username: "postgres",
   password: "postgres",
   database: "postgres",
   synchronize: true,
-  entities,
+  //entities: [City],
   logging: ["error"],
 });

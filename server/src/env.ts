@@ -1,10 +1,16 @@
-import { load } from "ts-dotenv";
+import { EnvType, load } from "ts-dotenv";
 
-// https://github.com/LeoBakerHytch/ts-dotenv
-export const env = load({
-    CORS_ALLOWED_ORIGINS: String,
-    NODE_ENV: ["production" as const, "development" as const, "test" as const],
-    SERVER_HOST: String,
-    SERVER_PORT: Number,
-    DB_HOST: { type: String, optional: true },
-});
+export type Env = EnvType<typeof schema>;
+
+export const schema = {
+    NODE_ENV: ["production" as const, "development" as const],
+    POSTGRES_PASSWORD: String,
+    POSTGRES_USER: String,
+    POSTGRES_DB: String,
+};
+
+export let env: Env;
+
+export function loadEnv(): void {
+    env = load(schema);
+}
