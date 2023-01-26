@@ -5,6 +5,7 @@ import cors from "cors";
 import datasource from "./db";
 import {buildSchema, Resolver, Query} from "type-graphql";
 import {CityResolver} from "./resolver/CityResolver";
+import { env } from "./env";
 
 // @Resolver()
 // class CityResolver {
@@ -27,10 +28,19 @@ const start = async () => {
 
     console.log("Hello World");
     const app: Express = express();
+    const allowedOrigins = env.CORS_ALLOWED_ORIGINS.split(",");
 
     app.use(express.json());
-    app.use(cors());
-
+    app.use(
+        cors({
+            credentials: true,
+            origin: (origin, callback) => {
+                if (typeof origin === "undefined" || allowedOrigins.includes(origin))
+                    return callback(null, true);
+                callback(new Error("Not allowed by CORS"));
+            },
+        })
+    );
     app.get("/", (req: Request, res: Response) => {
         res.send("<h1>Bienvenue sur City Simononio</h1>");
     });

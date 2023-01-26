@@ -64,7 +64,7 @@ function App() {
 
             <div className={"cities"}>
                 {fakeCities.map((c) =>
-                    <h1 className={"city"}>{c.name}</h1>
+                    <h1 key={c.id} className={"city"}>{c.name}</h1>
                 )}
             </div>
         </div>
