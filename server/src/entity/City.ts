@@ -11,6 +11,7 @@ export class CityInput {
 @ObjectType()
 export class City {
     @PrimaryGeneratedColumn()
+    @Field()
     id: number;
 
     @Column()
