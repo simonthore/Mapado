@@ -40,13 +40,14 @@ const start = async () => {
                 callback(new Error("Not allowed by CORS"));
             },
         })
-    );
+    )
+
     app.get("/", (req: Request, res: Response) => {
         res.send("<h1>Bienvenue sur City Simononio</h1>");
     });
 
     await apolloServer.start();
-    apolloServer.applyMiddleware({app});
+    apolloServer.applyMiddleware({ app, cors: false, path: "/" });
     const port = process.env.PORT || 4000;
 
     app.listen(port, () => {
