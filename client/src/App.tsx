@@ -23,36 +23,6 @@ function App() {
 
     const cities = data?.cities || []
 
-    const fakeCities = [
-        {
-            "id": 3,
-            "name": "Bordeaux"
-        },
-        {
-            "id": 4,
-            "name": "Nice"
-        },
-        {
-            "id": 5,
-            "name": "Lyon"
-        },
-        {
-            "id": 6,
-            "name": "Paris"
-        },
-        {
-            "id": 8,
-            "name": "Marseille"
-        },
-        {
-            "id": 9,
-            "name": "Nantes"
-        },
-        {
-            "id": 10,
-            "name": "Rennes"
-        }
-    ]
     return (
         <div className="App">
             <div className={"title"}>
@@ -63,7 +33,7 @@ function App() {
             </div>
 
             <div className={"cities"}>
-                {fakeCities.map((c) =>
+                {cities.map((c) =>
                     <h1 key={c.id} className={"city"}>{c.name}</h1>
                 )}
             </div>
