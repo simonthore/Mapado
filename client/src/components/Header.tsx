@@ -30,7 +30,7 @@ export default function Header() {
 
     return (
         <div style={HeaderStyles}>
-            <div>MAPADO</div>
+            <div><a href="/">MAPADO</a></div>
             <input style={searchBarStyles} type="text" placeholder="Rechercher une ville"></input>
         </div>
     )
