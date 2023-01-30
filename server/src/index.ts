@@ -5,7 +5,8 @@ import cors from "cors";
 import datasource from "./db";
 import {buildSchema, Resolver, Query} from "type-graphql";
 import {CityResolver} from "./resolver/CityResolver";
-import { UserResolver } from "./resolver/UserResolver";
+import {UserResolver} from "./resolver/UserResolver";
+import {PoiResolver} from "./resolver/PoiResolver";
 import {env} from "./env";
 import {
     ApolloServerPluginDrainHttpServer,
@@ -13,23 +14,13 @@ import {
 } from "apollo-server-core";
 import * as http from "http";
 
-// @Resolver()
-// class CityResolver {
-//     // private citiesCollection: City[] = [];
-//
-//     @Query(() => String, {name: "helloworld"})
-//     async hello() {
-//         return "hello world";
-//     }
-// }
-
 const start = async () => {
     await datasource.initialize();
     const app: Express = express();
     const httpServer = http.createServer(app);
 
     const schema = await buildSchema({
-        resolvers: [CityResolver, UserResolver],
+        resolvers: [CityResolver, UserResolver, PoiResolver],
     });
 
     const apolloServer = new ApolloServer({
@@ -70,7 +61,7 @@ const start = async () => {
     const port = process.env.PORT || 4000;
 
     app.listen(port, () => {
-        console.log(`App listening on port ${port}/graphql`);
+        console.log(`🚀 App listening on port ${port}/graphql 🥳`);
     });
 };
 void start();
