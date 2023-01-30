@@ -5,6 +5,7 @@ import Home from "./screens/Home";
 import Header from './components/Header';
 import AddManageCities from './components/AddManageCities';
 import "./App.css";
+import { useCitiesQuery } from "./gql/generated/schema";
 // import bordeaux from "./assets/bordeaux.jpeg";
 // import lille from "./assets/lille.jpeg";
 // import paris from "./assets/paris.jpeg";
@@ -54,40 +55,36 @@ const styles: CSS.Properties = {
 //   },
 // ];
 
-interface City {
-  id: number;
-  name: string;
-  city_area: string;
-  photo?: string;
-  user: {}[];
-}
+// interface City {
+//   id: number;
+//   name: string;
+//   city_area: string;
+//   photo?: string;
+//   user: {}[];
+// }
 
 
 function App() {
 
-  const GET_CITIES = gql`
-  query Cities {
-    cities {
-      id
-      name
-      city_area
-      photo
-      user
-    }
-  }
-  `
+  // const GET_CITIES = gql`
+  // query Cities {
+  //   cities {
+  //     id
+  //     name
+  //     city_area
+  //     photo
+  //     user
+  //   }
+  // }
+  // `
 
-const {data} = useQuery<{ cities: City[] }>(GET_CITIES);
-console.log(data)
-
-const cities = data?.cities || []
 
   return (
     <div style={styles}>
       <Header />
       <Routes>
-      <Route path="/" element={<Home cities={cities} />} />
-      <Route path="/manage-cities" element={<AddManageCities cities={cities}/>} />
+      <Route path="/" element={<Home />} />
+      {/* <Route path="/manage-cities" element={<AddManageCities cities={cities}/>} /> */}
       </Routes>
     </div>
   );
