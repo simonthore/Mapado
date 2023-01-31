@@ -5,6 +5,7 @@ import cors from "cors";
 import datasource from "./db";
 import {buildSchema, Resolver, Query} from "type-graphql";
 import {CityResolver} from "./resolver/CityResolver";
+import { UserResolver } from "./resolver/UserResolver";
 import {env} from "./env";
 import {
     ApolloServerPluginDrainHttpServer,
@@ -28,7 +29,7 @@ const start = async () => {
     const httpServer = http.createServer(app);
 
     const schema = await buildSchema({
-        resolvers: [CityResolver],
+        resolvers: [CityResolver, UserResolver],
     });
 
     const apolloServer = new ApolloServer({

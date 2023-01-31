@@ -1,11 +1,13 @@
 import { Route, Routes } from "react-router-dom";
-import {gql, useQuery} from '@apollo/client';
-import CSS from 'csstype';
+import { gql, useQuery } from "@apollo/client";
+import CSS from "csstype";
+import Login from "./screens/Login";
 import Home from "./screens/Home";
-import Header from './components/Header';
-import AddManageCities from './components/AddManageCities';
+import Header from "./components/Header";
+import AddManageCities from "./components/AddManageCities";
 import "./App.css";
 import { useCitiesQuery } from "./gql/generated/schema";
+import Register from "./screens/Register";
 // import bordeaux from "./assets/bordeaux.jpeg";
 // import lille from "./assets/lille.jpeg";
 // import paris from "./assets/paris.jpeg";
@@ -13,8 +15,8 @@ import { useCitiesQuery } from "./gql/generated/schema";
 
 const styles: CSS.Properties = {
   margin: 0,
-  backgroundSize: 'cover',
-  backgroundColor: '#3270F4',
+  backgroundSize: "cover",
+  backgroundColor: "#3270F4",
 };
 
 //MOCK DATA CITIES
@@ -63,26 +65,15 @@ const styles: CSS.Properties = {
 //   user: {}[];
 // }
 
-
 function App() {
-
-  // const GET_CITIES = gql`
-  // query Cities {
-  //   cities {
-  //     id
-  //     name
-  //     city_area
-  //     photo
-  //     user
-  //   }
-  // }
-  // `
 
 
   return (
     <div style={styles}>
-      <Header />
+      {window.location.pathname !== "/login" ? <Header /> : null}
       <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
       <Route path="/" element={<Home />} />
       {/* <Route path="/manage-cities" element={<AddManageCities cities={cities}/>} /> */}
       </Routes>
