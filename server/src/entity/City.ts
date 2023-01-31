@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
-=======
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
->>>>>>> origin
 import {Field, InputType, ObjectType} from "type-graphql";
 
 
@@ -22,7 +18,6 @@ export default class City {
     id: number;
 
     @Field()
-<<<<<<< HEAD
     User_id?: number;
 
     @Column()
@@ -41,15 +36,4 @@ export default class City {
     @Field()
     userId?: number;
 
-}
-
-export default City;
-=======
-    @Column()
-    name: string;
-
-    @Field({nullable: true})
-    @Column({nullable: true, type: "text"})
-    image?: string;
-}
->>>>>>> origin
+};
