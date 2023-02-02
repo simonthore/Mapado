@@ -19,6 +19,7 @@ import User, {
   UserInput,
   UserSendPassword,
   verifyPassword,
+  UpgradeUserInput
 } from "../entity/User";
 import { env } from "../environment";
 import { ContextType } from "../index";
@@ -53,10 +54,11 @@ export class UserResolver {
     @Mutation(() => String)
     async updateUser(
         @Arg("id", () => Int) id: number,
-        @Arg("data") {email, hashedPassword}: UserInput): Promise<string> {
+        @Arg("data") {email, hashedPassword, cities}: UpgradeUserInput): Promise<string>
+    {
         const {affected} = await datasource
             .getRepository(User)
-            .update(id, {email, hashedPassword});
+            .update(id, {email, hashedPassword, cities});
 
         if (affected === 0) throw new ApolloError("User not found", "NOT_FOUND");
 

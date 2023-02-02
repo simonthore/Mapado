@@ -23,6 +23,25 @@ export class UserInput {
     hashedPassword: string;
 }
 
+@ObjectType()
+@InputType()
+export class UpgradeUserInput {
+    @Field()
+    @IsEmail()
+    email: string;
+
+    @Field()
+    @MinLength(8)
+    @Matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)
+    hashedPassword: string;
+
+    // @Field(() => City, {nullable: true})
+    // cities?: City[];
+
+    // @Field(() => [Role], {nullable: true})
+    // role?: Role[];
+}
+
 @Entity()
 @ObjectType()
 class User {
@@ -46,9 +65,9 @@ class User {
   @Column({ nullable: true, type: "text" })
   hashedPassword?: string;
 
-  @Field({ nullable: true })
-  @Column({ enum: ["visitor", "cityAdmin"], default: "visitor" })
-  role?: Role;
+    @Field({nullable: true})
+    @Column({nullable: true, type: "text"})
+    role?: Role;
 
   @ManyToMany(() => City, (c) => c.id)
   cities?: City[];
