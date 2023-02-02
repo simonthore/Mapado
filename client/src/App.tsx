@@ -1,4 +1,4 @@
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { gql, useQuery } from "@apollo/client";
 import CSS from "csstype";
 import Login from "./screens/Login";
@@ -11,7 +11,6 @@ import Register from "./screens/Register";
 // import bordeaux from "./assets/bordeaux.jpeg";
 // import lille from "./assets/lille.jpeg";
 // import paris from "./assets/paris.jpeg";
-
 
 const styles: CSS.Properties = {
   margin: 0,
@@ -66,27 +65,14 @@ const styles: CSS.Properties = {
 // }
 
 function App() {
-  // const GET_CITIES = gql`
-  // query Cities {
-  //   cities {
-  //     id
-  //     name
-  //     city_area
-  //     photo
-  //     user
-  //   }
-  // }
-  // `
-
-
   return (
     <div style={styles}>
       {window.location.pathname !== "/login" ? <Header /> : null}
       <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/" element={<Home />} />
-      {/* <Route path="/manage-cities" element={<AddManageCities cities={cities}/>} /> */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="*" element={<Home />} />
+        {/* <Route path="/manage-cities" element={<AddManageCities cities={cities}/>} /> */}
       </Routes>
     </div>
   );

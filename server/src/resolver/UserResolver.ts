@@ -37,6 +37,7 @@ export class UserResolver {
     return true;
   }
 
+
   @Mutation(() => String)
   async login(
     @Arg("data") { email, password }: UserInput,
@@ -64,6 +65,12 @@ export class UserResolver {
     });
 
     return token;
+  }
+
+  @Mutation(() => String)
+  async logout(@Ctx() ctx: ContextType) {
+    ctx.res.clearCookie("token");
+    return 'logged out';
   }
 
   @Authorized()

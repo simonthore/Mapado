@@ -1,6 +1,17 @@
 import CSS from "csstype";
+import { truncate } from "fs";
+import { useEffect, useState } from "react";
+import { Routes } from "react-router";
+import { Route } from "react-router-dom";
 import CityCard from "../components/CityCard";
-import { useCitiesQuery } from "../gql/generated/schema";
+import {
+  useCitiesQuery,
+  useGetProfileQuery,
+  useLogoutMutation,
+} from "../gql/generated/schema";
+import { Location } from "history";
+import Login from "./Login";
+import Logout from "../components/Logout";
 
 const styles: CSS.Properties = {
   display: "flex",
@@ -33,13 +44,21 @@ const addCityButtonStyles: CSS.Properties = {
 //   cities: City[];
 // }
 
-export default function Home() {
+// interface currentUser {
+//   email: string;
+//   password: string
+// }
 
-  const {loading: loadingCities, data} = useCitiesQuery()
-  const cities=data?.cities || [];
+export default function Home() {
+  const [toLoginPage, setToLoginPage] = useState(false);
+  const { loading: loadingCities, data } = useCitiesQuery();
+  const cities = data?.cities || [];
+
+
 
   return (
     <div style={styles}>
+      <Logout />
       <a href="/manage-cities">
         <button style={addCityButtonStyles}>
           <p>AJOUTER UNE VILLE</p>
@@ -47,9 +66,7 @@ export default function Home() {
       </a>
 
       {cities.map((city) => {
-        return (
-          <CityCard key={city.id} cityName={city.name} />
-        );
+        return <CityCard key={city.id} cityName={city.name} />;
       })}
     </div>
   );

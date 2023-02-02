@@ -66,12 +66,12 @@ export default function Login() {
 
   const [login] = useLoginMutation();
 
-  const { data: currentUser, refetch } = useGetProfileQuery();
+  const { data: currentUser, refetch, client } = useGetProfileQuery();
 
   return (
     <div style={loginPageStyles}>
-      {currentUser && (<Navigate to="/" />)}
-      
+      {currentUser && <Navigate to="/" replace={true}/>}
+
       <form
         style={loginContainerStyles}
         onSubmit={(e) => {
