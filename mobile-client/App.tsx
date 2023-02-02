@@ -6,6 +6,7 @@ import {createNativeStackNavigator} from "react-native-screens/native-stack";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import CitiesScreen from "./screens/CitiesScreen";
 import CityInfoScreen from "./screens/CityInfoScreen";
+import LoginScreen from "./screens/LoginScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -53,7 +54,7 @@ export default function App() {
                     })}
                 >
                     <Tab.Screen name="Cities" component={Cities}/>
-                    <Tab.Screen name="Login" component={CitiesScreen}/>
+                    <Tab.Screen name="Login" component={LoginScreen}/>
                 </Tab.Navigator>
             </NavigationContainer>
         </ApolloProvider>

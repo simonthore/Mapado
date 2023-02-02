@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 import {Field, InputType, ObjectType} from "type-graphql";
+
 
 @InputType()
 export class CityInput {
@@ -17,10 +18,22 @@ export default class City {
     id: number;
 
     @Field()
+    User_id?: number;
+
     @Column()
+    @Field()
     name: string;
 
-    @Field({nullable: true})
-    @Column({nullable: true, type: "text"})
-    image?: string;
-}
+    @Column({ nullable: true, length: 100 })
+    @Field()
+    Photo?: string;
+
+    @Column()
+    @Field()
+    City_area?: string;
+
+    @Column()
+    @Field()
+    userId?: number;
+
+};

@@ -4,6 +4,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 
 interface WilderListItemProps {
     city: City;
+    navigation : any;
 }
 
 export default function CityListItem({city, navigation}: WilderListItemProps) {
