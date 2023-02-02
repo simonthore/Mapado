@@ -1,7 +1,7 @@
 import CSS from "csstype";
 import { useState } from "react";
 import login from "../assets/login.svg";
-import { useLoginMutation } from "../gql/generated/schema";
+import { useCreateUserMutation } from "../gql/generated/schema";
 
 const loginPageStyles: CSS.Properties = {
   height: "100vh",
@@ -60,10 +60,10 @@ const titleStyles: CSS.Properties = {
   color: "#000000",
 };
 
-export default function Login() {
-  const [credentials, setCredentials] = useState({ email: "", password: "" });
+export default function Register() {
+  const [userInfo, setUserInfo] = useState({ email: "", password: "" });
 
-  const [login] = useLoginMutation();
+  const [createUser] = useCreateUserMutation();
 
   return (
     <div style={loginPageStyles}>
@@ -71,16 +71,13 @@ export default function Login() {
         style={loginContainerStyles}
         onSubmit={(e) => {
           e.preventDefault();
-          login({variables: {data: credentials}}).then(() => {
-            console.log('ok')
-          })
-          .catch(console.error)
+          createUser({ variables: { data: userInfo } })
+            .then(() => {
+              console.log("ok");
+            })
+            .catch(console.error);
         }}
       >
-        <a href="/">
-          <h1 style={titleStyles}>MAPADO</h1>
-        </a>
-        {/* <img src={login} alt="" style={iconStyles} /> */}
         <label htmlFor="email">
           <input
             style={inputStyles}
@@ -88,9 +85,9 @@ export default function Login() {
             id="email"
             name="email"
             placeholder="Adresse mail"
-            value={credentials.email}
+            value={userInfo.email}
             onChange={(e) =>
-              setCredentials({...credentials, email: e.target.value})
+              setUserInfo({ ...userInfo, email: e.target.value })
             }
           ></input>
         </label>
@@ -99,17 +96,13 @@ export default function Login() {
             style={inputStyles}
             type="password"
             placeholder="Mot de passe"
-            value={credentials.password}
+            value={userInfo.password}
             onChange={(e) =>
-              setCredentials({...credentials, password: e.target.value})
+              setUserInfo({ ...userInfo, password: e.target.value })
             }
           ></input>
         </label>
-        <button style={tertiaryButtonStyles}>Mot de passe oublié ?</button>
-        <button type="submit" style={primaryButtonStyles}>
-          Se connecter
-        </button>
-        <button style={secondaryButtonStyles}>Créer un compte</button>
+        <button type="submit" style={primaryButtonStyles}>Créer un compte</button>
       </form>
     </div>
   );

@@ -1,49 +1,27 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
-import { Field, InputType, ObjectType } from "type-graphql";
-import City from "./City";
-import { IsEmail, Matches, MinLength } from "class-validator";
 import { argon2id, hash, verify } from "argon2";
-import { userInfo } from "os";
+import { Field, InputType, ObjectType } from "type-graphql";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 @ObjectType()
 class User {
-  @Field()
-  @PrimaryGeneratedColumn()
-  id: number;
+    @Field()
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Field()
-  @Column()
-  role_id: number;
+    @Column({ nullable: true })
+    email?: string;
 
-  @Field()
-  @Column()
-  city_id: number;
-
-  @Column({ nullable: true })
-  email: string;
-
-  @Column({ nullable: true })
-  hasedPassword?: string;
-
-  @Field()
-  @Column({ enum: ["visitor", "cityAdmin", "SuperAdmin"], default: "visitor" })
-  role: Role;
-
-  @Column()
-  @OneToMany(() => City, (c) => c.user)
-  city: City;
+    @Column({ nullable: true })
+    hashedPassword: string;
 }
 
 @InputType()
 export class UserInput {
     @Field()
-    @IsEmail()
     email: string;
 
     @Field()
-    @MinLength(8)
-    @Matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)
     password: string;
 }
 
@@ -53,7 +31,7 @@ const hashingOptions = {
     type: argon2id,
 }
 
-export const hashedPassword = async (plainPassword: string): Promise<string> => 
+export const hashPassword = async (plainPassword: string): Promise<string> => 
 await hash(plainPassword, hashingOptions);
 
 export const verifyPassword = async (
@@ -62,9 +40,9 @@ export const verifyPassword = async (
 ): Promise<boolean> => 
     await verify(hashedPassword, plainPassword, hashingOptions);
 
-export const getSafeAttributes = (use: User) => ({
-    ...userInfo,
-    hashedPassword: undefined
-});
+// export const getSafeAttributes = (use: User) => ({
+//     ...userInfo,
+//     hashedPassword: undefined
+// });
 
 export default User;
