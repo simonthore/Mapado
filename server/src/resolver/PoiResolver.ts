@@ -10,10 +10,12 @@ export class PoiResolver {
     async Pois(): Promise<Poi[]> {
         return await datasource.getRepository(Poi).find();
     }
-    // @Mutation(() => Poi)
-    // async createPoi(@Arg("data") data: PoiInput): Promise<Poi> {
-    //     return await datasource.getRepository(Poi).save(data);
-    // }
+
+    @Mutation(() => Poi)
+    async createPoi(@Arg("data") data: PoiInput): Promise<Poi> {
+        return await datasource.getRepository(Poi).save(data);
+    }
+
     @Mutation(() => Boolean)
     async deletePoi(@Arg("id", () => Int) id: number): Promise<boolean> {
         const { affected } = await datasource.getRepository(Poi).delete(id);

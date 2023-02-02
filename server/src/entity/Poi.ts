@@ -3,15 +3,18 @@ import {Field, InputType, ObjectType} from "type-graphql";
 import City from "./City";
 
 @InputType()
-export class PoiInput{
+export class PoiInput {
     @Field()
     name: string;
 
-    @Field({ nullable: true })
-    description?: string;
+    @Field()
+    description: string;
 
-    @Field({ nullable: true })
-    rating?: string;
+    @Field()
+    address: string;
+
+    @Field({nullable: true})
+    rating?: number;
 }
 
 @Entity()
@@ -22,7 +25,7 @@ class Poi {
     id: number;
 
     @Field()
-    @Column({ length: 25 })
+    @Column({length: 25})
     name: string;
 
     @Field({nullable: true})
@@ -34,12 +37,12 @@ class Poi {
     customize_gps_marker?: string;
 
     @Field()
-    @Column({ length: 100 })
+    @Column({length: 100})
     address: string;
 
-    @Field({nullable: true})
-    @Column({ length: 500 })
-    description?: string;
+    @Field()
+    @Column({length: 500})
+    description: string;
 
     @Field({nullable: true})
     @Column({nullable: true, type: "text"})
