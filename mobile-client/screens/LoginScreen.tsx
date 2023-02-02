@@ -24,7 +24,7 @@ export default function LoginScreen() {
 
   const [login] = useLoginMutation()
   const [error, setError] = useState('')
-
+  const [valid, setValid] = useState('')
 
   const [loader] = useFonts({
     "Amatic SC-Bold": require("../assets/fonts/AmaticSC-Bold.ttf"),
@@ -77,9 +77,15 @@ export default function LoginScreen() {
       </TouchableOpacity> 
       */}
       {error && <Text style={{color:'red'}}>{error}</Text>}
+      {valid && <Text style={{color:'green'}}>{valid}</Text>}
         <Button
           onPress={()=>{
-            login({variables: {data: credentials}}).catch(() => 
+            login({variables: {data: credentials}})
+            .then((res) => {
+            setValid('Vous êtes connecté')
+
+            })
+            .catch(() => 
               setError('Mot de passe ou email incorrect')
             )
        
