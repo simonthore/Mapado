@@ -26,6 +26,17 @@ export class UserResolver {
             .findOne({where: {email: data.email}});
         const hashedPassword = await hashPassword(data.password);
 
+
+    //     if (user === null) {
+    //         throw new ApolloError("no user");
+    //     } else if (!(await verifyPassword(data.password, user.hashedPassword))) {
+    //         throw new ApolloError("no password");
+    //     } else {
+    //         return "ok";
+    //     }
+    // }
+    // I used code below as code above not working like this
+
         if (
             user === null ||
             typeof user.hashedPassword !== "string" ||
