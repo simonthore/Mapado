@@ -6,7 +6,15 @@ import { Route } from 'react-router-dom';
 
 interface WilderListItemProps {
     city: City;
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
     
+=======
+    route: Route;
+>>>>>>> Stashed changes
+=======
+    route: Route;
+>>>>>>> Stashed changes
 }
 
 export default function CityInfoScreen({route}: WilderListItemProps) {
