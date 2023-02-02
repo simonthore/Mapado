@@ -1,9 +1,7 @@
 import { Arg, Int, Mutation,Query, Resolver } from "type-graphql";
-import {City} from "../entity/City";
+import City, {CityInput} from "../entity/City";
 import datasource from "../db";
 import { ApolloError } from "apollo-server-errors";
-import { CityInput } from "../entity/City";
-
 
 
 @Resolver(City)
@@ -26,11 +24,11 @@ export class CityResolver {
     @Mutation(() => City)
     async updateCity(
         @Arg("id", () => Int) id: number,
-        @Arg("data") { name }: CityInput
+        @Arg("data") { name, image, longitude, latitude }: CityInput
     ): Promise<City> {
         const { affected } = await datasource
             .getRepository(City)
-            .update(id, { name });
+            .update(id, { name, image, longitude, latitude });
 
         if (affected === 0) throw new ApolloError("City not found", "NOT_FOUND");
 
