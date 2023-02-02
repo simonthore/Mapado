@@ -1,11 +1,12 @@
 import { ApolloError } from "apollo-server-errors";
 import { verify } from "crypto";
-import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Authorized, Ctx, Int, Mutation, Query, Resolver } from "type-graphql";
 import jwt from "jsonwebtoken";
 import datasource from "../db";
 import User, {
   getSafeAttributes,
   hashPassword,
+  Role,
   UserInput,
   verifyPassword,
 } from "../entity/User";
@@ -28,6 +29,14 @@ export class UserResolver {
     return user;
   }
 
+  @Authorized<Role>(['admin'])
+  @Mutation(() => Boolean)
+  async deleteUser(@Arg("id", () => Int) id: number): Promise<boolean> {
+    const { affected } = await datasource.getRepository(User).delete(id);
+    if (affected === 0) throw new ApolloError("user not found", "NOT_FOUND");
+    return true;
+  }
+
   @Mutation(() => String)
   async login(
     @Arg("data") { email, password }: UserInput,
@@ -48,11 +57,11 @@ export class UserResolver {
 
     const token = jwt.sign({ userId: user.id }, env.JWT_PRIVATE_KEY);
 
-    // ctx.res.cookie("token", token, {
-    //   secure: env.NODE_ENV === "production",
-    //   domain: env.SERVER_HOST,
-    //   httpOnly: true,
-    // });
+    ctx.res.cookie("token", token, {
+      secure: env.NODE_ENV === "production",
+      domain: env.SERVER_HOST,
+      httpOnly: true,
+    });
 
     return token;
   }

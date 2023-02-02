@@ -14,6 +14,7 @@ import {
 import * as http from "http";
 import jwt from "jsonwebtoken";
 import User from "./entity/User";
+import cookieParser from "cookie-parser";
 
 // @Resolver()
 // class CityResolver {
@@ -41,8 +42,8 @@ const start = async () => {
     resolvers: [CityResolver, UserResolver],
     authChecker: async ({ context }: { context: ContextType }, roles) => {
       const tokenInHeaders = context.req.headers.authorization?.split(" ")[1];
-      const token = tokenInHeaders;
-      console.log(tokenInHeaders);
+      const tokenInCookie = context.req.cookies?.["token"];
+      const token = tokenInHeaders || tokenInCookie;
 
       let decoded;
       try {
@@ -58,8 +59,6 @@ const start = async () => {
           .findOne({ where: { id: context.jwtPayload.userId } });
 
       if (user !== null) context.currentUser = user;
-
-      console.log({ user });
 
       if (!context.currentUser) return false;
       return roles.length === 0 || roles.includes(context.currentUser.role);
@@ -84,6 +83,7 @@ const start = async () => {
   const allowedOrigins = env.CORS_ALLOWED_ORIGINS.split(",");
 
   app.use(express.json());
+  app.use(cookieParser());
   app.use(
     cors({
       credentials: true,

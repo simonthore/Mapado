@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import { gql, useQuery } from "@apollo/client";
 import CSS from "csstype";
 import Login from "./screens/Login";
