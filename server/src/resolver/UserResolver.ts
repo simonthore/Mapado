@@ -23,6 +23,7 @@ import User, {
 import { env } from "../environment";
 import { ContextType } from "../index";
 import { stringify } from "querystring";
+import City from "../entity/City";
 
 @Resolver(User)
 export class UserResolver {
