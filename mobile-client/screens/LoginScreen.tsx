@@ -8,16 +8,24 @@ import {
   Dimensions,
   ScrollView,
   TouchableHighlight,
+  Button,
+
 } from "react-native";
 import { useFonts } from "expo-font";
-import { TouchableOpacity } from 'react-native';
+
+import { useLoginMutation } from '../gql/generated/schema';
 
 
 export default function LoginScreen() {
   const [credentials, setCredentials] = useState({
-    email : "",
-    password : "",
+    email : "toto@gmail.com",
+    password : "abc123",
   });
+
+  const [login] = useLoginMutation()
+  const [error, setError] = useState('')
+
+
   const [loader] = useFonts({
     "Amatic SC-Bold": require("../assets/fonts/AmaticSC-Bold.ttf"),
   });
@@ -68,10 +76,18 @@ export default function LoginScreen() {
         <Text style={styles.loginText}>ce connecter</Text> 
       </TouchableOpacity> 
       */}
-        <TouchableOpacity >
-          <Text style={styles.forgot_button}> mot de passe oublié ? </Text>
-          </TouchableOpacity>
+      {error && <Text style={{color:'red'}}>{error}</Text>}
+        <Button
+          onPress={()=>{
+            login({variables: {data: credentials}}).catch(() => 
+              setError('Mot de passe ou email incorrect')
+            )
+       
+        }}
+        title="se connecter"
+        />
 
+          <Text style={styles.forgot_button}> mot de passe oublié ? </Text>
         <Text style={styles.info}>Créer un compte</Text>
 
         <StatusBar style="auto" />

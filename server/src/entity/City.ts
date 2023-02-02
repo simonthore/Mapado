@@ -17,9 +17,6 @@ export default class City {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Field()
-    User_id?: number;
-
     @Column()
     @Field()
     name: string;
@@ -28,12 +25,12 @@ export default class City {
     @Field()
     Photo?: string;
 
-    @Column()
-    @Field()
+    @Column( { nullable: true })
+    @Field( { nullable: true })
     City_area?: string;
 
-    @Column()
-    @Field()
+    @Column({ nullable: true })
+    @Field({ nullable: true })
     userId?: number;
 
 };

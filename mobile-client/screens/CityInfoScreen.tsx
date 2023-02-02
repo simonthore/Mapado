@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet, Image} from "react-native";
 import {City} from "../gql/generated/schema";
 import MapView from 'react-native-maps';
-import { Route } from 'react-router-dom';
+
 
 interface WilderListItemProps {
     city: City;
