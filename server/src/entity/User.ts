@@ -11,6 +11,18 @@ import { argon2id, hash, verify } from "argon2";
 
 export type Role = "visitor" | "cityAdmin" | "superAdmin";
 
+@InputType()
+export class UserInput {
+    @Field()
+    @IsEmail()
+    email: string;
+
+    @Field()
+    @MinLength(8)
+    @Matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)
+    hashedPassword: string;
+}
+
 @Entity()
 @ObjectType()
 class User {
@@ -48,13 +60,14 @@ class User {
 
 @InputType()
 export class UserInput {
-  @Field()
-  email: string;
+    @Field()
+    @IsEmail()
+    email: string;
 
-  @Field()
-  @MinLength(8)
-  @Matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)
-  password: string;
+    @Field()
+    @MinLength(8)
+    @Matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)
+    password: string;
 }
 
 @InputType()

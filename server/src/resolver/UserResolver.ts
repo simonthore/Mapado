@@ -50,6 +50,19 @@ export class UserResolver {
     return true;
   }
 
+    @Mutation(() => String)
+    async updateUser(
+        @Arg("id", () => Int) id: number,
+        @Arg("data") {email, hashedPassword}: UserInput): Promise<string> {
+        const {affected} = await datasource
+            .getRepository(User)
+            .update(id, {email, hashedPassword});
+
+        if (affected === 0) throw new ApolloError("User not found", "NOT_FOUND");
+
+        return "Data updated";
+    }
+
   @Mutation(() => String)
   async login(
     @Arg("data") { email, password }: UserInput,
