@@ -66,6 +66,17 @@ const styles: CSS.Properties = {
 // }
 
 function App() {
+  // const GET_CITIES = gql`
+  // query Cities {
+  //   cities {
+  //     id
+  //     name
+  //     city_area
+  //     photo
+  //     user
+  //   }
+  // }
+  // `
 
 
   return (
