@@ -1,4 +1,6 @@
+import { findByLabelText } from "@testing-library/react";
 import CSS from "csstype";
+import Header from "./Header";
 
 interface City {
   id: number;
@@ -13,8 +15,8 @@ interface Cities {
 }
 
 const AddManageStyles: CSS.Properties = {
-  height: "100vh",
-  width: "100vw",
+  height: "auto",
+  width: "auto",
   backgroundColor: "#FFFFFF",
   border: "10px solid #EC5D5C",
   borderRadius: "20px",
@@ -82,14 +84,28 @@ const backButton: CSS.Properties = {
   alignSelf: "flex-start",
   justifySelf: "flex-start",
   fontFamily: "Rubik",
-  fontSize: '2.25rem',
-  fontWeight: 500
+  fontSize: "2.25rem",
+  fontWeight: 500,
+  border: "1px solid #EC5D5C",
+  margin: "4rem",
+  padding: "1rem",
+};
+
+const pageStyles: CSS.Properties = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: 'center',
 }
 
-export default function AddManageCities( {cities} : Cities) {
+export default function AddManageCities({ cities }: Cities) {
   return (
+<div style={pageStyles}>
+    <Header />
     <div style={AddManageStyles}>
-      <a style={backButton} href="/">Home</a>
+      <a style={backButton} href="/">
+        Go Back
+      </a>
       <h2 style={titleStyles}>Ajouter une ville</h2>
 
       <div style={manageCityStyle}>
@@ -105,13 +121,14 @@ export default function AddManageCities( {cities} : Cities) {
       <div>
         {cities.map((city: City) => {
           return (
-            <div style={manageCityStyle}>
+            <div key={city.id} style={manageCityStyle}>
               <p style={cityLabel}>{city.name}</p>
               <button style={deleteButtonStyles}>Supprimer</button>
             </div>
           );
         })}
       </div>
+    </div>
     </div>
   );
 }

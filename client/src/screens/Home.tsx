@@ -60,6 +60,7 @@ export default function Home({cities}: Cities) {
 
   return (
     <>
+    <Header />
     <div style={styles}>
       <a href="/manage-cities">
         <button style={addCityButtonStyles}>

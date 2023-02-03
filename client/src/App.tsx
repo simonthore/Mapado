@@ -70,7 +70,7 @@ function App() {
     <>
       <Toaster position="top-center" />
       <div style={styles}>
-        {window.location.pathname !== "/login" ? <Header /> : null}
+        {/* {window.location.pathname !== "/login" ? <Header /> : null} */}
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
