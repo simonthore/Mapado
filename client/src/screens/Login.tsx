@@ -1,6 +1,7 @@
 import CSS from "csstype";
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import login from "../assets/login.svg";
 import { useGetProfileQuery, useLoginMutation } from "../gql/generated/schema";
 
@@ -70,7 +71,7 @@ export default function Login() {
 
   return (
     <div style={loginPageStyles}>
-      {currentUser && <Navigate to="/" replace={false}/>}
+      {currentUser && <Navigate to="/" replace={false} />}
 
       <form
         style={loginContainerStyles}
@@ -78,9 +79,21 @@ export default function Login() {
           e.preventDefault();
           login({ variables: { data: credentials } })
             .then(() => {
-              refetch();
+              client.resetStore();
             })
-            .catch(console.error);
+            .catch((error) => {
+              toast.error("Invalid credentials", {
+                style: {
+                  border: "3px solid #EC5D5C",
+                  padding: "4rem",
+                  color: "#EC5D5C",
+                },
+                iconTheme: {
+                  primary: "#EC5D5C",
+                  secondary: "#FFFFFF",
+                },
+              });
+            });
         }}
       >
         <a href="/">

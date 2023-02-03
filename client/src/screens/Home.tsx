@@ -12,6 +12,7 @@ import {
 import { Location } from "history";
 import Login from "./Login";
 import Logout from "../components/Logout";
+import Header from "../components/Header";
 
 const styles: CSS.Properties = {
   display: "flex",
@@ -32,33 +33,34 @@ const addCityButtonStyles: CSS.Properties = {
   fontSize: "1.25rem",
 };
 
-// interface City {
-//   id: number;
-//   name: string;
-//   city_area: string;
-//   photo?: string;
-//   user: {}[];
-// }
+interface City {
+  id: number;
+  name: string;
+  city_area: string;
+  photo?: string;
+  user: {}[];
+}
 
-// interface Cities {
-//   cities: City[];
-// }
+interface Cities {
+  cities: City[];
+}
 
 // interface currentUser {
 //   email: string;
 //   password: string
 // }
 
-export default function Home() {
+export default function Home({cities}: Cities) {
   const [toLoginPage, setToLoginPage] = useState(false);
   const { loading: loadingCities, data } = useCitiesQuery();
-  const cities = data?.cities || [];
+
+  // const cities = data?.cities || [];
 
 
 
   return (
+    <>
     <div style={styles}>
-      <Logout />
       <a href="/manage-cities">
         <button style={addCityButtonStyles}>
           <p>AJOUTER UNE VILLE</p>
@@ -69,5 +71,6 @@ export default function Home() {
         return <CityCard key={city.id} cityName={city.name} />;
       })}
     </div>
+    </>
   );
 }

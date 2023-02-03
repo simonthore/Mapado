@@ -7,17 +7,25 @@ const buttonStyles: CSS.Properties = {
   borderRadius: "15px",
   border: "3px solid #EC5D5C",
   fontSize: "1rem",
-}
+};
 
 export default function Logout() {
-  const { data: currentUser } = useGetProfileQuery();
+  const { data: currentUser, client } = useGetProfileQuery();
 
-    const [logout] = useLogoutMutation();
+  const [logout] = useLogoutMutation();
   return (
     <>
-    <a href="/login">
-      <button style={buttonStyles} onClick={() => logout()}>{currentUser ? "Log out" : "Log in"}</button>
-    </a>
+      <a href="/login">
+        <button
+          style={buttonStyles}
+          onClick={async () => {
+            await logout();
+            await client.resetStore();
+          }}
+        >
+          {currentUser ? "Log out" : "Log in"}
+        </button>
+      </a>
     </>
   );
 }
