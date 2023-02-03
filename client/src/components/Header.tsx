@@ -27,11 +27,11 @@ const searchBarStyles: CSS.Properties = {
   paddingLeft: "20px",
 };
 
-export default function Header() {
-  const logoStyles: CSS.Properties = {
-    height: "2.5rem",
-  };
+const logoStyles: CSS.Properties = {
+  height: "2.5rem",
+};
 
+export default function Header() {
   return (
     <div style={HeaderStyles}>
       <div>

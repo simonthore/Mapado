@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Routes } from "react-router";
 import { Route } from "react-router-dom";
 import CityCard from "../components/CityCard";
+import { gql, useQuery } from "@apollo/client";
 import {
   useCitiesQuery,
   useGetProfileQuery,
@@ -13,6 +14,15 @@ import { Location } from "history";
 import Login from "./Login";
 import Logout from "../components/Logout";
 import Header from "../components/Header";
+
+const GET_CITIES = gql`
+  query Cities {
+    cities {
+      id
+      name
+    }
+  }
+`;
 
 const styles: CSS.Properties = {
   display: "flex",
@@ -50,27 +60,25 @@ interface Cities {
 //   password: string
 // }
 
-export default function Home({cities}: Cities) {
+export default function Home() {
   const [toLoginPage, setToLoginPage] = useState(false);
   const { loading: loadingCities, data } = useCitiesQuery();
 
-  // const cities = data?.cities || [];
-
-
+  const cities = data?.cities || [];
 
   return (
     <>
-    <div style={styles}>
-      <a href="/manage-cities">
-        <button style={addCityButtonStyles}>
-          <p>AJOUTER UNE VILLE</p>
-        </button>
-      </a>
+      <div style={styles}>
+        <a href="/manage-cities">
+          <button style={addCityButtonStyles}>
+            <p>AJOUTER UNE VILLE</p>
+          </button>
+        </a>
 
-      {cities.map((city) => {
-        return <CityCard key={city.id} cityName={city.name} />;
-      })}
-    </div>
+        {cities.map((city) => {
+          return <CityCard key={city.id} cityName={city.name} />;
+        })}
+      </div>
     </>
   );
 }

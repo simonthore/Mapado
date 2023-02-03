@@ -76,11 +76,12 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="*" element={<Home cities={cities} />} />
+          <Route path="*" element={<Home />} />
           <Route
             path="/manage-cities"
             element={<AddManageCities cities={cities} />}
           />
+          <Route path="/map" element={<Map />} />
         </Routes>
       </div>
     </>
