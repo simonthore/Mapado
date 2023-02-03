@@ -17,6 +17,21 @@ export class PoiInput {
     rating?: number;
 }
 
+@InputType()
+export class UpdatePoiInput {
+    @Field()
+    name?: string;
+
+    @Field()
+    description?: string;
+
+    @Field()
+    address?: string;
+
+    @Field({nullable: true})
+    rating?: number;
+}
+
 @Entity()
 @ObjectType()
 class Poi {
