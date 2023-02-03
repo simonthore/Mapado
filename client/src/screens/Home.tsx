@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { Routes } from "react-router";
 import { Route } from "react-router-dom";
 import CityCard from "../components/CityCard";
-import { gql, useQuery } from "@apollo/client";
 import {
   useCitiesQuery,
   useGetProfileQuery,
@@ -14,15 +13,6 @@ import { Location } from "history";
 import Login from "./Login";
 import Logout from "../components/Logout";
 import Header from "../components/Header";
-
-const GET_CITIES = gql`
-  query Cities {
-    cities {
-      id
-      name
-    }
-  }
-`;
 
 const styles: CSS.Properties = {
   display: "flex",
