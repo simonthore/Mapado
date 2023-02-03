@@ -28,7 +28,7 @@ export default function Header() {
   return (
     <div style={HeaderStyles}>
       <div>
-        <a href="/home">MAPADO</a>
+        <a href="/">MAPADO</a>
       </div>
       <input
         style={searchBarStyles}
