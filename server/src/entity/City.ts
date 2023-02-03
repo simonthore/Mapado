@@ -39,6 +39,21 @@ export class UpdateCityInput {
   latitude?: number;
 }
 
+@InputType()
+export class UpdateCityInput{
+    @Field()
+    name?: string;
+
+    @Field({ nullable: true })
+    photo?: string;
+
+    @Field(()=>Float, {nullable: true})
+    longitude?: number;
+
+    @Field(()=>Float, {nullable: true})
+    latitude?: number;
+}
+
 @Entity()
 @ObjectType()
 export default class City {
