@@ -17,6 +17,7 @@ const styles: CSS.Properties = {
   margin: 0,
   backgroundSize: "cover",
   backgroundColor: "#3270F4",
+  minHeight: "100vh",
 };
 
 //MOCK DATA CITIES
