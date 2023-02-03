@@ -4,6 +4,8 @@ interface City {
   id: number;
   name: string;
   city_area: string;
+  latitude: number;
+  longitude: number;
   photo?: string;
   user: {}[];
 }
@@ -35,15 +37,19 @@ export default function CityCard({ cityName, cityPhoto }: any) {
     backgroundColor: "#EC5D5C",
   };
 
+  const linktomapStyles: CSS.Properties = {
+    marginBottom: "36px",
+  };
+
   const buttonStyles: CSS.Properties = {
     height: "2.5rem",
     width: "8rem",
     border: "1px solid #EC5D5C",
     borderRadius: "40px",
-    marginBottom: "36px",
     fontWeight: "600",
     fontSize: "1rem",
   };
+
   return (
     <div style={cardStyles}>
       {cityPhoto ? (
@@ -52,9 +58,11 @@ export default function CityCard({ cityName, cityPhoto }: any) {
         <div style={photoStyles}></div>
       )}
       <p>{cityName}</p>
-      <button style={buttonStyles}>
-        <a href="/map">Voir la ville</a>
-      </button>
+      <a style={linktomapStyles} href="/map">
+        <button style={buttonStyles}>
+          <p>Voir la ville</p>
+        </button>
+      </a>
     </div>
   );
 }
