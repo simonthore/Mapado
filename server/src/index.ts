@@ -3,10 +3,11 @@ import express, { Express, Request, Response } from "express";
 import { ApolloServer } from "apollo-server-express";
 import cors from "cors";
 import datasource from "./db";
-import { buildSchema, Resolver, Query } from "type-graphql";
-import { CityResolver } from "./resolver/CityResolver";
-import { UserResolver } from "./resolver/UserResolver";
-import { env } from "./environment";
+import {buildSchema, Resolver, Query} from "type-graphql";
+import {CityResolver} from "./resolver/CityResolver";
+import {UserResolver} from "./resolver/UserResolver";
+import {PoiResolver} from "./resolver/PoiResolver";
+import {env} from "./environment";
 import {
   ApolloServerPluginDrainHttpServer,
   ApolloServerPluginLandingPageLocalDefault,

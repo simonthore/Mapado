@@ -1,8 +1,18 @@
-import { argon2id, hash, verify } from "argon2";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  ManyToOne,
+  ManyToMany,
+} from "typeorm";
 import { Field, InputType, ObjectType } from "type-graphql";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import City from "./City";
+import { IsEmail, Matches, MinLength } from "class-validator";
+import { argon2id, hash, verify } from "argon2";
+import { userInfo } from "os";
 
-export type Role = "visitor" | "admin";
+export type Role = "visitor" | "cityAdmin" | "superAdmin";
 
 @Entity()
 @ObjectType()
@@ -11,25 +21,35 @@ class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Field()
-  @Column({ nullable: true })
-  email: string;
+  @Field({ nullable: true })
+  @Column({ nullable: true, type: "int" })
+  role_id?: number;
 
-  @Field()
-  @Column({ nullable: true })
+  @Field({ nullable: true })
+  @Column({ nullable: true, type: "text" })
+  email?: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true, type: "text" })
   hashedPassword?: string;
 
-  @Field()
-  @Column({ enum: ["visitor", "admin"], default: "visitor" })
-  role: Role;
+  @Field({ nullable: true })
+  @Column({ enum: ["visitor", "cityAdmin"], default: "visitor" })
+  role?: Role;
+
+  @ManyToMany(() => City, (c) => c.id)
+  cities?: City[];
 }
 
 @InputType()
 export class UserInput {
   @Field()
+  @IsEmail()
   email: string;
 
   @Field()
+  @MinLength(8)
+  @Matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)
   password: string;
 }
 
@@ -49,8 +69,8 @@ export const verifyPassword = async (
   await verify(hashedPassword, plainPassword, hashingOptions);
 
 export const getSafeAttributes = (user: User) => ({
-    ...user,
-    hashedPassword: undefined
+  ...user,
+  hashedPassword: undefined,
 });
 
 export default User;
