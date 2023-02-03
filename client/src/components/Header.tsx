@@ -1,8 +1,9 @@
 import CSS from "csstype";
+import logo from "../assets/logo.png";
 
 export default function Header() {
   const HeaderStyles: CSS.Properties = {
-    height: "8.6rem",
+    height: "7.5rem",
     width: "100vw",
     display: "flex",
     flexDirection: "row",
@@ -25,10 +26,16 @@ export default function Header() {
     paddingLeft: "20px",
   };
 
+  const logoStyles: CSS.Properties = {
+    height: "2.5rem",
+  };
+
   return (
     <div style={HeaderStyles}>
       <div>
-        <a href="/">MAPADO</a>
+        <a href="/">
+          <img src={logo} style={logoStyles} />
+        </a>
       </div>
       <input
         style={searchBarStyles}
