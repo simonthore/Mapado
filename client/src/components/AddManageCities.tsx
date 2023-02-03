@@ -86,7 +86,7 @@ const backButton: CSS.Properties = {
   fontWeight: 500
 }
 
-export default function AddManageCities({ cities }: Cities) {
+export default function AddManageCities( {cities} : Cities) {
   return (
     <div style={AddManageStyles}>
       <a style={backButton} href="/">Home</a>

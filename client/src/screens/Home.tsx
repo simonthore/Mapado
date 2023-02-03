@@ -1,6 +1,18 @@
 import CSS from "csstype";
+import { truncate } from "fs";
+import { useEffect, useState } from "react";
+import { Routes } from "react-router";
+import { Route } from "react-router-dom";
 import CityCard from "../components/CityCard";
-import { useCitiesQuery } from "../gql/generated/schema";
+import {
+  useCitiesQuery,
+  useGetProfileQuery,
+  useLogoutMutation,
+} from "../gql/generated/schema";
+import { Location } from "history";
+import Login from "./Login";
+import Logout from "../components/Logout";
+import Header from "../components/Header";
 
 const styles: CSS.Properties = {
   display: "flex",
@@ -21,24 +33,33 @@ const addCityButtonStyles: CSS.Properties = {
   fontSize: "1.25rem",
 };
 
-// interface City {
-//   id: number;
-//   name: string;
-//   city_area: string;
-//   photo?: string;
-//   user: {}[];
+interface City {
+  id: number;
+  name: string;
+  city_area: string;
+  photo?: string;
+  user: {}[];
+}
+
+interface Cities {
+  cities: City[];
+}
+
+// interface currentUser {
+//   email: string;
+//   password: string
 // }
 
-// interface Cities {
-//   cities: City[];
-// }
+export default function Home({cities}: Cities) {
+  const [toLoginPage, setToLoginPage] = useState(false);
+  const { loading: loadingCities, data } = useCitiesQuery();
 
-export default function Home() {
+  // const cities = data?.cities || [];
 
-  const {loading: loadingCities, data} = useCitiesQuery()
-  const cities=data?.cities || [];
+
 
   return (
+    <>
     <div style={styles}>
       <a href="/manage-cities">
         <button style={addCityButtonStyles}>
@@ -47,10 +68,9 @@ export default function Home() {
       </a>
 
       {cities.map((city) => {
-        return (
-          <CityCard key={city.id} cityName={city.name} />
-        );
+        return <CityCard key={city.id} cityName={city.name} />;
       })}
     </div>
+    </>
   );
 }

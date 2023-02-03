@@ -1,7 +1,9 @@
 import CSS from "csstype";
 import { useState } from "react";
+import { Navigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import login from "../assets/login.svg";
-import { useLoginMutation } from "../gql/generated/schema";
+import { useGetProfileQuery, useLoginMutation } from "../gql/generated/schema";
 
 const loginPageStyles: CSS.Properties = {
   height: "100vh",
@@ -65,16 +67,33 @@ export default function Login() {
 
   const [login] = useLoginMutation();
 
+  const { data: currentUser, refetch, client } = useGetProfileQuery();
+
   return (
     <div style={loginPageStyles}>
+      {currentUser && <Navigate to="/" replace={false} />}
+
       <form
         style={loginContainerStyles}
         onSubmit={(e) => {
           e.preventDefault();
-          login({variables: {data: credentials}}).then(() => {
-            console.log('ok')
-          })
-          .catch(console.error)
+          login({ variables: { data: credentials } })
+            .then(() => {
+              client.resetStore();
+            })
+            .catch((error) => {
+              toast.error("Invalid credentials", {
+                style: {
+                  border: "3px solid #EC5D5C",
+                  padding: "4rem",
+                  color: "#EC5D5C",
+                },
+                iconTheme: {
+                  primary: "#EC5D5C",
+                  secondary: "#FFFFFF",
+                },
+              });
+            });
         }}
       >
         <a href="/">
@@ -90,7 +109,7 @@ export default function Login() {
             placeholder="Adresse mail"
             value={credentials.email}
             onChange={(e) =>
-              setCredentials({...credentials, email: e.target.value})
+              setCredentials({ ...credentials, email: e.target.value })
             }
           ></input>
         </label>
@@ -101,7 +120,7 @@ export default function Login() {
             placeholder="Mot de passe"
             value={credentials.password}
             onChange={(e) =>
-              setCredentials({...credentials, password: e.target.value})
+              setCredentials({ ...credentials, password: e.target.value })
             }
           ></input>
         </label>
