@@ -1,11 +1,23 @@
-import { useLogoutMutation } from "../gql/generated/schema";
+import { useGetProfileQuery, useLogoutMutation } from "../gql/generated/schema";
+import CSS from "csstype";
+
+const buttonStyles: CSS.Properties = {
+  height: "2.5rem",
+  width: "15rem",
+  borderRadius: "15px",
+  border: "3px solid #EC5D5C",
+  fontSize: "1rem",
+}
 
 export default function Logout() {
+  const { data: currentUser } = useGetProfileQuery();
 
     const [logout] = useLogoutMutation();
   return (
+    <>
     <a href="/login">
-      <button onClick={() => logout()}>Log out</button>
+      <button style={buttonStyles} onClick={() => logout()}>{currentUser ? "Log out" : "Log in"}</button>
     </a>
+    </>
   );
 }

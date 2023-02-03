@@ -70,7 +70,7 @@ export default function Login() {
 
   return (
     <div style={loginPageStyles}>
-      {currentUser && <Navigate to="/" replace={true}/>}
+      {currentUser && <Navigate to="/" replace={false}/>}
 
       <form
         style={loginContainerStyles}
