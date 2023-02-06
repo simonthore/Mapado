@@ -50,25 +50,24 @@ interface Cities {
 //   password: string
 // }
 
-export default function Home() {
+export default function Home({cities}: Cities) {
   const [toLoginPage, setToLoginPage] = useState(false);
   const { loading: loadingCities, data } = useCitiesQuery();
 
-  const cities = data?.cities || [];
+  const cities=data?.cities || [];
+  console.log(cities)
 
   return (
-    <>
-      <div style={styles}>
-        <a href="/manage-cities">
-          <button style={addCityButtonStyles}>
-            <p>AJOUTER UNE VILLE</p>
-          </button>
-        </a>
+    <div style={styles}>
+      <a href="/manage-cities">
+        <button style={addCityButtonStyles}>
+          <p>AJOUTER UNE VILLE</p>
+        </button>
+      </a>
 
-        {cities.map((city) => {
-          return <CityCard key={city.id} cityName={city.name} />;
-        })}
-      </div>
-    </>
+      {cities.map((city) => {
+        return <CityCard key={city.id} cityName={city.name} />;
+      })}
+    </div>
   );
 }
