@@ -65,11 +65,13 @@ const cities: {
 // }
 
 function App() {
+  const path = window.location.pathname
+  console.log(path)
   return (
     <>
       <Toaster position="top-center" />
       <div style={styles}>
-        {window.location.pathname !== "/login" ? <Header /> : null}
+        {window.location.pathname !== "/login" ? <Header icon={path}/> : null}
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
