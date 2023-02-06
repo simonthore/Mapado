@@ -50,7 +50,7 @@ interface Cities {
 //   password: string
 // }
 
-export default function Home({cities}: Cities) {
+export default function Home() {
   const [toLoginPage, setToLoginPage] = useState(false);
   const { loading: loadingCities, data } = useCitiesQuery();
 
@@ -66,7 +66,7 @@ export default function Home({cities}: Cities) {
       </a>
 
       {cities.map((city) => {
-        return <CityCard key={city.id} cityName={city.name} />;
+        return <CityCard key={city.id} cityName={city.name} cityPhoto={city.photo}/>;
       })}
     </div>
   );

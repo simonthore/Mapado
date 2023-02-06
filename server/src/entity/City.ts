@@ -9,7 +9,7 @@ export class CityInput{
     name: string;
 
     @Field({ nullable: true })
-    image?: string;
+    photo?: string;
 
     @Field(()=>Float, {nullable: true})
     longitude?: number;
@@ -46,7 +46,7 @@ export default class City {
 
     @Field({nullable: true})
     @Column({nullable: true, type: "text"})
-    image?: string;
+    photo?: string;
 
     @Field(()=>Float, {nullable: true})
     @Column({nullable: true, type: "decimal"})

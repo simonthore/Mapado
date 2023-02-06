@@ -5,7 +5,6 @@ import CSS from "csstype";
 import Login from "./screens/Login";
 import Home from "./screens/Home";
 import Header from "./components/Header";
-import Map from "./screens/Map";
 import AddManageCities from "./components/AddManageCities";
 import "./App.css";
 import { useCitiesQuery } from "./gql/generated/schema";
@@ -18,7 +17,6 @@ const styles: CSS.Properties = {
   margin: 0,
   backgroundSize: "100vw",
   backgroundColor: "#3270F4",
-  minHeight: "100vh",
 };
 
 //MOCK DATA CITIES
@@ -76,12 +74,11 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="*" element={<Home />} />
+          <Route path="*" element={<Home/>} />
           <Route
             path="/manage-cities"
             element={<AddManageCities cities={cities} />}
           />
-          <Route path="/map" element={<Map />} />
         </Routes>
       </div>
     </>
