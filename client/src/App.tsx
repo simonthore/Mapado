@@ -16,7 +16,6 @@ import paris from "./assets/paris.jpeg";
 const styles: CSS.Properties = {
   margin: 0,
   backgroundSize: "100vw",
-  backgroundColor: "#3270F4",
 };
 
 //MOCK DATA CITIES
