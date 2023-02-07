@@ -43,7 +43,6 @@ export default function Header({icon}: HeaderProps) {
                 placeholder="Rechercher une ville"
             ></input>
             <ul style={{display: "flex", justifyContent: "flex-start", gap:"1rem"}}>
-                {icon === "/manage-cities" && <li style={{display: "inline-flex"}}><HomeOutlinedIcon sx={{color: "#EC5D5C"}} fontSize={"large"}/></li>}
                 <li><Logout/></li>
             </ul>
 

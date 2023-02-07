@@ -22,10 +22,10 @@ const AddManageStyles: CSS.Properties = {
 };
 
 const titleStyles: CSS.Properties = {
-    color: "#363636",
+    color: "#EC5D5C",
     fontFamily: "Rubik",
-    fontWeight: 700,
-    fontSize: "3rem",
+    fontWeight: 600,
+    fontSize: "2rem",
 };
 
 const inputStyles: CSS.Properties = {
@@ -58,6 +58,7 @@ const deleteButtonStyles: CSS.Properties = {
     margin: "1.5rem",
     padding: "10px",
     borderRadius: "5px",
+    fontWeight: 700,
 };
 
 const manageCityStyle: CSS.Properties = {
@@ -73,6 +74,7 @@ const AddCityButtonStyle: CSS.Properties = {
     margin: "1.5rem",
     padding: "10px",
     borderRadius: "5px",
+    border: "2px solid #EC5D5C",
 };
 
 const backButton: CSS.Properties = {
