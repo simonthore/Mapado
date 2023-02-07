@@ -1,5 +1,5 @@
 import { Arg, Int, Mutation, Query, Resolver } from "type-graphql";
-import City, { CityInput, CityRequested } from "../entity/City";
+import City, { CityInput, CityRequested, UpdateCityInput } from "../entity/City";
 import datasource from "../db";
 import { ApolloError } from "apollo-server-errors";
 import { env } from "../environment";

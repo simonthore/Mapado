@@ -41,7 +41,7 @@ export class UpdateCityInput {
 
 @InputType()
 export class UpdateCityInput{
-    @Field()
+    @Field({ nullable: true })
     name?: string;
 
     @Field({ nullable: true })
