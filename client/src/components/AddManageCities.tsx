@@ -13,19 +13,21 @@ interface Cities {
 }
 
 const AddManageStyles: CSS.Properties = {
-    margin: "0 3rem",
+    margin: "0 auto",
     borderRadius: "20px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "space-between",
+    backgroundColor:"#173472",
+    width: "fit-content",
 };
 
 const titleStyles: CSS.Properties = {
     color: "#EC5D5C",
     fontFamily: "Rubik",
     fontWeight: 600,
-    fontSize: "2rem",
+    fontSize: "1.5rem",
 };
 
 const inputStyles: CSS.Properties = {
