@@ -11,6 +11,7 @@ import {
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import datasource from "../db";
+import {In} from "typeorm";
 import User, {
   getSafeAttributes,
   hashPassword,
@@ -19,7 +20,7 @@ import User, {
   UserInput,
   UserSendPassword,
   verifyPassword,
-  UpgradeUserInput
+    UpdateUserInput
 } from "../entity/User";
 import { env } from "../environment";
 import { ContextType } from "../index";
@@ -28,10 +29,11 @@ import City from "../entity/City";
 
 @Resolver(User)
 export class UserResolver {
-  @Query(() => [User])
-  async users(): Promise<User[]> {
-    return await datasource.getRepository(User).find();
-  }
+    @Query(() => [User])
+    async users(): Promise<User[]> {
+        //Pour récupérer la liste des cities on ajoute la relation
+        return await datasource.getRepository(User).find({relations: {cities: true}});
+    }
 
   @Mutation(() => User)
   async createUser(@Arg("data") data: UserInput): Promise<User> {
@@ -54,15 +56,25 @@ export class UserResolver {
     @Mutation(() => String)
     async updateUser(
         @Arg("id", () => Int) id: number,
-        @Arg("data") {email, hashedPassword, cities}: UpgradeUserInput): Promise<string>
+        @Arg("data", () => UpdateUserInput) {email, hashedPassword, cities}: UpdateUserInput): Promise<String>
     {
-        const {affected} = await datasource
+        let citiesEntities: City[] = []
+        let user = await datasource.getRepository(User).findOne({where: {id}, relations: {cities: true}})
+        if (!user) throw new ApolloError("User not found", "NOT_FOUND")
+
+        if (cities) {
+            citiesEntities = await datasource.getRepository(City).find({where: {id: In(cities?.map(c => c.id))}})
+            user.cities = [...(user?.cities ? user.cities : []), ...citiesEntities]
+        }
+        if (hashedPassword) user.hashedPassword = hashedPassword
+        if (email) user.email = email
+
+        const updatedUser = await datasource
             .getRepository(User)
-            .update(id, {email, hashedPassword, cities});
+            .save(user);
 
-        if (affected === 0) throw new ApolloError("User not found", "NOT_FOUND");
+        return "data updated";
 
-        return "Data updated";
     }
 
   @Mutation(() => String)

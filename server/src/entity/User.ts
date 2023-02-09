@@ -1,10 +1,5 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToMany,
-} from "typeorm";
-import { Field, InputType, ObjectType } from "type-graphql";
+import {Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable} from "typeorm";
+import {Field, InputType, ObjectType} from "type-graphql";
 import City from "./City";
 import { IsEmail, Matches, MinLength } from "class-validator";
 import { argon2id, hash, verify } from "argon2";
@@ -21,22 +16,31 @@ export class UserInput {
     @MinLength(8)
     @Matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)
     hashedPassword: string;
+
+    @Field(() => [CityId], {nullable: true})
+    cities?: CityId[];
+}
+
+@InputType()
+export class CityId {
+    @Field()
+    id: number;
 }
 
 @ObjectType()
 @InputType()
-export class UpgradeUserInput {
-    @Field()
+export class UpdateUserInput {
+    @Field({ nullable: true })
     @IsEmail()
-    email: string;
+    email?: string;
 
-    @Field()
+    @Field({ nullable: true })
     @MinLength(8)
     @Matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)
-    hashedPassword: string;
+    hashedPassword?: string;
 
-    // @Field(() => City, {nullable: true})
-    // cities?: City[];
+    @Field(() => [CityId], {nullable: true})
+    cities?: CityId[]
 
     // @Field(() => [Role], {nullable: true})
     // role?: Role[];
@@ -69,12 +73,14 @@ class User {
     @Column({nullable: true, type: "text"})
     role?: Role;
 
-  @ManyToMany(() => City, (c) => c.id)
-  cities?: City[];
+    @Field(()=>[City], {defaultValue: []})
+    @ManyToMany(() => City, (c) => c.users, {cascade: true,})
+    @JoinTable()
+    cities: City[];
 
-  @Field({ nullable: true })
-  @Column({ nullable: true, type: "text" })
-  changePasswordToken: string;
+    @Field({ nullable: true })
+    @Column({ nullable: true, type: "text" })
+    changePasswordToken: string;
 }
 
 @InputType()
