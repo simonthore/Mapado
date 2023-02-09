@@ -14,6 +14,7 @@ import {Location} from "history";
 import Login from "./Login";
 import Logout from "../components/Logout";
 import Header from "../components/Header";
+import AnimatedCard from "../components/AnimatedCard";
 
 const styles: CSS.Properties = {
     display: "flex",
@@ -21,6 +22,7 @@ const styles: CSS.Properties = {
     flexWrap: "wrap",
     margin: "2rem",
     alignItems: "center",
+    gap: "2rem"
 };
 const addCityButtonStyles: CSS.Properties = {
     display: "flex",
@@ -70,7 +72,10 @@ export default function Home() {
             </a>
 
             {cities.map((city) => {
-                return <CityCard key={city.id} cityName={city.name} cityPhoto={city.photo}/>;
+                return <AnimatedCard key={city.id} cityName={city.name} cityPhoto={city.photo}/>
+
+                    // <CityCard key={city.id} cityName={city.name} cityPhoto={city.photo}/>
+                    ;
             })}
         </div>
     );
