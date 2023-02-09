@@ -8,8 +8,6 @@ import Card from "../components/Card";
 import {useNavigate} from "react-router";
 
 const loginPageStyles: CSS.Properties = {
-    height: "100vh",
-    width: "100vw",
     display: "flex",
     flexDirection: "column",
     justifyContent: "flex-start",
