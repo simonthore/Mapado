@@ -102,10 +102,6 @@
     font-weight: bold;
 }
 
-.card-body {
-    color: rgb(255, 255, 255/0.85);
-}
-
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
