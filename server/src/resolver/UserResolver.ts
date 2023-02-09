@@ -66,12 +66,13 @@ export class UserResolver {
             citiesEntities = await datasource.getRepository(City).find({where: {id: In(cities?.map(c => c.id))}})
             user.cities = [...(user?.cities ? user.cities : []), ...citiesEntities]
         }
-        if (hashedPassword) user.hashedPassword = hashedPassword
+        if (hashedPassword) user.hashedPassword = await hashPassword(user.hashedPassword);
+
         if (email) user.email = email
 
-        const updatedUser = await datasource
-            .getRepository(User)
-            .save(user);
+        // const updatedUser = await datasource
+        //     .getRepository(User)
+        //     .save(user);
 
         return "data updated";
 
