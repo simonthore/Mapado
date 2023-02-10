@@ -2,7 +2,7 @@ import CSS from "csstype";
 import {truncate} from "fs";
 import {useEffect, useState} from "react";
 import {Routes} from "react-router";
-import {Route} from "react-router-dom";
+import {NavLink, Route} from "react-router-dom";
 import CityCard from "../components/CityCard";
 import {
     useCitiesQuery,
@@ -72,11 +72,15 @@ export default function Home() {
             </a>
 
             {cities.map((city) => {
-                return <AnimatedCard key={city.id} cityName={city.name} cityPhoto={city.photo}/>
-
+                return(
+                <NavLink key={city.id} to={`/info/${city.name}`}>
+                    < AnimatedCard key={city.id} cityName={city.name} cityPhoto={city.photo}/>
+                </NavLink>
+                )
                     // <CityCard key={city.id} cityName={city.name} cityPhoto={city.photo}/>
-                    ;
-            })}
+                ;
+            })
+            }
         </div>
     );
 }
