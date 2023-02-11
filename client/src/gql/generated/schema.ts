@@ -17,28 +17,38 @@ export type Scalars = {
 
 export type City = {
   __typename?: 'City';
-  City_area: Scalars['String'];
-  Photo: Scalars['String'];
-  User_id: Scalars['Float'];
   id: Scalars['Float'];
+  image?: Maybe<Scalars['String']>;
+  latitude?: Maybe<Scalars['Float']>;
+  longitude?: Maybe<Scalars['Float']>;
   name: Scalars['String'];
-  userId: Scalars['Float'];
+  poi?: Maybe<Array<Poi>>;
+  users?: Maybe<Array<User>>;
 };
 
 export type CityInput = {
-  image: Scalars['String'];
+  image?: InputMaybe<Scalars['String']>;
+  latitude?: InputMaybe<Scalars['Float']>;
+  longitude?: InputMaybe<Scalars['Float']>;
   name: Scalars['String'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
+  changePassword: User;
   createCity: City;
   createUser: User;
   deleteCity: Scalars['Boolean'];
   deleteUser: Scalars['Boolean'];
   login: Scalars['String'];
   logout: Scalars['String'];
+  sendPasswordEmail: User;
   updateCity: City;
+};
+
+
+export type MutationChangePasswordArgs = {
+  data: UserChangePassword;
 };
 
 
@@ -67,9 +77,31 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationSendPasswordEmailArgs = {
+  data: UserSendPassword;
+};
+
+
 export type MutationUpdateCityArgs = {
   data: CityInput;
   id: Scalars['Int'];
+};
+
+export type Poi = {
+  __typename?: 'Poi';
+  address: Scalars['String'];
+  audio?: Maybe<Scalars['String']>;
+  categoryId: Scalars['Float'];
+  comments?: Maybe<Scalars['String']>;
+  customize_gps_marker?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  gps_coordinates: Scalars['Float'];
+  id: Scalars['Float'];
+  name: Scalars['String'];
+  phone?: Maybe<Scalars['Float']>;
+  photo?: Maybe<Scalars['String']>;
+  rating?: Maybe<Scalars['Float']>;
+  website?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -81,16 +113,34 @@ export type Query = {
 
 export type User = {
   __typename?: 'User';
-  email: Scalars['String'];
-  hashedPassword: Scalars['String'];
+  email?: Maybe<Scalars['String']>;
+  hashedPassword?: Maybe<Scalars['String']>;
   id: Scalars['Float'];
-  role: Scalars['String'];
+  role?: Maybe<Scalars['String']>;
+  role_id?: Maybe<Scalars['Float']>;
+};
+
+export type UserChangePassword = {
+  email: Scalars['String'];
+  newPassword: Scalars['String'];
+  prevPassword: Scalars['String'];
 };
 
 export type UserInput = {
   email: Scalars['String'];
   password: Scalars['String'];
 };
+
+export type UserSendPassword = {
+  email: Scalars['String'];
+};
+
+export type ChangePasswordMutationVariables = Exact<{
+  data: UserChangePassword;
+}>;
+
+
+export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'User', id: number } };
 
 export type CreateUserMutationVariables = Exact<{
   data: UserInput;
@@ -107,7 +157,7 @@ export type CitiesQuery = { __typename?: 'Query', cities: Array<{ __typename?: '
 export type GetProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetProfileQuery = { __typename?: 'Query', profile: { __typename?: 'User', id: number, email: string, role: string } };
+export type GetProfileQuery = { __typename?: 'Query', profile: { __typename?: 'User', id: number, email?: string | null, role?: string | null } };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -127,6 +177,39 @@ export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 export type LogoutMutation = { __typename?: 'Mutation', logout: string };
 
 
+export const ChangePasswordDocument = gql`
+    mutation ChangePassword($data: UserChangePassword!) {
+  changePassword(data: $data) {
+    id
+  }
+}
+    `;
+export type ChangePasswordMutationFn = Apollo.MutationFunction<ChangePasswordMutation, ChangePasswordMutationVariables>;
+
+/**
+ * __useChangePasswordMutation__
+ *
+ * To run a mutation, you first call `useChangePasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangePasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changePasswordMutation, { data, loading, error }] = useChangePasswordMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useChangePasswordMutation(baseOptions?: Apollo.MutationHookOptions<ChangePasswordMutation, ChangePasswordMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument, options);
+      }
+export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswordMutation>;
+export type ChangePasswordMutationResult = Apollo.MutationResult<ChangePasswordMutation>;
+export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
 export const CreateUserDocument = gql`
     mutation CreateUser($data: UserInput!) {
   createUser(data: $data) {

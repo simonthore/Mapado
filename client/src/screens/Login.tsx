@@ -4,6 +4,7 @@ import { Navigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import login from "../assets/login.svg";
 import { useGetProfileQuery, useLoginMutation } from "../gql/generated/schema";
+import Header from "../components/Header";
 
 const loginPageStyles: CSS.Properties = {
   height: "100vh",
@@ -12,7 +13,10 @@ const loginPageStyles: CSS.Properties = {
   flexDirection: "column",
   justifyContent: "flex-start",
   alignItems: "center",
-  backgroundColor: "#3270F4",
+  backgroundColor: "#FFFFFF",
+  border: "2px solid #E2FE53",
+  position: "absolute"
+
 };
 const loginContainerStyles: CSS.Properties = {
   height: "100vh",
@@ -21,7 +25,7 @@ const loginContainerStyles: CSS.Properties = {
   flexDirection: "column",
   justifyContent: "space-around",
   alignItems: "center",
-  backgroundColor: "#E2FE53",
+  backgroundColor: "#FFFFFF",
 };
 
 const inputStyles: CSS.Properties = {
@@ -70,7 +74,11 @@ export default function Login() {
   const { data: currentUser, refetch, client } = useGetProfileQuery();
 
   return (
+    <><a href="/">
+    <Header />
+  </a>
     <div style={loginPageStyles}>
+        
       {currentUser && <Navigate to="/" replace={false} />}
 
       <form
@@ -96,9 +104,7 @@ export default function Login() {
             });
         }}
       >
-        <a href="/">
-          <h1 style={titleStyles}>MAPADO</h1>
-        </a>
+      
         {/* <img src={login} alt="" style={iconStyles} /> */}
         <label htmlFor="email">
           <input
@@ -131,5 +137,6 @@ export default function Login() {
         <button style={secondaryButtonStyles}>Créer un compte</button>
       </form>
     </div>
+    </>
   );
 }

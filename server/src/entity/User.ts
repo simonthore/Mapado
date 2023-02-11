@@ -53,6 +53,35 @@ export class UserInput {
   password: string;
 }
 
+@InputType()
+export class UserChangePassword {
+
+  // @Field()
+  // @PrimaryGeneratedColumn()
+  // id: number;
+
+  @Field()
+  @IsEmail()
+  email: string;
+
+  @Field()
+  @Matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)
+  prevPassword: string;
+
+  @Field()
+  @Matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)
+  newPassword: string;
+}
+
+
+@InputType()
+export class UserSendPassword {
+
+  @Field()
+  @IsEmail()
+  email: string;
+}
+
 const hashingOptions = {
   memoryCost: 2 ** 16,
   timeCost: 5,
@@ -72,5 +101,11 @@ export const getSafeAttributes = (user: User) => ({
   ...user,
   hashedPassword: undefined,
 });
+
+export const sendPasswordEmail = async (email: string): Promise<UserSendPassword> => {
+  console.log(`sending an email to ${email}`);
+  email;
+  return new UserSendPassword;
+}
 
 export default User;
