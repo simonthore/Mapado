@@ -63,8 +63,11 @@ const titleStyles: CSS.Properties = {
 
 export default function Register() {
   const [userInfo, setUserInfo] = useState({ email: "", password: "" });
+  const [passwordShown, setPasswordShown] = useState(false);
 
   const [createUser] = useCreateUserMutation();
+
+  const togglePassword = () => setPasswordShown(!passwordShown);
 
   return (
     <>
@@ -97,13 +100,14 @@ export default function Register() {
         <label htmlFor="password">
           <input
             style={inputStyles}
-            type="password"
+            type={passwordShown ? "text" : "password"}
             placeholder="Mot de passe"
             value={userInfo.password}
             onChange={(e) =>
               setUserInfo({ ...userInfo, password: e.target.value })
             }
           ></input>
+          <button type="button" onClick={togglePassword}>Show Password</button>
         </label>
         <button type="submit" style={primaryButtonStyles}>
           Créer un compte

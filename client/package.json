@@ -3,14 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@apollo/client": "^3.7.5",
+    "@apollo/client": "^3.7.9",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
     "@types/jwt-decode": "^3.1.0",
     "@types/node": "^16.18.3",
-    "@types/react": "^18.0.25",
+    "@types/react": "^18.0.28",
     "@types/react-cookies": "^0.1.0",
     "@types/react-dom": "^18.0.8",
     "@types/react-router-dom": "^5.3.3",
@@ -20,6 +20,7 @@
     "jwt-decode": "^3.1.2",
     "npm": "^9.4.0",
     "react": "^18.2.0",
+    "react-apollo": "^3.1.5",
     "react-cookie": "^4.1.1",
     "react-cookies": "^0.1.1",
     "react-dom": "^18.2.0",
@@ -58,6 +59,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.21.0",
     "@graphql-codegen/cli": "2.6.1",
     "@graphql-codegen/introspection": "2.1.1",
     "@graphql-codegen/typescript": "2.4.3",

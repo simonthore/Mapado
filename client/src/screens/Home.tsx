@@ -52,7 +52,7 @@ interface Cities {
 
 export default function Home({ cities }: Cities) {
   const [toLoginPage, setToLoginPage] = useState(false);
-  const { loading: loadingCities, data } = useCitiesQuery();
+  // const { loading: loadingCities, data } = useCitiesQuery();
 
   // const cities = data?.cities || [];
 
