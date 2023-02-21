@@ -1,6 +1,7 @@
 import CSS from "csstype";
 import { useState } from "react";
 import login from "../assets/login.svg";
+import Header from "../components/Header";
 import { useCreateUserMutation } from "../gql/generated/schema";
 
 const loginPageStyles: CSS.Properties = {
@@ -66,6 +67,8 @@ export default function Register() {
   const [createUser] = useCreateUserMutation();
 
   return (
+    <>
+    <Header />
     <div style={loginPageStyles}>
       <form
         style={loginContainerStyles}
@@ -102,8 +105,11 @@ export default function Register() {
             }
           ></input>
         </label>
-        <button type="submit" style={primaryButtonStyles}>Créer un compte</button>
+        <button type="submit" style={primaryButtonStyles}>
+          Créer un compte
+        </button>
       </form>
     </div>
+    </>
   );
 }

@@ -2,7 +2,7 @@ import CSS from "csstype";
 import { truncate } from "fs";
 import { useEffect, useState } from "react";
 import { Routes } from "react-router";
-import { Route } from "react-router-dom";
+import { Link, Route } from "react-router-dom";
 import CityCard from "../components/CityCard";
 import {
   useCitiesQuery,
@@ -50,28 +50,25 @@ interface Cities {
 //   password: string
 // }
 
-export default function Home({cities}: Cities) {
+export default function Home({ cities }: Cities) {
   const [toLoginPage, setToLoginPage] = useState(false);
   const { loading: loadingCities, data } = useCitiesQuery();
 
   // const cities = data?.cities || [];
 
-
-
   return (
     <>
-    <Header />
-    <div style={styles}>
-      <a href="/manage-cities">
-        <button style={addCityButtonStyles}>
-          <p>AJOUTER UNE VILLE</p>
-        </button>
-      </a>
-
-      {cities.map((city) => {
-        return <CityCard key={city.id} cityName={city.name} />;
-      })}
-    </div>
+      <Header />
+      <div style={styles}>
+        <Link to="/manage-cities">
+          <button style={addCityButtonStyles}>
+            <p>AJOUTER UNE VILLE</p>
+          </button>
+        </Link>
+        {cities.map((city) => {
+          return <CityCard key={city.id} cityName={city.name} />;
+        })}
+      </div>
     </>
   );
 }

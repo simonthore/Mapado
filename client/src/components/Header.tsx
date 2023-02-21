@@ -1,6 +1,7 @@
 import CSS from "csstype";
 import { useGetProfileQuery } from "../gql/generated/schema";
 import Logout from "./Logout";
+import { Link } from "react-router-dom";
 
 const HeaderStyles: CSS.Properties = {
   height: "8.6rem",
@@ -31,7 +32,7 @@ export default function Header() {
   return (
     <div style={HeaderStyles}>
       <div>
-        <a href="/home">MAPADO</a>
+      <Link to="/">MAPADO</Link>
       </div>
       <input
         style={searchBarStyles}

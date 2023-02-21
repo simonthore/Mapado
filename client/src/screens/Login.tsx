@@ -1,6 +1,6 @@
 import CSS from "csstype";
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import login from "../assets/login.svg";
 import { useGetProfileQuery, useLoginMutation } from "../gql/generated/schema";
@@ -15,8 +15,7 @@ const loginPageStyles: CSS.Properties = {
   alignItems: "center",
   backgroundColor: "#FFFFFF",
   border: "2px solid #E2FE53",
-  position: "absolute"
-
+  position: "absolute",
 };
 const loginContainerStyles: CSS.Properties = {
   height: "100vh",
@@ -33,6 +32,7 @@ const inputStyles: CSS.Properties = {
   borderRadius: "10px",
   width: "20rem",
   height: "2.5rem",
+  border: "1px solid #EC5D5C",
 };
 
 const primaryButtonStyles: CSS.Properties = {
@@ -68,75 +68,95 @@ const titleStyles: CSS.Properties = {
 
 export default function Login() {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
+  const [passwordShown, setPasswordShown] = useState(false);
 
   const [login] = useLoginMutation();
 
   const { data: currentUser, refetch, client } = useGetProfileQuery();
 
-  return (
-    <><a href="/">
-    <Header />
-  </a>
-    <div style={loginPageStyles}>
-        
-      {currentUser && <Navigate to="/" replace={false} />}
+  const navigate = useNavigate();
 
-      <form
-        style={loginContainerStyles}
-        onSubmit={(e) => {
-          e.preventDefault();
-          login({ variables: { data: credentials } })
-            .then(() => {
-              client.resetStore();
-            })
-            .catch((error) => {
-              toast.error("Invalid credentials", {
-                style: {
-                  border: "3px solid #EC5D5C",
-                  padding: "4rem",
-                  color: "#EC5D5C",
-                },
-                iconTheme: {
-                  primary: "#EC5D5C",
-                  secondary: "#FFFFFF",
-                },
+  const navigateEmailPassword = () => navigate("/password/email");
+
+  const togglePassword = () => setPasswordShown(!passwordShown);
+
+  const navigateCreateAccount = () => navigate("/register")
+
+  return (
+    <>
+      <Link to="/">
+        <Header />
+      </Link>
+      <div style={loginPageStyles}>
+        {currentUser && <Navigate to="/" replace={false} />}
+        <form
+          style={loginContainerStyles}
+          onSubmit={(e) => {
+            e.preventDefault();
+            login({ variables: { data: credentials } })
+              .then(() => {
+                client.resetStore();
+              })
+              .catch((error) => {
+                toast.error("Invalid credentials", {
+                  style: {
+                    border: "3px solid #EC5D5C",
+                    padding: "4rem",
+                    color: "#EC5D5C",
+                  },
+                  iconTheme: {
+                    primary: "#EC5D5C",
+                    secondary: "#FFFFFF",
+                  },
+                });
               });
-            });
-        }}
-      >
-      
-        {/* <img src={login} alt="" style={iconStyles} /> */}
-        <label htmlFor="email">
-          <input
-            style={inputStyles}
-            type="email"
-            id="email"
-            name="email"
-            placeholder="Adresse mail"
-            value={credentials.email}
-            onChange={(e) =>
-              setCredentials({ ...credentials, email: e.target.value })
-            }
-          ></input>
-        </label>
-        <label htmlFor="password">
-          <input
-            style={inputStyles}
-            type="password"
-            placeholder="Mot de passe"
-            value={credentials.password}
-            onChange={(e) =>
-              setCredentials({ ...credentials, password: e.target.value })
-            }
-          ></input>
-        </label>
-        <button style={tertiaryButtonStyles}>Mot de passe oublié ?</button>
-        <button type="submit" style={primaryButtonStyles}>
-          Se connecter
-        </button>
-        <button style={secondaryButtonStyles}>Créer un compte</button>
-      </form>
-    </div>
+          }}
+        >
+          {/* <img src={login} alt="" style={iconStyles} /> */}
+          <label htmlFor="email">
+            <input
+              style={inputStyles}
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Adresse mail"
+              value={credentials.email}
+              onChange={(e) =>
+                setCredentials({ ...credentials, email: e.target.value })
+              }
+            ></input>
+          </label>
+          {/*  */}
+          <label htmlFor="password">
+            <input
+              style={inputStyles}
+              type={passwordShown ? "text" : "password"}
+              placeholder="Mot de passe"
+              value={credentials.password}
+              onChange={(e) =>
+                setCredentials({ ...credentials, password: e.target.value })
+              }
+            ></input>
+            <div>
+              <button type="button" onClick={togglePassword}>
+                Show Password
+              </button>
+            </div>
+            {/*  */}
+          </label>
+          <button
+            type="button"
+            style={tertiaryButtonStyles}
+            onClick={navigateEmailPassword}
+          >
+            Mot de passe oublié ?
+          </button>
+          <button type="submit" style={primaryButtonStyles}>
+            Se connecter
+          </button>
+          <button type="button" style={secondaryButtonStyles} onClick={navigateCreateAccount}>Créer un compte</button>
+        </form>
+      </div>
     </>
   );
 }

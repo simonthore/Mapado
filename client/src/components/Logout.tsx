@@ -1,4 +1,5 @@
 import { useGetProfileQuery, useLogoutMutation } from "../gql/generated/schema";
+import { Link } from "react-router-dom";
 import CSS from "csstype";
 
 const buttonStyles: CSS.Properties = {
@@ -15,7 +16,7 @@ export default function Logout() {
   const [logout] = useLogoutMutation();
   return (
     <>
-      <a href="/login">
+      <Link to="/login">
         <button
           style={buttonStyles}
           onClick={async () => {
@@ -25,7 +26,7 @@ export default function Logout() {
         >
           {currentUser ? "Log out" : "Log in"}
         </button>
-      </a>
+      </Link>
     </>
   );
 }
