@@ -22,6 +22,10 @@ class User {
   id: number;
 
   @Field({ nullable: true })
+  @Column({nullable: true, type: "date"})
+  created_at: number;
+
+  @Field({ nullable: true })
   @Column({ nullable: true, type: "int" })
   role_id?: number;
 
@@ -39,12 +43,15 @@ class User {
 
   @ManyToMany(() => City, (c) => c.id)
   cities?: City[];
+
+  @Field({ nullable: true })
+  @Column({ nullable: true, type: "text" })
+  changePasswordToken: string
 }
 
 @InputType()
 export class UserInput {
   @Field()
-  @IsEmail()
   email: string;
 
   @Field()
@@ -54,32 +61,25 @@ export class UserInput {
 }
 
 @InputType()
-export class UserChangePassword {
+export class UserSendPassword {
+  @Field()
+  email: string;
 
-  // @Field()
-  // @PrimaryGeneratedColumn()
-  // id: number;
+  @Field({ nullable: true })
+  @Column({ nullable: true})
+  token?: string;
+}
+
+@InputType()
+export class UserChangePassword {
 
   @Field()
   @IsEmail()
   email: string;
-
-  @Field()
-  @Matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)
-  prevPassword: string;
 
   @Field()
   @Matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)
   newPassword: string;
-}
-
-
-@InputType()
-export class UserSendPassword {
-
-  @Field()
-  @IsEmail()
-  email: string;
 }
 
 const hashingOptions = {
@@ -102,10 +102,9 @@ export const getSafeAttributes = (user: User) => ({
   hashedPassword: undefined,
 });
 
-export const sendPasswordEmail = async (email: string): Promise<UserSendPassword> => {
-  console.log(`sending an email to ${email}`);
-  email;
-  return new UserSendPassword;
-}
+export const sendPasswordEmail = async (email: string, token?: string): Promise<UserSendPassword> => (
+ { email, token }
+)
+
 
 export default User;

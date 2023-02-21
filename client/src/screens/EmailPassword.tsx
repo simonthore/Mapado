@@ -1,5 +1,6 @@
 import CSS from "csstype";
 import { useState } from "react";
+import { useSendPasswordEmailMutation } from "../gql/generated/schema";
 import Header from "../components/Header";
 
 const resetPasswordStyles: CSS.Properties = {
@@ -40,7 +41,7 @@ const primaryButtonStyles: CSS.Properties = {
   backgroundColor: "#EC5D5C",
   border: "3px solid #EC5D5C",
   color: "#FFFFFF",
-  marginLeft: "10rem"
+  marginLeft: "10rem",
 };
 
 const secondaryButtonStyles: CSS.Properties = {
@@ -49,16 +50,20 @@ const secondaryButtonStyles: CSS.Properties = {
   border: "3px solid #EC5D5C",
 };
 
+// interface onSendPasswordReset {
+// //
+// }
+
 export default function PasswordReset() {
   const [email, setEmail] = useState({
     email: "",
   });
 
-//   const [sendEmail] = sendPasswordEmailMutation();
+const [sendEmail] = useSendPasswordEmailMutation()
   return (
     <>
       <Header />
-      {/* <div style={resetPasswordStyles}>
+      <div style={resetPasswordStyles}>
         <form
           style={passwordResetContainerStyles}
           onSubmit={(e) => {
@@ -70,7 +75,10 @@ export default function PasswordReset() {
               .catch(console.error);
           }}
         >
-            <p>Saissiez votre email. Vous y recevrez un lien permettant de modifier votre mot de passe.</p>
+          <p>
+            Saissiez votre email. Vous y recevrez un lien permettant de modifier
+            votre mot de passe.
+          </p>
           <label htmlFor="email">
             <input
               style={inputStyles}
@@ -79,19 +87,17 @@ export default function PasswordReset() {
               name="email"
               placeholder="Email"
               value={email.email}
-              onChange={(e) =>
-                setEmail({ email: e.target.value })
-              }
+              onChange={(e) => setEmail({ email: e.target.value })}
             ></input>
           </label>
           <div>
             <button style={secondaryButtonStyles}>Retour</button>
-            <button type="submit" style={primaryButtonStyles}>
+            <button type="submit" style={primaryButtonStyles} onClick={() => alert("please check your email")}>
               Valider
             </button>
           </div>
         </form>
-      </div> */}
+      </div>
     </>
   );
 }

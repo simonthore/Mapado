@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useParams } from "react-router-dom";
 import { gql, useQuery } from "@apollo/client";
 import { Toaster } from "react-hot-toast";
 import CSS from "csstype";
@@ -68,6 +68,17 @@ const cities: {
 // }
 
 function App() {
+
+    // let { token } = useParams();
+    // console.log(token)
+
+    // console.log(useParams())
+
+  
+  //   const token =
+  //     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6eyJlbWFpbCI6ImFubmEuZ29zbWVAZ21haWwuY29tIn0sImlhdCI6MTY3NjM4NDY1MSwiZXhwIjoxNjc2NDcxMDUxfQ.AlKBSX9iClPtCMDt64m3FNp6-wpqLaPwmoXQuCRN4oY";
+ 
+
   return (
     <>
       <Toaster position="top-center" />
@@ -76,9 +87,21 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="*" element={<Home cities={cities} />} />
-          <Route path="/reset-password" element={<PasswordReset />} />
-          <Route path="/email-password" element={<EmailPassword />} />
+          {/* <Route path="*" element={<Home cities={cities} />} /> */}
+          <Route
+            path="/password/reset/:token"
+            element={<PasswordReset />}
+          />
+          {/* <Route
+            path="/password/reset/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6eyJlbWFpbCI6ImFubmEuZ29zbWVAZ21haWwuY29tIn0sImlhdCI6MTY3NjM4NDY1MSwiZXhwIjoxNjc2NDcxMDUxfQ.AlKBSX9iClPtCMDt64m3FNp6-wpqLaPwmoXQuCRN4oY"
+            element={<PasswordReset />}
+          /> */}
+          <Route
+            path="/password/email"
+            element={
+              <EmailPassword />
+            }
+          />
           <Route path="/" element={<Home cities={cities} />} />
           <Route
             path="/manage-cities"

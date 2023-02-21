@@ -1,5 +1,13 @@
 import { ApolloError } from "apollo-server-errors";
-import { Arg, Authorized, Ctx, Int, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Authorized,
+  Ctx,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+} from "type-graphql";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import datasource from "../db";
@@ -14,6 +22,7 @@ import User, {
 } from "../entity/User";
 import { env } from "../environment";
 import { ContextType } from "../index";
+import { stringify } from "querystring";
 
 @Resolver(User)
 export class UserResolver {
@@ -25,20 +34,20 @@ export class UserResolver {
   @Mutation(() => User)
   async createUser(@Arg("data") data: UserInput): Promise<User> {
     const hashedPassword = await hashPassword(data.password);
+    const createdAt = await Date.now();
     const user = await datasource
       .getRepository(User)
-      .save({ ...data, hashedPassword });
+      .save({ ...data, createdAt, hashedPassword });
     return user;
   }
 
-  @Authorized<Role>(['cityAdmin'])
+  @Authorized<Role>(["cityAdmin"])
   @Mutation(() => Boolean)
   async deleteUser(@Arg("id", () => Int) id: number): Promise<boolean> {
     const { affected } = await datasource.getRepository(User).delete(id);
     if (affected === 0) throw new ApolloError("user not found", "NOT_FOUND");
     return true;
   }
-
 
   @Mutation(() => String)
   async login(
@@ -72,7 +81,7 @@ export class UserResolver {
   @Mutation(() => String)
   async logout(@Ctx() ctx: ContextType) {
     ctx.res.clearCookie("token");
-    return 'logged out';
+    return "logged out";
   }
 
   @Authorized()
@@ -81,45 +90,15 @@ export class UserResolver {
     return getSafeAttributes(ctx.currentUser as User);
   }
 
-  // // Reset Password email & token creation
-
-  // // Reset Password
-
-  // @Mutation(() => User)
-  // async updatePassword(
-  //   @Arg('id', () => Int) id: number,
-  //   @Arg('data') data: UserUpdatePassword,
-  // ):Promise<User> {
-  //   const { email, oldPassword, newPassword } = data;
-
-  //   const userToUpdate = await datasource
-  //     .getRepository(User)
-  //     .findOne({ where: { email } });
-
-  //   if (
-  //     userToUpdate === null
-  //   || typeof userToUpdate.hashedPassword !== 'string'
-  //   || !(await verifyPassword(oldPassword, userToUpdate.hashedPassword))
-  //   ) { throw new ApolloError('invalid credentials'); }
-
-  //   const hashedPassword = await hashPassword(newPassword);
-
-  //   userToUpdate.hashedPassword = hashedPassword;
-
-  //   await datasource.getRepository(User).save(userToUpdate);
-
-  //   return getSafeAttributes(userToUpdate);
-  // }
-
   @Mutation(() => User)
-  async sendPasswordEmail(@Arg("data") data: UserSendPassword): Promise<UserSendPassword> {
+  async sendPasswordEmail(@Arg("data") data: UserSendPassword): Promise<User> {
     const { email } = data;
 
-    // const userToEmail = await datasource
-    // .getRepository(User)
-    // .findOne({ where: { email } });
+    const userToEmail = await datasource
+      .getRepository(User)
+      .findOne({ where: { email } });
 
-    // if (!userToEmail) throw new ApolloError("invalid credentials");
+    if (!userToEmail) throw new ApolloError("invalid credentials");
 
     // sender information used to authenticate
     const transporter = nodemailer.createTransport({
@@ -128,77 +107,85 @@ export class UserResolver {
         user: "mapado-wns@outlook.com",
         pass: "projetMapado",
       },
+      from: "mapado-wns@outlook.com",
     });
+
+    // const createEmailToken = (): string => {
+    const userId = userToEmail.id;
+    const hashedPassword = userToEmail.hashedPassword;
+    const createdAt = userToEmail.created_at;
+    const secret = hashedPassword + "-" + createdAt;
+
+    const emailToken = jwt.sign({ userId }, secret, { expiresIn: 36000 });
 
     try {
       // create token
-      const emailToken = jwt.sign(
-        {
-          email: { email },
-        },
-        env.JWT_PRIVATE_KEY,
-        {
-          expiresIn: "1d",
-        }
-      );
-
-      const url = `http://localhost:3000/reset-password/${emailToken}`;
+      const url = `http://localhost:3000/password/reset/:${emailToken}`;
+      // const url = `http://localhost:3000/password/reset/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6eyJlbWFpbCI6ImFubmEuZ29zbWVAZ21haWwuY29tIn0sImlhdCI6MTY3NjM4NDY1MSwiZXhwIjoxNjc2NDcxMDUxfQ.AlKBSX9iClPtCMDt64m3FNp6-wpqLaPwmoXQuCRN4oY`;
 
       //  send password reset email
-
       await transporter.sendMail({
+        from: "Mapado Team mapado-wns@outlook.com",
         to: email,
-        subject: "Password Reset",
-        html: `Please click this link to change your password: <a href="${url}">${url}</a>`,
+        subject: "Mapado reset password",
+        html: `Hi ${email}, we received a request to reset your password. Please click the following link to reset your password.: <a href="${url}">${url}</a>`,
+        text: `Hi ${email}, we received a request to reset your password. Please click the following link to reset your password.: <a href="${url}">${url}</a>`,
       });
     } catch (e) {
       console.log(e);
     }
 
-    return new UserSendPassword;
+    // add token to user in db
+    userToEmail.changePasswordToken = emailToken;
+
+    // save token in db
+    await datasource.getRepository(User).save(userToEmail);
+
+    return userToEmail;
+  }
+
+  // // Query to fetch and send changeEmailToken to client
+
+  @Query(() => User)
+  async fetchToken(@Arg("email", () => String) email: string): Promise<User> {
+    const userToUpdatePassword = await datasource
+      .getRepository(User)
+      .findOne({ where: { email } });
+    if (userToUpdatePassword === null)
+      throw new ApolloError("user not found", "NOT_FOUND");
+    return userToUpdatePassword;
   }
 
   // mutation to change password
-
   @Mutation(() => User)
   async changePassword(
     // @Arg('id', () => Int) id: number,
     @Arg("data") data: UserChangePassword
   ): Promise<boolean> {
-    // deconstruct data from UserChangePassword entity
-    const { email, prevPassword, newPassword } = data;
+    // deconstruct data from User entity
+    const { email, newPassword } = data;
 
     //create userToUpdate which is the user in the db matching the email (with properties email, hashedPassword, etc)
     const userToUpdate = await datasource
       .getRepository(User)
       .findOne({ where: { email } });
-
     // verify if user is null > throw error
-    if (!userToUpdate) throw new ApolloError("invalid credentials");
+    if (!userToUpdate)
+      throw new ApolloError("invalid credentials no such user");
 
-    // // RESET PASSWORD VIA EMAIL
+    // match UserSendPassword token to token in headers
+    if (!userToUpdate.changePasswordToken)
+      throw new ApolloError("invalid credentials no such token");
 
-    // // save token in database
-
-    // if (token) {
-
-    //   userToUpdate.token = token;
-    // }
-
-    // if (userToUpdate.token === token) {
-
-    //   // hash new password
-    const hashedPassword = await hashPassword(newPassword);
+    // hash new password
+    const newHashedPassword = await hashPassword(newPassword);
 
     // update password in user data
-
-    userToUpdate.hashedPassword = hashedPassword;
+    userToUpdate.hashedPassword = newHashedPassword;
 
     // save new password in db
-
     await datasource.getRepository(User).save(userToUpdate);
 
-    // }
     return true;
   }
 }

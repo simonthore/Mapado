@@ -1,7 +1,11 @@
 import CSS from "csstype";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import Header from "../components/Header";
-// import { useChangePasswordMutation } from "../gql/generated/schema";
+import {
+  useChangePasswordMutation,
+  useFetchTokenQuery,
+} from "../gql/generated/schema";
 
 const resetPasswordStyles: CSS.Properties = {
   height: "100vh",
@@ -41,7 +45,7 @@ const primaryButtonStyles: CSS.Properties = {
   backgroundColor: "#EC5D5C",
   border: "3px solid #EC5D5C",
   color: "#FFFFFF",
-  margin: "10rem"
+  margin: "10rem",
 };
 
 const secondaryButtonStyles: CSS.Properties = {
@@ -51,24 +55,49 @@ const secondaryButtonStyles: CSS.Properties = {
 };
 
 export default function PasswordReset() {
+  const { token } = useParams();
+
   const [credentials, setCredentials] = useState({
     email: "",
-    prevPassword: "",
     newPassword: "",
   });
 
-//   const [changePassword] = useChangePasswordMutation();
+  const [serverToken, setServerToken] = useState({});
+
+  // mutation to get the changeEmailToken
+  useFetchTokenQuery({
+    // how to replace hard coded email ?
+    variables: { email: "ap_levy@hotmail.com" },
+    onCompleted: (response) => {
+      setServerToken(JSON.stringify(response.fetchToken.changePasswordToken));
+    },
+  });
+
+  const [changePassword] = useChangePasswordMutation();
+
+  // if params === serverEmailToken then display the page else display an error message / page
+  const cleanServerToken = JSON.stringify(serverToken).replace(/[\\]/g, "").replace(/['"]+/g, '');
+  const cleanToken = token?.replace(/[:]+/g, '')
+
+  if (!token || cleanToken !== cleanServerToken)
+    return (
+      <div>
+        {/* <img src={lost} alt="lost" /> */}
+        <p>OOOPPS invalid token</p>
+      </div>
+    );
+
   return (
     <>
       <Header />
-      {/* <div style={resetPasswordStyles}>
+      <div style={resetPasswordStyles}>
         <form
           style={passwordResetContainerStyles}
           onSubmit={(e) => {
             e.preventDefault();
             changePassword({ variables: { data: credentials } })
               .then(() => {
-                console.log("ok");
+                console.log(credentials.email, credentials.newPassword);
               })
               .catch(console.error);
           }}
@@ -83,19 +112,6 @@ export default function PasswordReset() {
               value={credentials.email}
               onChange={(e) =>
                 setCredentials({ ...credentials, email: e.target.value })
-              }
-            ></input>
-          </label>
-          <label htmlFor="prevPassword">
-            <input
-              style={inputStyles}
-              type="password"
-              id="prevPassword"
-              name="prebPassword"
-              placeholder="Ancien mot de passe"
-              value={credentials.prevPassword}
-              onChange={(e) =>
-                setCredentials({ ...credentials, prevPassword: e.target.value })
               }
             ></input>
           </label>
@@ -118,7 +134,7 @@ export default function PasswordReset() {
             </button>
           </div>
         </form>
-      </div> */}
+      </div>
     </>
   );
 }
