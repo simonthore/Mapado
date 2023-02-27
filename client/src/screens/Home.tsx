@@ -1,18 +1,8 @@
 import CSS from "csstype";
-import { truncate } from "fs";
-import { KeyboardEventHandler, useEffect, useState } from "react";
-import { Routes } from "react-router";
-import { Route, useSearchParams } from "react-router-dom";
+import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import CityCard from "../components/CityCard";
-import {
-  useCitiesQuery,
-  useGetCityQuery,
-  useGetProfileQuery,
-  useLogoutMutation,
-} from "../gql/generated/schema";
-import { Location } from "history";
-import Login from "./Login";
-import Logout from "../components/Logout";
+import { useCitiesQuery, useGetCityQuery } from "../gql/generated/schema";
 import Header from "../components/Header";
 
 const styles: CSS.Properties = {
@@ -46,6 +36,11 @@ interface Cities {
   cities: City[];
 }
 
+interface IState {
+  query: string;
+  list: City[];
+}
+
 // interface currentUser {
 //   email: string;
 //   password: string
@@ -58,32 +53,37 @@ export default function Home({ cities }: Cities) {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const [query, setQuery] = useState(searchParams.get("query") ?? "");
+  // const [query, setQuery] = useState(searchParams.get("query") ?? "");
 
-
-  // setSearchParams(newQueryParameters);
-
-  // const city = searchParams.get("city");
-
-  // // const findPOI = searchParams.get("poi")
+  const [state, setState] = useState<IState>({
+    query: searchParams.get("query") ?? "",
+    list: [],
+  });
 
   const searchResult = useGetCityQuery({
-    variables: { query: query ?? "" },
+    variables: { query: state.query ?? "" },
   });
   const dbCity = searchResult.data?.city.name;
 
   // const cities = data?.cities || [];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const results = cities.filter((city) => {
+      if (e.target.value === " ") return cities;
+      return city.name.toLowerCase().includes(e.target.value.toLowerCase());
+    });
     setSearchParams({ query: e.target.value });
-    setQuery(e.target.value);
+    setState({
+      query: e.target.value,
+      list: results,
+    });
   };
 
   return (
     <>
       <form>
         <input
-          value={query}
+          value={state.query}
           onChange={handleChange}
           placeholder="Rechercher une ville..."
           type="search"
@@ -96,21 +96,13 @@ export default function Home({ cities }: Cities) {
             <p>AJOUTER UNE VILLE</p>
           </button>
         </a>
-      </div>
-
-      <div>
-        {/* {displayCity ? (
-         city && <CityCard key={city.name} cityName={city.name} />
-        ) : (
-          cities.map((city) => {
-            return <CityCard key={city.id} cityName={city.name} />;
-          })
-        )} */}
-        {dbCity === undefined ? (
-          <p>We don't know that city</p>
-        ) : (
-          <CityCard cityName={dbCity} />
-        )}
+        {state.query === ""
+          ? cities.map((city) => (
+              <CityCard key={city.id} cityName={city.name} />
+            ))
+          : state.list.map((city) => (
+              <CityCard key={city.id} cityName={city.name} />
+            ))}
       </div>
     </>
   );
