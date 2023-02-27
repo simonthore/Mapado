@@ -1,37 +1,48 @@
-import { Arg, Int, Mutation,Query, Resolver } from "type-graphql";
-import City, {CityInput} from "../entity/City";
+import { Arg, Int, Mutation, Query, Resolver } from "type-graphql";
+import City, { CityInput } from "../entity/City";
 import datasource from "../db";
 import { ApolloError } from "apollo-server-errors";
 
-
 @Resolver(City)
 export class CityResolver {
-    @Query(() => [City])
-    async cities(): Promise<City[]> {
-        return await datasource.getRepository(City).find();
-    }
-    @Mutation(() => City)
-    async createCity(@Arg("data") data: CityInput): Promise<City> {
-        return await datasource.getRepository(City).save(data);
-    }
-    @Mutation(() => Boolean)
-    async deleteCity(@Arg("id", () => Int) id: number): Promise<boolean> {
-        const { affected } = await datasource.getRepository(City).delete(id);
-        if (affected === 0) throw new ApolloError("City not found", "NOT_FOUND");
-        return true;
-    }
+  @Query(() => [City])
+  async cities(): Promise<City[]> {
+    return await datasource.getRepository(City).find();
+  }
 
-    @Mutation(() => City)
-    async updateCity(
-        @Arg("id", () => Int) id: number,
-        @Arg("data") { name, photo, longitude, latitude }: CityInput
-    ): Promise<City> {
-        const { affected } = await datasource
-            .getRepository(City)
-            .update(id, { name, photo, longitude, latitude });
+  @Query(() => City)
+  async city(@Arg("name", () => String) name: string): Promise<City> {
+    const city = await datasource
+      .getRepository(City)
+      .findOne({ where: { name } });
 
-        if (affected === 0) throw new ApolloError("City not found", "NOT_FOUND");
+    if (city === null) throw new ApolloError("city not found", "NOT_FOUND");
 
-        return { id, name };
-    }
+    return city;
+  }
+
+  @Mutation(() => City)
+  async createCity(@Arg("data") data: CityInput): Promise<City> {
+    return await datasource.getRepository(City).save(data);
+  }
+  @Mutation(() => Boolean)
+  async deleteCity(@Arg("id", () => Int) id: number): Promise<boolean> {
+    const { affected } = await datasource.getRepository(City).delete(id);
+    if (affected === 0) throw new ApolloError("City not found", "NOT_FOUND");
+    return true;
+  }
+
+  @Mutation(() => City)
+  async updateCity(
+    @Arg("id", () => Int) id: number,
+    @Arg("data") { name, image, longitude, latitude }: CityInput
+  ): Promise<City> {
+    const { affected } = await datasource
+      .getRepository(City)
+      .update(id, { name, image, longitude, latitude });
+
+    if (affected === 0) throw new ApolloError("City not found", "NOT_FOUND");
+
+    return { id, name };
+  }
 }

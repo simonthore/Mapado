@@ -1,5 +1,4 @@
 import CSS from "csstype";
-import { useGetProfileQuery } from "../gql/generated/schema";
 import Logout from "./Logout";
 
 const HeaderStyles: CSS.Properties = {
@@ -16,29 +15,16 @@ const HeaderStyles: CSS.Properties = {
   color: "#000000",
 };
 
-const searchBarStyles: CSS.Properties = {
-  height: "2.5rem",
-  width: "20rem",
-  fontWeight: 700,
-  fontSize: "1rem",
-  color: "#000000",
-  borderRadius: "10px",
-  paddingLeft: "20px",
-};
+
+
 
 export default function Header() {
-
   return (
     <div style={HeaderStyles}>
       <div>
         <a href="/home">MAPADO</a>
       </div>
-      <input
-        style={searchBarStyles}
-        type="text"
-        placeholder="Rechercher une ville"
-      ></input>
-       <Logout />
+      <Logout />
     </div>
   );
 }
