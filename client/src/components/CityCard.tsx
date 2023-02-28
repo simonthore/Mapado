@@ -1,16 +1,12 @@
 import CSS from "csstype";
 
-interface City {
-  id: number;
-  name: string;
-  city_area: string;
-  latitude: number;
-  longitude: number;
-  photo?: string;
-  user: {}[];
+interface CityProps {
+  id?: number;
+  cityName?: string;
+  cityPhoto?: string;
 }
 
-export default function CityCard({ cityName, cityPhoto }: any) {
+export default function CityCard({ cityName, cityPhoto }: CityProps) {
   const cardStyles: CSS.Properties = {
     display: "flex",
     flexDirection: "column",
@@ -24,9 +20,9 @@ export default function CityCard({ cityName, cityPhoto }: any) {
     borderBottomLeftRadius: "40px",
     margin: "2rem",
     color: "#EC5D5C",
-    fontFamily: "Josefin Sans",
+    fontFamily: 'Josefin Sans',
     fontWeight: 700,
-    fontSize: "1.25rem",
+    fontSize: '1.25rem'
   };
 
   const photoStyles: CSS.Properties = {
@@ -34,11 +30,7 @@ export default function CityCard({ cityName, cityPhoto }: any) {
     width: "15.6rem",
     borderTopLeftRadius: "40px",
     borderTopRightRadius: "40px",
-    backgroundColor: "#EC5D5C",
-  };
-
-  const linktomapStyles: CSS.Properties = {
-    marginBottom: "36px",
+    backgroundColor: '#EC5D5C',
   };
 
   const buttonStyles: CSS.Properties = {
@@ -46,10 +38,10 @@ export default function CityCard({ cityName, cityPhoto }: any) {
     width: "8rem",
     border: "1px solid #EC5D5C",
     borderRadius: "40px",
+    marginBottom: "36px",
     fontWeight: "600",
     fontSize: "1rem",
   };
-
   return (
     <div style={cardStyles}>
       {cityPhoto ? (
@@ -58,11 +50,9 @@ export default function CityCard({ cityName, cityPhoto }: any) {
         <div style={photoStyles}></div>
       )}
       <p>{cityName}</p>
-      <a style={linktomapStyles} href="/map">
-        <button style={buttonStyles}>
-          <p>Voir la ville</p>
-        </button>
-      </a>
+      <button style={buttonStyles}>
+        <p>Voir la ville</p>
+      </button>
     </div>
   );
 }
