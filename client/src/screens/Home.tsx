@@ -4,36 +4,42 @@ import { useSearchParams } from "react-router-dom";
 import CityCard from "../components/CityCard";
 import { useCitiesQuery, useGetCityQuery } from "../gql/generated/schema";
 import Header from "../components/Header";
+import AnimatedCard from "../components/AnimatedCard";
 
 const styles: CSS.Properties = {
-  display: "flex",
-  flexDirection: "row",
-  flexWrap: "wrap",
-  margin: "2rem",
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    margin: "2rem",
+    alignItems: "center",
+    gap: "2rem"
 };
 const addCityButtonStyles: CSS.Properties = {
-  height: "17rem",
-  width: "15.6rem",
-  border: "10px solid #EC5D5C",
-  borderRadius: "40px",
-  backgroundColor: "#FFFFFF",
-  margin: "2rem",
-  color: "#EC5D5C",
-  fontFamily: "Josefin Sans",
-  fontWeight: 700,
-  fontSize: "1.25rem",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "fit-content",
+    width: "fit-content",
+    margin: "2rem",
+    color: "#EC5D5C",
+    fontFamily: "Josefin Sans",
+    fontWeight: 700,
+    fontSize: "1.25rem",
 };
 
 interface City {
-  id: number;
-  name: string;
-  city_area: string;
-  photo?: string;
-  user: {}[];
+    id: number;
+    name: string;
+    // latitude?: number;
+    // longitude?: number;
+    // photo?: string;
+    // users?: User[];
+    // poi?: Poi[];
 }
 
 interface Cities {
-  cities: City[];
+    cities: City[];
 }
 
 interface IState {
@@ -46,10 +52,10 @@ interface IState {
 //   password: string
 // }
 
-export default function Home({ cities }: Cities) {
+export default function Home({cities}: Cities) {
   const [toLoginPage, setToLoginPage] = useState(false);
 
-  const { loading: loadingCities, data } = useCitiesQuery();
+
 
   // gets the paras from URL
   const [searchParams, setSearchParams] = useSearchParams();
@@ -68,6 +74,7 @@ export default function Home({ cities }: Cities) {
       if (e.target.value === " ") return cities;
       return city.name.toLowerCase().includes(e.target.value.toLowerCase());
     });
+    console.log(results)
     setSearchParams({ query: e.target.value });
     setState({
       query: e.target.value,

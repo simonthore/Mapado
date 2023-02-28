@@ -15,10 +15,11 @@ const HeaderStyles: CSS.Properties = {
   color: "#000000",
 };
 
+interface HeaderProps {
+  icon: string;
+}
 
-
-
-export default function Header() {
+export default function Header({ icon }: HeaderProps) {
   return (
     <div style={HeaderStyles}>
       <div>

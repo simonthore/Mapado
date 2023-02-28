@@ -1,14 +1,12 @@
 import CSS from "csstype";
 
-interface City {
-  id: number;
-  name: string;
-  city_area: string;
-  photo?: string;
-  user: {}[];
+interface CityProps {
+  id?: number;
+  cityName?: string;
+  cityPhoto?: string;
 }
 
-export default function CityCard({ cityName, cityPhoto }: any) {
+export default function CityCard({ cityName, cityPhoto }: CityProps) {
   const cardStyles: CSS.Properties = {
     display: "flex",
     flexDirection: "column",
