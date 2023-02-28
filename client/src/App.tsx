@@ -20,7 +20,6 @@ const styles: CSS.Properties = {
 };
 
 //MOCK DATA CITIES
-
 const cities: {
   id: number;
   name: string;

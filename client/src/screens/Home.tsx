@@ -51,22 +51,18 @@ export default function Home({ cities }: Cities) {
 
   const { loading: loadingCities, data } = useCitiesQuery();
 
+  // gets the paras from URL
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // const [query, setQuery] = useState(searchParams.get("query") ?? "");
-
+  // State to manage both URL query & cities to display
   const [state, setState] = useState<IState>({
     query: searchParams.get("query") ?? "",
     list: [],
   });
 
-  const searchResult = useGetCityQuery({
-    variables: { query: state.query ?? "" },
-  });
-  const dbCity = searchResult.data?.city.name;
-
-  // const cities = data?.cities || [];
-
+  // takes in value from the search bar and returns a filtered list of the cities to display
+  //(filter improves with each letter)
+  //searchParams controls the URL (what comes after the "?")
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const results = cities.filter((city) => {
       if (e.target.value === " ") return cities;
@@ -97,10 +93,12 @@ export default function Home({ cities }: Cities) {
           </button>
         </a>
         {state.query === ""
+        // if there is no search, display all cities
           ? cities.map((city) => (
               <CityCard key={city.id} cityName={city.name} />
             ))
-          : state.list.map((city) => (
+            : state.list.map((city) => (
+            // if there is a search display the cities corresponding 
               <CityCard key={city.id} cityName={city.name} />
             ))}
       </div>
