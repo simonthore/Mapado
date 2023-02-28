@@ -1,9 +1,10 @@
 import CSS from "csstype";
 import { useGetProfileQuery } from "../gql/generated/schema";
 import Logout from "./Logout";
+import logo from "../assets/logo.png";
 
 const HeaderStyles: CSS.Properties = {
-  height: "8.6rem",
+  height: "7.5rem",
   width: "100vw",
   display: "flex",
   flexDirection: "row",
@@ -26,19 +27,24 @@ const searchBarStyles: CSS.Properties = {
   paddingLeft: "20px",
 };
 
-export default function Header() {
+const logoStyles: CSS.Properties = {
+  height: "2.5rem",
+};
 
+export default function Header() {
   return (
     <div style={HeaderStyles}>
       <div>
-        <a href="/home">MAPADO</a>
+        <a href="/">
+          <img src={logo} style={logoStyles} />
+        </a>
       </div>
       <input
         style={searchBarStyles}
         type="text"
         placeholder="Rechercher une ville"
       ></input>
-       <Logout />
+      <Logout />
     </div>
   );
 }
