@@ -6,6 +6,7 @@ import Login from "./screens/Login";
 import Home from "./screens/Home";
 import Header from "./components/Header";
 import AddManageCities from "./components/AddManageCities";
+import Map from "./screens/Map";
 import "./App.css";
 import {useCitiesQuery} from "./gql/generated/schema";
 import Register from "./screens/Register";
@@ -82,6 +83,7 @@ function App() {
                         element={<AddManageCities cities={cities}/>}
                     />
                     <Route path="/info/:cityName" element={<InfoCity/>}/>
+                    <Route path="/map" element={<Map/>}/>
                 </Routes>
             </div>
         </>

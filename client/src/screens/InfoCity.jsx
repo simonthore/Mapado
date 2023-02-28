@@ -1,5 +1,9 @@
+import Map from  "../screens/Map"
+
 export default function InfoCity() {
     return (
-        <div></div>
+        <div>
+            <Map></Map>
+        </div>
     )
 };

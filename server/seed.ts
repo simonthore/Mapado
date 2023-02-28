@@ -36,6 +36,7 @@ async function seed(): Promise<void> {
         },
     ]);
 
+
     await db.destroy();
     console.log("done !");
 }

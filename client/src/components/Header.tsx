@@ -8,7 +8,7 @@ interface HeaderProps {
 }
 
 const HeaderStyles: CSS.Properties = {
-    height: "8.6rem",
+    height: "10vh",
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
