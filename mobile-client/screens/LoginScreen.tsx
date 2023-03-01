@@ -1,100 +1,134 @@
 import { StatusBar } from "expo-status-bar";
-import {useState} from "react";
+import { useState } from "react";
+import * as React from "react";
+import Svg, { G, Rect } from "react-native-svg";
 import {
   StyleSheet,
-  Text,
   TextInput,
   View,
   Dimensions,
+  Text,
   ScrollView,
+  RefreshControl,
   TouchableHighlight,
-  Button,
-
+  Pressable,
 } from "react-native";
 import { useFonts } from "expo-font";
+import { useLoginMutation } from "../gql/generated/schema";
 
-import { useLoginMutation } from '../gql/generated/schema';
-
-
-export default function LoginScreen() {
+export default function LoginScreen({ navigation }) {
   const [credentials, setCredentials] = useState({
-    email : "toto@gmail.com",
-    password : "abc123",
+    email: "toto@gmail.com",
+    password: "abc123",
   });
 
-  const [login] = useLoginMutation()
-  const [error, setError] = useState('')
-  const [valid, setValid] = useState('')
+  
+  const [refresh, setRefresh] = useState(false);
 
-  const [loader] = useFonts({
-    "Amatic SC-Bold": require("../assets/fonts/AmaticSC-Bold.ttf"),
-  });
+  const pullRefresh = () => {
+    setRefresh(true);
+    setTimeout(() => {
+      window;
+      setRefresh(false);
+    }, 2000);
+  };
+  const [login] = useLoginMutation();
+  const [error, setError] = useState("");
+  const [valid, setValid] = useState("");
 
- 
+
+
   return (
     <View style={styles.container}>
-
-      <ScrollView style={styles.ScrollView}>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={refresh}
+            onRefresh={() => pullRefresh()}
+          />
+        }
+        style={styles.ScrollView}
+      >
+         <View style={styles.contain}>
         <TouchableHighlight
           style={{
             borderRadius:
               Math.round(
-              Dimensions.get("window").width + Dimensions.get("window").height
+                Dimensions.get("window").width + Dimensions.get("window").height
               ) / 2,
             width: Dimensions.get("window").width * 0.5,
             height: Dimensions.get("window").width * 0.5,
-            borderWidth: 2,
-            borderColor: "black",
+            borderWidth: 8,
+            borderColor: "#F5DEB3",
             justifyContent: "center",
             alignItems: "center",
             marginBottom: 60,
-            marginTop: 60,
-            marginLeft: 90,
+            marginTop: 20,
+           
           }}
           underlayColor="#CCC30A"
           onPress={() => alert("Mapado's Rule")}
         >
           <Text style={styles.mainName}>Mapado</Text>
         </TouchableHighlight>
-        
-
+        </View>
         <TextInput
           onChangeText={(val) => setCredentials({ ...credentials, email: val })}
           placeholder="Nom d'utilisateur ou email"
           value={credentials.email}
-          style = {styles.info}
-
-          />
-
-        <TextInput
-          onChangeText={(val) => setCredentials({ ...credentials, password: val })}
-          placeholder="Mot de passe"
-          value={credentials.password}
-          style = {styles.info}
-          />
-      {/* <TouchableOpacity style={styles.loginBtn}>
-        <Text style={styles.loginText}>ce connecter</Text> 
-      </TouchableOpacity> 
-      */}
-      {error && <Text style={{color:'red'}}>{error}</Text>}
-      {valid && <Text style={{color:'green'}}>{valid}</Text>}
-        <Button
-          onPress={()=>{
-            login({variables: {data: credentials}})
-            .then((res) => {
-            setValid('Vous êtes connecté')
-
-            })
-            .catch(() => 
-              setError('Mot de passe ou email incorrect')
-            )
-       
-        }}
-        title="se connecter"
+          style={styles.info}
         />
 
-          <Text style={styles.forgot_button}> mot de passe oublié ? </Text>
-        <Text style={styles.info}>Créer un compte</Text>
+        <Svg height="15" width="100%">
+          <Rect x="0" y="10" width="1120" height="3" fill="white" />
+        </Svg>
+
+        <TextInput
+          onChangeText={(val) =>
+            setCredentials({ ...credentials, password: val })
+          }
+          placeholder="Mot de passe"
+          value={credentials.password}
+          style={styles.info}
+        />
+
+        <Svg height="50" width="100%">
+          <Rect x="0" y="10" width="1120" height="3" fill="white" />
+        </Svg>
+
+        {error && <Text style={{ color: "red" }}>{error}</Text>}
+        {valid && <Text style={{ color: "green" }}>{valid}</Text>}
+        <View style={styles.contain}>
+        <Pressable
+            style={styles.connexion}
+          onPress={() => {
+            login({ variables: { data: credentials } })
+            .then((res) => {
+              navigation.navigate("Home");
+            })
+            .catch(() => setError("Mot de passe ou email incorrect"));
+          }}
+        >
+          <Text style={styles.connexionText}>Se connecter</Text>
+        </Pressable>
+        </View>
+        <View style={styles.box}>
+        <Pressable
+          onPress={() => {
+            navigation.navigate("Forgot");
+          }}
+        >
+          <Text style={styles.Mdp}>Mot de passe oublié ?</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => {
+            navigation.navigate("Register");
+          }}
+        >
+          <Text style={styles.text}>Créer un compte</Text>
+        </Pressable>
+        
+        </View>
 
         <StatusBar style="auto" />
       </ScrollView>
@@ -105,43 +139,49 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "yellow",
+    backgroundColor: "#08415C",
     alignItems: "center",
-    justifyContent: "center",
+  },
+  contain: {
+  flex: 1,
+  alignItems: "center",
   },
   info: {
-    color: "black",
-    backgroundColor: "#ffffff",
-    padding: 10,
-    justifyContent: "flex-end",
-    width: 350,
-    margin: 10,
-    borderWidth: 1,
-    borderColor: "black",
-    borderTopLeftRadius: 20,
-  },
-  button: {
-    alignItems: "center",
-    paddingVertical: 12,
-    borderRadius: 4,
-    backgroundColor: "black",
-    width: 250,
-    justifyContent: "center",
-  },
-  text: {
-    fontSize: 16,
-    lineHeight: 21,
-    fontWeight: "bold",
-    letterSpacing: 0.25,
     color: "white",
   },
-  forgot_button: {
-    textAlign: "center",
-    marginBottom: 25,
-    height: 30,
+  connexion: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 40,
+    paddingHorizontal: 32,
+    height: 50,
+    width: 200,
+    borderRadius: 20,
+    backgroundColor: "#F5DEB3",
+    marginBottom: 70,
+  },
+  connexionText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#08415C",
+  },
+  text: {
+    fontSize: 16, 
+    fontWeight: "bold",
+    color: "white",
+  },
+  Mdp: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "white",
+    marginRight: 60,
+  
+  },
+  box: {
+  flexDirection: "row",
   },
   mainName: {
-    fontFamily: "Amatic SC-Bold",
+    color: "#F5DEB3",
     fontSize: 40,
   },
   ScrollView: {},

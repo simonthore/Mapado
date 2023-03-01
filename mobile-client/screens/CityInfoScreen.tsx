@@ -4,6 +4,7 @@ import {City} from "../gql/generated/schema";
 import MapView from 'react-native-maps';
 
 
+
 interface WilderListItemProps {
     city: City;
     route: any;

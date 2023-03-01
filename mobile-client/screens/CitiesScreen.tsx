@@ -4,13 +4,13 @@ import {useCitiesQuery} from "../gql/generated/schema";
 import CityListItem from "../components/CityListItem";
 import React from "react";
 
+
 export default function CitiesScreen({navigation}) {
     const [text, onChangeText] = React.useState('');
 
     const {data} = useCitiesQuery();
     const cities = data?.cities || [];
-    console.log(data)
-    console.log('Navigation', navigation)
+
 
     return (
         <View style={styles.container}>
@@ -21,6 +21,8 @@ export default function CitiesScreen({navigation}) {
                 value={text}
                 placeholder={"Recherchez un ville"}>
             </TextInput>
+            <Text>Home Screen</Text>
+    
             <FlatList
                 keyExtractor={(item) => item.id.toString()}
                 data={cities}

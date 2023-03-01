@@ -7,6 +7,10 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import CitiesScreen from "./screens/CitiesScreen";
 import CityInfoScreen from "./screens/CityInfoScreen";
 import LoginScreen from "./screens/LoginScreen";
+import UserProfile from './screens/ProfileView';
+
+import ForgotPassword from "./screens/ForgotPassword";
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -17,6 +21,8 @@ function Cities() {
         <Stack.Navigator screenOptions={{headerShown: false}}>
             <Stack.Screen name="Home" component={CitiesScreen} />
             <Stack.Screen name="Info" component={CityInfoScreen} />
+            <Stack.Screen name="Profile" component={UserProfile} />
+            <Stack.Screen name="Forgot" component={ForgotPassword} />
         </Stack.Navigator>
     )
 }
