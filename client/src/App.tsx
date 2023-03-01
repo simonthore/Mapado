@@ -83,8 +83,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/password/email" element={<EmailPassword />} />
-          <Route path="/password/reset:token" element={<PasswordReset />} />
-          <Route path="*" element={<Home cities={cities} />} />
+          <Route path="/password/reset/:token" element={<PasswordReset />} />
+          {/* <Route path="*" element={<Home cities={cities} />} /> */}
           <Route
             path="/manage-cities"
             element={<AddManageCities cities={cities} />}
