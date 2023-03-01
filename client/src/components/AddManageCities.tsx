@@ -17,6 +17,7 @@ interface Cities {
 }
 
 const AddManageStyles: CSS.Properties = {
+<<<<<<< HEAD
   height: "auto",
   width: "auto",
   backgroundColor: "#FFFFFF",
@@ -26,6 +27,16 @@ const AddManageStyles: CSS.Properties = {
   flexDirection: "column",
   alignItems: "center",
   justifyContent: "space-between",
+=======
+    margin: "0 auto",
+    borderRadius: "20px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor:"#173472",
+    width: "fit-content",
+>>>>>>> origin
 };
 
 const titleStyles: CSS.Properties = {
@@ -85,6 +96,7 @@ const AddCityButtonStyle: CSS.Properties = {
 };
 
 const backButton: CSS.Properties = {
+<<<<<<< HEAD
   alignSelf: "flex-start",
   justifySelf: "flex-start",
   fontFamily: "Rubik",
@@ -134,4 +146,40 @@ export default function AddManageCities({ cities }: Cities) {
     </div>
     </div>
   );
+=======
+    alignSelf: "flex-start",
+    justifySelf: "flex-start",
+    fontFamily: "Rubik",
+    fontSize: '2.25rem',
+    fontWeight: 500
+}
+
+export default function AddManageCities({cities}: Cities) {
+    return (
+        <div style={AddManageStyles}>
+            <h2 style={titleStyles}>Ajouter une ville</h2>
+
+            <div style={manageCityStyle}>
+                <input
+                    type="text"
+                    placeholder="Nom de la ville"
+                    style={inputStyles}
+                ></input>
+                <button style={AddCityButtonStyle}>Ajouter</button>
+            </div>
+
+            <h2 style={titleStyles}>Gérer les villes</h2>
+            <div>
+                {cities.map((city: City) => {
+                    return (
+                        <div style={manageCityStyle}>
+                            <p style={cityLabel}>{city.name}</p>
+                            <button style={deleteButtonStyles}>Supprimer</button>
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
+    );
+>>>>>>> origin
 }

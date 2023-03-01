@@ -107,35 +107,47 @@ export type Poi = {
 export type Query = {
   __typename?: 'Query';
   cities: Array<City>;
+<<<<<<< HEAD
   fetchToken: User;
+=======
+>>>>>>> origin
   city: City;
   profile: User;
   users: Array<User>;
 };
 
 
+<<<<<<< HEAD
 export type QueryFetchTokenArgs = {
   email: Scalars['String'];
 }
 
+=======
+>>>>>>> origin
 export type QueryCityArgs = {
   name: Scalars['String'];
 };
 
 export type User = {
   __typename?: 'User';
+<<<<<<< HEAD
   changePasswordToken?: Maybe<Scalars['String']>;
   created_at?: Maybe<Scalars['Float']>;
+=======
+>>>>>>> origin
   email?: Maybe<Scalars['String']>;
   hashedPassword?: Maybe<Scalars['String']>;
   id: Scalars['Float'];
   role?: Maybe<Scalars['String']>;
   role_id?: Maybe<Scalars['Float']>;
+<<<<<<< HEAD
 };
 
 export type UserChangePassword = {
   email: Scalars['String'];
   newPassword: Scalars['String'];
+=======
+>>>>>>> origin
 };
 
 export type UserInput = {
@@ -173,6 +185,7 @@ export type GetCityQueryVariables = Exact<{
 
 
 export type GetCityQuery = { __typename?: 'Query', city: { __typename?: 'City', name: string } };
+<<<<<<< HEAD
 
 export type FetchTokenQueryVariables = Exact<{
   email: Scalars['String'];
@@ -180,6 +193,8 @@ export type FetchTokenQueryVariables = Exact<{
 
 
 export type FetchTokenQuery = { __typename?: 'Query', fetchToken: { __typename?: 'User', changePasswordToken?: string | null } };
+=======
+>>>>>>> origin
 
 export type GetProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -315,6 +330,7 @@ export function useCitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Cit
 export type CitiesQueryHookResult = ReturnType<typeof useCitiesQuery>;
 export type CitiesLazyQueryHookResult = ReturnType<typeof useCitiesLazyQuery>;
 export type CitiesQueryResult = Apollo.QueryResult<CitiesQuery, CitiesQueryVariables>;
+<<<<<<< HEAD
 export const FetchTokenDocument = gql`
     query FetchToken($email: String!) {
   fetchToken(email: $email) {
@@ -323,6 +339,8 @@ export const FetchTokenDocument = gql`
     }
     `
 
+=======
+>>>>>>> origin
 export const GetCityDocument = gql`
     query getCity($query: String!) {
   city(name: $query) {
@@ -332,10 +350,13 @@ export const GetCityDocument = gql`
     `;
 
 /**
+<<<<<<< HEAD
  * __useFetchTokenQuery__
  *
  * To run a query within a React component, call `useFetchTokenQuery` and pass it any options that fit your needs.
  * When your component renders, `useFetchTokenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+=======
+>>>>>>> origin
  * __useGetCityQuery__
  *
  * To run a query within a React component, call `useGetCityQuery` and pass it any options that fit your needs.
@@ -345,6 +366,7 @@ export const GetCityDocument = gql`
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
+<<<<<<< HEAD
  * const { data, loading, error } = useFetchTokenQuery({
  *   variables: {
  *      email: // value for 'email'
@@ -368,6 +390,14 @@ export type FetchTokenQueryResult = Apollo.QueryResult<FetchTokenQuery, FetchTok
 //    },
 //  });
  
+=======
+ * const { data, loading, error } = useGetCityQuery({
+ *   variables: {
+ *      query: // value for 'query'
+ *   },
+ * });
+ */
+>>>>>>> origin
 export function useGetCityQuery(baseOptions: Apollo.QueryHookOptions<GetCityQuery, GetCityQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetCityQuery, GetCityQueryVariables>(GetCityDocument, options);
