@@ -1,0 +1,5 @@
+query getCity($query: String!) {
+  city(name: $query) {
+    name
+  }
+}

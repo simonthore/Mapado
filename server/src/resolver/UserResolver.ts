@@ -121,7 +121,6 @@ export class UserResolver {
     try {
       // create token
       const url = `http://localhost:3000/password/reset/:${emailToken}`;
-      // const url = `http://localhost:3000/password/reset/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6eyJlbWFpbCI6ImFubmEuZ29zbWVAZ21haWwuY29tIn0sImlhdCI6MTY3NjM4NDY1MSwiZXhwIjoxNjc2NDcxMDUxfQ.AlKBSX9iClPtCMDt64m3FNp6-wpqLaPwmoXQuCRN4oY`;
 
       //  send password reset email
       await transporter.sendMail({
