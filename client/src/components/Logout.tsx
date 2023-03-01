@@ -1,9 +1,5 @@
-<<<<<<< HEAD
 import { useGetProfileQuery, useLogoutMutation } from "../gql/generated/schema";
 import { Link } from "react-router-dom";
-=======
-import {useGetProfileQuery, useLogoutMutation} from "../gql/generated/schema";
->>>>>>> origin
 import CSS from "csstype";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 
@@ -20,24 +16,6 @@ const buttonStyles: CSS.Properties = {
 export default function Logout() {
     const {data: currentUser, client} = useGetProfileQuery();
 
-<<<<<<< HEAD
-  const [logout] = useLogoutMutation();
-  return (
-    <>
-      <Link to="/login">
-        <button
-          style={buttonStyles}
-          onClick={async () => {
-            await logout();
-            await client.resetStore();
-          }}
-        >
-          {currentUser ? "Log out" : "Log in"}
-        </button>
-      </Link>
-    </>
-  );
-=======
     const [logout] = useLogoutMutation();
     return (
         <>
@@ -55,5 +33,4 @@ export default function Logout() {
             </a>
         </>
     );
->>>>>>> origin
 }
