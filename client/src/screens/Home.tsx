@@ -5,6 +5,8 @@ import CityCard from "../components/CityCard";
 import { useCitiesQuery, useGetCityQuery } from "../gql/generated/schema";
 import Header from "../components/Header";
 import AnimatedCard from "../components/AnimatedCard";
+import ICity from "../interfaces/ICity";
+import { filterBySearch } from "../utils/helpers";
 
 const styles: CSS.Properties = {
     display: "flex",
@@ -28,23 +30,13 @@ const addCityButtonStyles: CSS.Properties = {
     fontSize: "1.25rem",
 };
 
-interface City {
-    id: number;
-    name: string;
-    // latitude?: number;
-    // longitude?: number;
-    // photo?: string;
-    // users?: User[];
-    // poi?: Poi[];
-}
-
 interface Cities {
-    cities: City[];
+  cities: ICity[];
 }
 
 interface IState {
   query: string;
-  list: City[];
+  list: ICity[];
 }
 
 // interface currentUser {
@@ -53,8 +45,6 @@ interface IState {
 // }
 
 export default function Home({ cities }: Cities) {
-  const [toLoginPage, setToLoginPage] = useState(false);
-
   // gets the paras from URL
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -68,11 +58,7 @@ export default function Home({ cities }: Cities) {
   //(filter improves with each letter)
   //searchParams controls the URL (what comes after the "?")
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const results = cities.filter((city) => {
-      if (e.target.value === " ") return cities;
-      return city.name.toLowerCase().includes(e.target.value.toLowerCase());
-    });
-    console.log(results)
+    const results = filterBySearch(cities, e.target.value);
     setSearchParams({ query: e.target.value });
     setState({
       query: e.target.value,

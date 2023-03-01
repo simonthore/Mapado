@@ -2,6 +2,7 @@ import CSS from "csstype";
 import { useState } from "react";
 import { useSendPasswordEmailMutation } from "../gql/generated/schema";
 import Header from "../components/Header";
+import toast from "react-hot-toast";
 
 const resetPasswordStyles: CSS.Properties = {
   height: "100vh",
@@ -70,7 +71,7 @@ const [sendEmail] = useSendPasswordEmailMutation()
             e.preventDefault();
             sendEmail({ variables: { data: email } })
               .then(() => {
-                console.log("ok");
+                console.log("email sent");
               })
               .catch(console.error);
           }}
@@ -92,7 +93,7 @@ const [sendEmail] = useSendPasswordEmailMutation()
           </label>
           <div>
             <button style={secondaryButtonStyles}>Retour</button>
-            <button type="submit" style={primaryButtonStyles} onClick={() => alert("please check your email")}>
+            <button type="submit" style={primaryButtonStyles} onClick={() => toast("Please check your email for the reset link")}>
               Valider
             </button>
           </div>
