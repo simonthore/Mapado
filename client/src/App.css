@@ -1,3 +1,6 @@
+@import "assets/css/components/AnimatedCard.css";
+@import "assets/css/components/Card.css";
+
 .App {
   text-align: center;
 }
@@ -26,6 +29,14 @@
 
 .App-link {
   color: #61dafb;
+}
+
+.map-container {
+  height: 90vh;
+}
+
+body {
+  background-color: #173472;
 }
 
 @keyframes App-logo-spin {

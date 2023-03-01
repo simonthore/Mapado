@@ -1,48 +1,110 @@
-import { argon2id, hash, verify } from "argon2";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  ManyToOne,
+  ManyToMany,
+} from "typeorm";
 import { Field, InputType, ObjectType } from "type-graphql";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import City from "./City";
+import { IsEmail, Matches, MinLength } from "class-validator";
+import { argon2id, hash, verify } from "argon2";
+import { userInfo } from "os";
+
+export type Role = "visitor" | "cityAdmin" | "superAdmin";
 
 @Entity()
 @ObjectType()
 class User {
-    @Field()
-    @PrimaryGeneratedColumn()
-    id: number;
+  @Field()
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({ nullable: true })
-    email?: string;
+  @Field({ nullable: true })
+  @Column({nullable: true, type: "date"})
+  created_at: number;
 
-    @Column({ nullable: true })
-    hashedPassword: string;
+  @Field({ nullable: true })
+  @Column({ nullable: true, type: "int" })
+  role_id?: number;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true, type: "text" })
+  email?: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true, type: "text" })
+  hashedPassword?: string;
+
+  @Field({ nullable: true })
+  @Column({ enum: ["visitor", "cityAdmin"], default: "visitor" })
+  role?: Role;
+
+  @ManyToMany(() => City, (c) => c.id)
+  cities?: City[];
+
+  @Field({ nullable: true })
+  @Column({ nullable: true, type: "text" })
+  changePasswordToken: string
 }
 
 @InputType()
 export class UserInput {
-    @Field()
-    email: string;
+  @Field()
+  email: string;
 
-    @Field()
-    password: string;
+  @Field()
+  @MinLength(8)
+  @Matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)
+  password: string;
+}
+
+@InputType()
+export class UserSendPassword {
+  @Field()
+  email: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true})
+  token?: string;
+}
+
+@InputType()
+export class UserChangePassword {
+
+  @Field()
+  @IsEmail()
+  email: string;
+
+  @Field()
+  @Matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)
+  newPassword: string;
 }
 
 const hashingOptions = {
-    memoryCost: 2 ** 16,
-    timeCost: 5,
-    type: argon2id,
-}
+  memoryCost: 2 ** 16,
+  timeCost: 5,
+  type: argon2id,
+};
 
-export const hashPassword = async (plainPassword: string): Promise<string> => 
-await hash(plainPassword, hashingOptions);
+export const hashPassword = async (plainPassword: string): Promise<string> =>
+  await hash(plainPassword, hashingOptions);
 
 export const verifyPassword = async (
-    plainPassword: string,
-    hashedPassword: string
-): Promise<boolean> => 
-    await verify(hashedPassword, plainPassword, hashingOptions);
+  plainPassword: string,
+  hashedPassword: string
+): Promise<boolean> =>
+  await verify(hashedPassword, plainPassword, hashingOptions);
 
-// export const getSafeAttributes = (use: User) => ({
-//     ...userInfo,
-//     hashedPassword: undefined
-// });
+export const getSafeAttributes = (user: User) => ({
+  ...user,
+  hashedPassword: undefined,
+});
+
+export const sendPasswordEmail = async (email: string, token?: string): Promise<UserSendPassword> => (
+ { email, token }
+)
+
 
 export default User;

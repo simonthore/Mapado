@@ -1,13 +1,36 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
-import {Field, InputType, ObjectType} from "type-graphql";
-
+import {Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany} from "typeorm";
+import {Field, Float, InputType, ObjectType} from "type-graphql";
+import User from "./User"
+import Poi from "./Poi"
 
 @InputType()
-export class CityInput {
+export class CityInput{
     @Field()
     name: string;
+
+    @Field({ nullable: true })
+    photo?: string;
+
+    @Field(()=>Float, {nullable: true})
+    longitude?: number;
+
+    @Field(()=>Float, {nullable: true})
+    latitude?: number;
+}
+
+@InputType()
+export class UpdateCityInput{
     @Field()
-    image?: string;
+    name?: string;
+
+    @Field({ nullable: true })
+    photo?: string;
+
+    @Field(()=>Float, {nullable: true})
+    longitude?: number;
+
+    @Field(()=>Float, {nullable: true})
+    latitude?: number;
 }
 
 @Entity()
@@ -17,20 +40,27 @@ export default class City {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
     @Field()
+    @Column()
     name: string;
 
-    @Column({ nullable: true, length: 100 })
-    @Field()
-    Photo?: string;
+    @Field({nullable: true})
+    @Column({nullable: true, type: "text"})
+    photo?: string;
 
-    @Column( { nullable: true })
-    @Field( { nullable: true })
-    City_area?: string;
+    @Field(()=>Float, {nullable: true})
+    @Column({nullable: true, type: "decimal"})
+    latitude?: number;
 
-    @Column({ nullable: true })
-    @Field({ nullable: true })
-    userId?: number;
+    @Field(()=>Float, {nullable: true})
+    @Column({nullable: true, type: "decimal"})
+    longitude?: number;
 
-};
+    @Field(()=>[User],{nullable: true})
+    @ManyToMany(() => User, (u) => u.cities, {cascade: true,})
+    users?: User[];
+
+    @Field(()=>[Poi],{nullable: true})
+    @OneToMany(() => Poi, (p) => p.cities, {cascade: true,})
+    poi?: Poi[];
+}

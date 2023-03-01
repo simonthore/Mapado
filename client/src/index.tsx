@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
+// import  {CookiesProvider }from "react-cookie";
 import "./index.css";
 import App from "./App";
 import { ApolloProvider } from "@apollo/client";
@@ -12,9 +13,11 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+      <BrowserRouter>
+        {/* <CookiesProvider> */}
+          <App />
+        {/* </CookiesProvider> */}
+      </BrowserRouter>
     </ApolloProvider>
   </React.StrictMode>
 );

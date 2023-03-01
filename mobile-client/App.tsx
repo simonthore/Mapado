@@ -8,7 +8,7 @@ import CitiesScreen from "./screens/CitiesScreen";
 import CityInfoScreen from "./screens/CityInfoScreen";
 import LoginScreen from "./screens/LoginScreen";
 import UserProfile from './screens/ProfileView';
-
+import UserRegister from './screens/Register';
 import ForgotPassword from "./screens/ForgotPassword";
 
 
@@ -23,6 +23,9 @@ function Cities() {
             <Stack.Screen name="Info" component={CityInfoScreen} />
             <Stack.Screen name="Profile" component={UserProfile} />
             <Stack.Screen name="Forgot" component={ForgotPassword} />
+            <Stack.Screen name="Register" component={UserRegister} />
+
+            
         </Stack.Navigator>
     )
 }
