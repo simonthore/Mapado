@@ -105,7 +105,6 @@ const pageStyles: CSS.Properties = {
 export default function AddManageCities({ cities }: Cities) {
   return (
 <div style={pageStyles}>
-    <Header />
     <div style={AddManageStyles}>
       <a style={backButton} href="/">
         Go Back
