@@ -1,18 +1,8 @@
 import CSS from "csstype";
-import {truncate} from "fs";
-import {useEffect, useState} from "react";
-import {Routes} from "react-router";
-import {NavLink, Route} from "react-router-dom";
+import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import CityCard from "../components/CityCard";
-import {
-    useCitiesQuery,
-    useGetProfileQuery,
-    useLogoutMutation,
-} from "../gql/generated/schema";
-import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
-import {Location} from "history";
-import Login from "./Login";
-import Logout from "../components/Logout";
+import { useCitiesQuery, useGetCityQuery } from "../gql/generated/schema";
 import Header from "../components/Header";
 import AnimatedCard from "../components/AnimatedCard";
 
@@ -41,13 +31,20 @@ const addCityButtonStyles: CSS.Properties = {
 interface City {
     id: number;
     name: string;
-    city_area: string;
-    photo?: string;
-    user: {}[];
+    // latitude?: number;
+    // longitude?: number;
+    // photo?: string;
+    // users?: User[];
+    // poi?: Poi[];
 }
 
 interface Cities {
     cities: City[];
+}
+
+interface IState {
+  query: string;
+  list: City[];
 }
 
 // interface currentUser {
@@ -55,32 +52,63 @@ interface Cities {
 //   password: string
 // }
 
-export default function Home() {
-    const [toLoginPage, setToLoginPage] = useState(false);
-    const {loading: loadingCities, data} = useCitiesQuery();
+export default function Home({cities}: Cities) {
+  const [toLoginPage, setToLoginPage] = useState(false);
 
-    const cities = data?.cities || [];
-    console.log(cities)
 
-    return (
-        <div style={styles}>
-            <a href="/manage-cities">
-                <button style={addCityButtonStyles}>
-                    <AddCircleOutlineOutlinedIcon/>
-                    <p>Ajouter une ville</p>
-                </button>
-            </a>
 
-            {cities.map((city) => {
-                return(
-                <NavLink key={city.id} to={`/info/${city.name}`}>
-                    < AnimatedCard key={city.id} cityName={city.name} cityPhoto={city.photo}/>
-                </NavLink>
-                )
-                    // <CityCard key={city.id} cityName={city.name} cityPhoto={city.photo}/>
-                ;
-            })
-            }
-        </div>
-    );
+  // gets the paras from URL
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // State to manage both URL query & cities to display
+  const [state, setState] = useState<IState>({
+    query: searchParams.get("query") ?? "",
+    list: [],
+  });
+
+  // takes in value from the search bar and returns a filtered list of the cities to display
+  //(filter improves with each letter)
+  //searchParams controls the URL (what comes after the "?")
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const results = cities.filter((city) => {
+      if (e.target.value === " ") return cities;
+      return city.name.toLowerCase().includes(e.target.value.toLowerCase());
+    });
+    console.log(results)
+    setSearchParams({ query: e.target.value });
+    setState({
+      query: e.target.value,
+      list: results,
+    });
+  };
+
+  return (
+    <>
+      <form>
+        <input
+          value={state.query}
+          onChange={handleChange}
+          placeholder="Rechercher une ville..."
+          type="search"
+        ></input>
+      </form>
+
+      <div style={styles}>
+        <a href="/manage-cities">
+          <button style={addCityButtonStyles}>
+            <p>AJOUTER UNE VILLE</p>
+          </button>
+        </a>
+        {state.query === ""
+        // if there is no search, display all cities
+          ? cities.map((city) => (
+              <CityCard key={city.id} cityName={city.name} />
+            ))
+            : state.list.map((city) => (
+            // if there is a search display the cities corresponding 
+              <CityCard key={city.id} cityName={city.name} />
+            ))}
+      </div>
+    </>
+  );
 }

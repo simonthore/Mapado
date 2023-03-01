@@ -3,9 +3,11 @@ import CSS from "csstype";
 interface City {
     id: number;
     name: string;
-    city_area: string;
-    photo?: string;
-    user: {}[];
+    // latitude?: number;
+    // longitude?: number;
+    // photo?: string;
+    // users?: User[];
+    // poi?: Poi[];
 }
 
 interface Cities {

@@ -9,6 +9,18 @@ export class CityResolver {
   async cities(): Promise<City[]> {
     return await datasource.getRepository(City).find();
   }
+
+  @Query(() => City)
+  async city(@Arg("name", () => String) name: string): Promise<City> {
+    const city = await datasource
+      .getRepository(City)
+      .findOne({ where: { name } });
+
+    if (city === null) throw new ApolloError("city not found", "NOT_FOUND");
+
+    return city;
+  }
+
   @Mutation(() => City)
   async createCity(@Arg("data") data: CityInput): Promise<City> {
     return await datasource.getRepository(City).save(data);
