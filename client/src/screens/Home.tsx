@@ -1,48 +1,50 @@
 import CSS from "csstype";
-import { truncate } from "fs";
-import { useEffect, useState } from "react";
-import { Routes } from "react-router";
-import { Link, Route } from "react-router-dom";
+import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import CityCard from "../components/CityCard";
-import {
-  useCitiesQuery,
-  useGetProfileQuery,
-  useLogoutMutation,
-} from "../gql/generated/schema";
-import { Location } from "history";
-import Login from "./Login";
-import Logout from "../components/Logout";
+import { useCitiesQuery, useGetCityQuery } from "../gql/generated/schema";
 import Header from "../components/Header";
+import AnimatedCard from "../components/AnimatedCard";
 
 const styles: CSS.Properties = {
-  display: "flex",
-  flexDirection: "row",
-  flexWrap: "wrap",
-  margin: "2rem",
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    margin: "2rem",
+    alignItems: "center",
+    gap: "2rem"
 };
 const addCityButtonStyles: CSS.Properties = {
-  height: "17rem",
-  width: "15.6rem",
-  border: "10px solid #EC5D5C",
-  borderRadius: "40px",
-  backgroundColor: "#FFFFFF",
-  margin: "2rem",
-  color: "#EC5D5C",
-  fontFamily: "Josefin Sans",
-  fontWeight: 700,
-  fontSize: "1.25rem",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "fit-content",
+    width: "fit-content",
+    margin: "2rem",
+    color: "#EC5D5C",
+    fontFamily: "Josefin Sans",
+    fontWeight: 700,
+    fontSize: "1.25rem",
 };
 
 interface City {
-  id: number;
-  name: string;
-  city_area: string;
-  photo?: string;
-  user: {}[];
+    id: number;
+    name: string;
+    // latitude?: number;
+    // longitude?: number;
+    // photo?: string;
+    // users?: User[];
+    // poi?: Poi[];
 }
 
 interface Cities {
-  cities: City[];
+    cities: City[];
+}
+
+interface IState {
+  query: string;
+  list: City[];
 }
 
 // interface currentUser {
@@ -52,22 +54,60 @@ interface Cities {
 
 export default function Home({ cities }: Cities) {
   const [toLoginPage, setToLoginPage] = useState(false);
-  const { loading: loadingCities, data } = useCitiesQuery();
 
-  // const cities = data?.cities || [];
+
+
+  // gets the paras from URL
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // State to manage both URL query & cities to display
+  const [state, setState] = useState<IState>({
+    query: searchParams.get("query") ?? "",
+    list: [],
+  });
+
+  // takes in value from the search bar and returns a filtered list of the cities to display
+  //(filter improves with each letter)
+  //searchParams controls the URL (what comes after the "?")
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const results = cities.filter((city) => {
+      if (e.target.value === " ") return cities;
+      return city.name.toLowerCase().includes(e.target.value.toLowerCase());
+    });
+    console.log(results)
+    setSearchParams({ query: e.target.value });
+    setState({
+      query: e.target.value,
+      list: results,
+    });
+  };
 
   return (
     <>
-      <Header />
+      <form>
+        <input
+          value={state.query}
+          onChange={handleChange}
+          placeholder="Rechercher une ville..."
+          type="search"
+        ></input>
+      </form>
+
       <div style={styles}>
-        <Link to="/manage-cities">
+        <a href="/manage-cities">
           <button style={addCityButtonStyles}>
             <p>AJOUTER UNE VILLE</p>
           </button>
-        </Link>
-        {cities.map((city) => {
-          return <CityCard key={city.id} cityName={city.name} />;
-        })}
+        </a>
+        {state.query === ""
+        // if there is no search, display all cities
+          ? cities.map((city) => (
+              <CityCard key={city.id} cityName={city.name} />
+            ))
+            : state.list.map((city) => (
+            // if there is a search display the cities corresponding 
+              <CityCard key={city.id} cityName={city.name} />
+            ))}
       </div>
     </>
   );

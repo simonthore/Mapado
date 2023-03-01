@@ -1,78 +1,81 @@
 import CSS from "csstype";
-import { useState } from "react";
-import { Navigate, Link, useNavigate } from "react-router-dom";
+import {useState} from "react";
+import {Navigate, Link} from "react-router-dom";
 import toast from "react-hot-toast";
 import login from "../assets/login.svg";
-import { useGetProfileQuery, useLoginMutation } from "../gql/generated/schema";
+import {useGetProfileQuery, useLoginMutation} from "../gql/generated/schema";
+import Card from "../components/Card";
+import {useNavigate} from "react-router";
 import Header from "../components/Header";
 
 const loginPageStyles: CSS.Properties = {
-  height: "100vh",
-  width: "100vw",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "flex-start",
-  alignItems: "center",
-  backgroundColor: "#FFFFFF",
-  border: "2px solid #E2FE53",
-  position: "absolute",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    backgroundAttachment: "fixed",
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "cover",
 };
+
 const loginContainerStyles: CSS.Properties = {
-  height: "100vh",
-  width: "70vw",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "space-around",
-  alignItems: "center",
-  backgroundColor: "#FFFFFF",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-around",
+    alignItems: "center",
 };
 
 const inputStyles: CSS.Properties = {
-  textAlign: "center",
-  borderRadius: "10px",
-  width: "20rem",
-  height: "2.5rem",
-  border: "1px solid #EC5D5C",
+    textAlign: "center",
+    borderRadius: "20px",
+    width: "20rem",
+    height: "2.5rem",
+    border: "3px solid #173472",
+    boxSizing: "content-box",
 };
 
 const primaryButtonStyles: CSS.Properties = {
-  height: "2.5rem",
-  width: "15rem",
-  backgroundColor: "#FFFFFF",
-  borderRadius: "15px",
-  border: "3px solid #EC5D5C",
+    height: "2.5rem",
+    width: "15rem",
+    backgroundColor: "#FFFFFF",
+    borderRadius: "15px",
+    border: "3px solid #173472",
 };
 const secondaryButtonStyles: CSS.Properties = {
-  height: "2.5rem",
-  width: "15rem",
-  borderRadius: "15px",
-  border: "3px solid #EC5D5C",
+    height: "2.5rem",
+    width: "15rem",
+    borderRadius: "15px",
+    border: "3px solid #EC5D5C",
 };
 
 const tertiaryButtonStyles: CSS.Properties = {
-  color: "#EC5D5C",
-  fontWeight: 700,
+    height: "2.5rem",
+    width: "15rem",
+    borderRadius: "15px",
+    border: "3px solid #173472",
+    backgroundColor: "#EC5D5C",
+    color: "white",
 };
 
 const iconStyles: CSS.Properties = {
-  height: "15rem",
-  width: "auto",
+    height: "15rem",
+    width: "auto",
 };
 
 const titleStyles: CSS.Properties = {
-  fontFamily: "Rubik",
-  fontWeight: 800,
-  fontSize: "3rem",
-  color: "#000000",
+    fontFamily: "Rubik",
+    fontWeight: 800,
+    fontSize: "3rem",
+    color: "#EC5D5C",
 };
 
 export default function Login() {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [passwordShown, setPasswordShown] = useState(false);
 
-  const [login] = useLoginMutation();
+    const [login] = useLoginMutation();
 
-  const { data: currentUser, refetch, client } = useGetProfileQuery();
+    const {data: currentUser, refetch, client} = useGetProfileQuery();
 
   const navigate = useNavigate();
 
