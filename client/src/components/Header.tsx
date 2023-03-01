@@ -1,5 +1,6 @@
 import CSS from "csstype";
 import Logout from "./Logout";
+import { Link } from "react-router-dom";
 
 const HeaderStyles: CSS.Properties = {
   height: "8.6rem",
@@ -15,15 +16,12 @@ const HeaderStyles: CSS.Properties = {
   color: "#000000",
 };
 
-interface HeaderProps {
-  icon: string;
-}
 
-export default function Header({ icon }: HeaderProps) {
+export default function Header() {
   return (
     <div style={HeaderStyles}>
       <div>
-        <a href="/home">MAPADO</a>
+      <Link to="/">MAPADO</Link>
       </div>
       <Logout />
     </div>

@@ -1,4 +1,6 @@
+import { findByLabelText } from "@testing-library/react";
 import CSS from "csstype";
+import Header from "./Header";
 
 interface City {
     id: number;

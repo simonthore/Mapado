@@ -35,13 +35,20 @@ export type CityInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  changePassword: User;
   createCity: City;
   createUser: User;
   deleteCity: Scalars['Boolean'];
   deleteUser: Scalars['Boolean'];
   login: Scalars['String'];
   logout: Scalars['String'];
+  sendPasswordEmail: User;
   updateCity: City;
+};
+
+
+export type MutationChangePasswordArgs = {
+  data: UserChangePassword;
 };
 
 
@@ -70,6 +77,11 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationSendPasswordEmailArgs = {
+  data: UserSendPassword;
+};
+
+
 export type MutationUpdateCityArgs = {
   data: CityInput;
   id: Scalars['Int'];
@@ -95,11 +107,16 @@ export type Poi = {
 export type Query = {
   __typename?: 'Query';
   cities: Array<City>;
+  fetchToken: User;
   city: City;
   profile: User;
   users: Array<User>;
 };
 
+
+export type QueryFetchTokenArgs = {
+  email: Scalars['String'];
+}
 
 export type QueryCityArgs = {
   name: Scalars['String'];
@@ -107,6 +124,8 @@ export type QueryCityArgs = {
 
 export type User = {
   __typename?: 'User';
+  changePasswordToken?: Maybe<Scalars['String']>;
+  created_at?: Maybe<Scalars['Float']>;
   email?: Maybe<Scalars['String']>;
   hashedPassword?: Maybe<Scalars['String']>;
   id: Scalars['Float'];
@@ -114,10 +133,27 @@ export type User = {
   role_id?: Maybe<Scalars['Float']>;
 };
 
+export type UserChangePassword = {
+  email: Scalars['String'];
+  newPassword: Scalars['String'];
+};
+
 export type UserInput = {
   email: Scalars['String'];
   password: Scalars['String'];
 };
+
+export type UserSendPassword = {
+  email: Scalars['String'];
+  token?: InputMaybe<Scalars['String']>;
+};
+
+export type ChangePasswordMutationVariables = Exact<{
+  data: UserChangePassword;
+}>;
+
+
+export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'User', email?: string | null } };
 
 export type CreateUserMutationVariables = Exact<{
   data: UserInput;
@@ -137,6 +173,13 @@ export type GetCityQueryVariables = Exact<{
 
 
 export type GetCityQuery = { __typename?: 'Query', city: { __typename?: 'City', name: string } };
+
+export type FetchTokenQueryVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type FetchTokenQuery = { __typename?: 'Query', fetchToken: { __typename?: 'User', changePasswordToken?: string | null } };
 
 export type GetProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -160,7 +203,47 @@ export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 export type LogoutMutation = { __typename?: 'Mutation', logout: string };
 
+export type SendPasswordEmailMutationVariables = Exact<{
+  data: UserSendPassword;
+}>;
 
+
+export type SendPasswordEmailMutation = { __typename?: 'Mutation', sendPasswordEmail: { __typename?: 'User', email?: string | null } };
+
+
+export const ChangePasswordDocument = gql`
+    mutation ChangePassword($data: UserChangePassword!) {
+  changePassword(data: $data) {
+    email
+  }
+}
+    `;
+export type ChangePasswordMutationFn = Apollo.MutationFunction<ChangePasswordMutation, ChangePasswordMutationVariables>;
+
+/**
+ * __useChangePasswordMutation__
+ *
+ * To run a mutation, you first call `useChangePasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangePasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changePasswordMutation, { data, loading, error }] = useChangePasswordMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useChangePasswordMutation(baseOptions?: Apollo.MutationHookOptions<ChangePasswordMutation, ChangePasswordMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument, options);
+      }
+export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswordMutation>;
+export type ChangePasswordMutationResult = Apollo.MutationResult<ChangePasswordMutation>;
+export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
 export const CreateUserDocument = gql`
     mutation CreateUser($data: UserInput!) {
   createUser(data: $data) {
@@ -232,6 +315,14 @@ export function useCitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Cit
 export type CitiesQueryHookResult = ReturnType<typeof useCitiesQuery>;
 export type CitiesLazyQueryHookResult = ReturnType<typeof useCitiesLazyQuery>;
 export type CitiesQueryResult = Apollo.QueryResult<CitiesQuery, CitiesQueryVariables>;
+export const FetchTokenDocument = gql`
+    query FetchToken($email: String!) {
+  fetchToken(email: $email) {
+    changePasswordToken
+  }
+    }
+    `
+
 export const GetCityDocument = gql`
     query getCity($query: String!) {
   city(name: $query) {
@@ -241,6 +332,10 @@ export const GetCityDocument = gql`
     `;
 
 /**
+ * __useFetchTokenQuery__
+ *
+ * To run a query within a React component, call `useFetchTokenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchTokenQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * __useGetCityQuery__
  *
  * To run a query within a React component, call `useGetCityQuery` and pass it any options that fit your needs.
@@ -250,12 +345,35 @@ export const GetCityDocument = gql`
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetCityQuery({
+ * const { data, loading, error } = useFetchTokenQuery({
  *   variables: {
- *      query: // value for 'query'
+ *      email: // value for 'email'
  *   },
  * });
  */
+export function useFetchTokenQuery(baseOptions: Apollo.QueryHookOptions<FetchTokenQuery, FetchTokenQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchTokenQuery, FetchTokenQueryVariables>(FetchTokenDocument, options);
+      }
+export function useFetchTokenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchTokenQuery, FetchTokenQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchTokenQuery, FetchTokenQueryVariables>(FetchTokenDocument, options);
+        }
+export type FetchTokenQueryHookResult = ReturnType<typeof useFetchTokenQuery>;
+export type FetchTokenLazyQueryHookResult = ReturnType<typeof useFetchTokenLazyQuery>;
+export type FetchTokenQueryResult = Apollo.QueryResult<FetchTokenQuery, FetchTokenQueryVariables>;
+//   const { data, loading, error } = useGetCityQuery({
+//    variables: {
+//       query: // value for 'query'
+//    },
+//  });
+ 
+//  * const { data, loading, error } = useGetCityQuery({
+//  *   variables: {
+//  *      query: // value for 'query'
+//  *   },
+//  * });
+//  */
 export function useGetCityQuery(baseOptions: Apollo.QueryHookOptions<GetCityQuery, GetCityQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetCityQuery, GetCityQueryVariables>(GetCityDocument, options);
@@ -398,3 +516,36 @@ export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<Logou
 export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
+export const SendPasswordEmailDocument = gql`
+    mutation sendPasswordEmail($data: UserSendPassword!) {
+  sendPasswordEmail(data: $data) {
+    email
+  }
+}
+    `;
+export type SendPasswordEmailMutationFn = Apollo.MutationFunction<SendPasswordEmailMutation, SendPasswordEmailMutationVariables>;
+
+/**
+ * __useSendPasswordEmailMutation__
+ *
+ * To run a mutation, you first call `useSendPasswordEmailMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendPasswordEmailMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendPasswordEmailMutation, { data, loading, error }] = useSendPasswordEmailMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useSendPasswordEmailMutation(baseOptions?: Apollo.MutationHookOptions<SendPasswordEmailMutation, SendPasswordEmailMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SendPasswordEmailMutation, SendPasswordEmailMutationVariables>(SendPasswordEmailDocument, options);
+      }
+export type SendPasswordEmailMutationHookResult = ReturnType<typeof useSendPasswordEmailMutation>;
+export type SendPasswordEmailMutationResult = Apollo.MutationResult<SendPasswordEmailMutation>;
+export type SendPasswordEmailMutationOptions = Apollo.BaseMutationOptions<SendPasswordEmailMutation, SendPasswordEmailMutationVariables>;

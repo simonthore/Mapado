@@ -20,9 +20,9 @@ export default function CityCard({ cityName, cityPhoto }: CityProps) {
     borderBottomLeftRadius: "40px",
     margin: "2rem",
     color: "#EC5D5C",
-    fontFamily: 'Josefin Sans',
+    fontFamily: "Josefin Sans",
     fontWeight: 700,
-    fontSize: '1.25rem'
+    fontSize: "1.25rem",
   };
 
   const photoStyles: CSS.Properties = {
@@ -30,7 +30,7 @@ export default function CityCard({ cityName, cityPhoto }: CityProps) {
     width: "15.6rem",
     borderTopLeftRadius: "40px",
     borderTopRightRadius: "40px",
-    backgroundColor: '#EC5D5C',
+    backgroundColor: "#EC5D5C",
   };
 
   const buttonStyles: CSS.Properties = {

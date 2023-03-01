@@ -1,11 +1,12 @@
 import CSS from "csstype";
 import {useState} from "react";
-import {Navigate} from "react-router-dom";
+import {Navigate, Link} from "react-router-dom";
 import toast from "react-hot-toast";
 import login from "../assets/login.svg";
 import {useGetProfileQuery, useLoginMutation} from "../gql/generated/schema";
 import Card from "../components/Card";
 import {useNavigate} from "react-router";
+import Header from "../components/Header";
 
 const loginPageStyles: CSS.Properties = {
     display: "flex",
@@ -69,88 +70,94 @@ const titleStyles: CSS.Properties = {
 };
 
 export default function Login() {
-    const [credentials, setCredentials] = useState({email: "", password: ""});
-    let navigate = useNavigate();
+  const [credentials, setCredentials] = useState({ email: "", password: "" });
+  const [passwordShown, setPasswordShown] = useState(false);
+  const [login] = useLoginMutation();
+  const {data: currentUser, client} = useGetProfileQuery();
 
-    const [login] = useLoginMutation();
+  const navigate = useNavigate();
 
-    const {data: currentUser, refetch, client} = useGetProfileQuery();
+  const navigateEmailPassword = () => navigate("/password/email");
 
-    function register() {
-        console.log("hello")
-        navigate("/register", {replace: false});
-    }
+  const togglePassword = () => setPasswordShown(!passwordShown);
 
-    return (
-        <div style={loginPageStyles}>
-            {currentUser && <Navigate to="/" replace={false}/>}
-            <Card customClass={"registerCard"}>
-                <form
-                    style={loginContainerStyles}
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        login({variables: {data: credentials}})
-                            .then(() => {
-                                client.resetStore();
-                            })
-                            .catch((error) => {
-                                toast.error("Invalid credentials", {
-                                    style: {
-                                        border: "3px solid #EC5D5C",
-                                        padding: "4rem",
-                                        color: "#EC5D5C",
-                                    },
-                                    iconTheme: {
-                                        primary: "#EC5D5C",
-                                        secondary: "#FFFFFF",
-                                    },
-                                });
-                            });
-                    }}
-                >
-                    <a href="/">
-                        <h1 style={titleStyles}>MAPADO</h1>
-                    </a>
-                    {/* <img src={login} alt="" style={iconStyles} /> */}
-                    <div style={{display: "flex", flexDirection: "column", gap: "2rem", alignItems: "center"}}>
-                        <label htmlFor="email">
-                            <input
-                                style={inputStyles}
-                                type="email"
-                                id="email"
-                                name="email"
-                                placeholder="Adresse mail"
-                                value={credentials.email}
-                                onChange={(e) =>
-                                    setCredentials({...credentials, email: e.target.value})
-                                }
-                            ></input>
-                        </label>
-                        <label htmlFor="password">
-                            <input
-                                style={inputStyles}
-                                type="password"
-                                placeholder="Mot de passe"
-                                value={credentials.password}
-                                onChange={(e) =>
-                                    setCredentials({...credentials, password: e.target.value})
-                                }
-                            ></input>
-                        </label>
-                        <button type="submit" style={tertiaryButtonStyles}>
-                            Se connecter
-                        </button>
-                    </div>
-                    <p style={{color: "#173472", fontWeight: 600}}>Mot de passe oublié ? <a href={"#"}>Cliquez ici !</a>
-                    </p>
-                </form>
-                <div>
-                    <p style={{color: "white", fontWeight: 600}}>Pas encore de compte Mapado ? </p>
-                    <button style={tertiaryButtonStyles} onClick={register}>Créer un compte
-                    </button>
-                </div>
-            </Card>
+  const navigateCreateAccount = () => navigate("/register")
 
-        </div>
-    );
+  return (
+    <>
+      <Link to="/">
+        <Header />
+      </Link>
+      <div style={loginPageStyles}>
+        {currentUser && <Navigate to="/" replace={false} />}
+        <form
+          style={loginContainerStyles}
+          onSubmit={(e) => {
+            e.preventDefault();
+            login({ variables: { data: credentials } })
+              .then(() => {
+                client.resetStore();
+              })
+              .catch((error) => {
+                toast.error("Invalid credentials", {
+                  style: {
+                    border: "3px solid #EC5D5C",
+                    padding: "4rem",
+                    color: "#EC5D5C",
+                  },
+                  iconTheme: {
+                    primary: "#EC5D5C",
+                    secondary: "#FFFFFF",
+                  },
+                });
+              });
+          }}
+        >
+          {/* <img src={login} alt="" style={iconStyles} /> */}
+          <label htmlFor="email">
+            <input
+              style={inputStyles}
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Adresse mail"
+              value={credentials.email}
+              onChange={(e) =>
+                setCredentials({ ...credentials, email: e.target.value })
+              }
+            ></input>
+          </label>
+          {/*  */}
+          <label htmlFor="password">
+            <input
+              style={inputStyles}
+              type={passwordShown ? "text" : "password"}
+              placeholder="Mot de passe"
+              value={credentials.password}
+              onChange={(e) =>
+                setCredentials({ ...credentials, password: e.target.value })
+              }
+            ></input>
+            <div>
+              <button type="button" onClick={togglePassword}>
+                Show Password
+              </button>
+            </div>
+            {/*  */}
+          </label>
+          <button
+            type="button"
+            style={tertiaryButtonStyles}
+            onClick={navigateEmailPassword}
+          >
+            Mot de passe oublié ?
+          </button>
+          <button type="submit" style={primaryButtonStyles}>
+            Se connecter
+          </button>
+          <button type="button" style={secondaryButtonStyles} onClick={navigateCreateAccount}>Créer un compte</button>
+        </form>
+      </div>
+    </>
+  );
 }

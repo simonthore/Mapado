@@ -52,7 +52,7 @@ interface IState {
 //   password: string
 // }
 
-export default function Home({cities}: Cities) {
+export default function Home({ cities }: Cities) {
   const [toLoginPage, setToLoginPage] = useState(false);
 
 

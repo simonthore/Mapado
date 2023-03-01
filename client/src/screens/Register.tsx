@@ -1,7 +1,8 @@
 import CSS from "csstype";
 import {useState} from "react";
 import login from "../assets/login.svg";
-import {useCreateUserMutation} from "../gql/generated/schema";
+import Header from "../components/Header";
+import { useCreateUserMutation } from "../gql/generated/schema";
 import Card from "../components/Card";
 
 const loginPageStyles: CSS.Properties = {
@@ -65,6 +66,8 @@ export default function Register() {
     const [createUser] = useCreateUserMutation();
 
     return (
+      <>
+      <Header />
         <div style={loginPageStyles}>
             <Card customClass={"registerCard"}>
                 <form
@@ -106,5 +109,6 @@ export default function Register() {
                 </form>
             </Card>
         </div>
+        </>
     );
 }

@@ -1,4 +1,5 @@
-import {useGetProfileQuery, useLogoutMutation} from "../gql/generated/schema";
+import { useGetProfileQuery, useLogoutMutation } from "../gql/generated/schema";
+import { Link } from "react-router-dom";
 import CSS from "csstype";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 
