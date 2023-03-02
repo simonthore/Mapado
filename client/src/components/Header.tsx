@@ -1,29 +1,15 @@
-import CSS from "csstype";
 import Logout from "./Logout";
-import { Link } from "react-router-dom";
-
-const HeaderStyles: CSS.Properties = {
-  height: "8.6rem",
-  width: "100vw",
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "space-around",
-  alignItems: "center",
-  backgroundColor: "#E6BFFB",
-  fontFamily: "Rubik",
-  fontWeight: 800,
-  fontSize: "3rem",
-  color: "#000000",
-};
-
+import {Link} from "react-router-dom";
+import Mapado from "../assets/images/Mapado.png"
 
 export default function Header() {
-  return (
-    <div style={HeaderStyles}>
-      <div>
-      <Link to="/">MAPADO</Link>
-      </div>
-      <Logout />
-    </div>
-  );
+    return (
+        <div className={"headerStyle"}>
+            <div>
+                <Link to="/"> <img src={Mapado} alt="Logo"/>
+                </Link>
+            </div>
+            <Logout/>
+        </div>
+    );
 }

@@ -1,0 +1,60 @@
+.loginStyle {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.loginContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+form {
+    gap: 30px;
+}
+
+input {
+    text-align: center;
+    border-radius: 20px;
+    width: 20rem;
+    height: 2.5rem;
+    border: 3px solid #173472;
+    box-sizing: content-box;
+}
+
+.primaryButton {
+    height: 2.5rem;
+    width: 15rem;
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    border: 3px solid #173472;
+}
+
+.tertiaryButton {
+    height: 2.5rem;
+    width: 15rem;
+    border-radius: 15px;
+    border: 3px solid #173472;
+    background-color: #EC5D5C;
+    color: white;
+}
+
+.secondaryButton {
+    height: 2.5rem;
+    width: 15rem;
+    border-radius: 15px;
+    border: 3px solid #EC5D5C;
+}
+
+.loginButtonsContainer {
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
