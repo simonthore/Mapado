@@ -39,7 +39,9 @@ export default function LoginScreen({ navigation }) {
 
 
   return (
+    
     <View style={styles.container}>
+      
       <ScrollView
         refreshControl={
           <RefreshControl
@@ -143,9 +145,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   contain: {
-  flex: 1,
-  alignItems: "center",
-  },
+    flex: 1,
+    alignItems: "center",
+    },
   info: {
     color: "white",
   },
