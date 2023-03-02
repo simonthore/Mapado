@@ -33,7 +33,7 @@ interface City {
     name: string;
     // latitude?: number;
     // longitude?: number;
-    // photo?: string;
+    photo?: string | null | undefined;
     // users?: User[];
     // poi?: Poi[];
 }
@@ -54,8 +54,6 @@ interface IState {
 
 export default function Home({ cities }: Cities) {
   const [toLoginPage, setToLoginPage] = useState(false);
-
-
 
   // gets the paras from URL
   const [searchParams, setSearchParams] = useSearchParams();
@@ -102,11 +100,11 @@ export default function Home({ cities }: Cities) {
         {state.query === ""
         // if there is no search, display all cities
           ? cities.map((city) => (
-              <CityCard key={city.id} cityName={city.name} />
+              <AnimatedCard key={city.id} cityPhoto={city.photo} cityName={city.name} />
             ))
             : state.list.map((city) => (
             // if there is a search display the cities corresponding 
-              <CityCard key={city.id} cityName={city.name} />
+              <AnimatedCard key={city.id} cityPhoto={city.photo} cityName={city.name} />
             ))}
       </div>
     </>

@@ -9,7 +9,7 @@ const HeaderStyles: CSS.Properties = {
   flexDirection: "row",
   justifyContent: "space-around",
   alignItems: "center",
-  backgroundColor: "#E6BFFB",
+  backgroundColor: "transparent",
   fontFamily: "Rubik",
   fontWeight: 800,
   fontSize: "3rem",
