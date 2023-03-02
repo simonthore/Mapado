@@ -1,7 +1,9 @@
 import { Arg, Int, Mutation, Query, Resolver } from "type-graphql";
-import City, { CityInput } from "../entity/City";
+import City, { CityInput, CityNameRequested } from "../entity/City";
 import datasource from "../db";
 import { ApolloError } from "apollo-server-errors";
+import { env } from "../environment";
+import express from "express";
 
 @Resolver(City)
 export class CityResolver {
@@ -44,5 +46,47 @@ export class CityResolver {
     if (affected === 0) throw new ApolloError("City not found", "NOT_FOUND");
 
     return { id, name };
+  }
+
+  // On récupère le string du front
+  // On fetch l'objet ville de l'API du string du front
+  // On enregistre nom, lat, long dans notre bdd
+
+  @Mutation(() => String)
+  async fetchCityName(@Arg("data") data: CityNameRequested): Promise<string> {
+    const { cityNameRequested } = data;
+
+    let options = {
+      method: "GET",
+      headers: { "x-api-key": env.REACT_APP_CITIES_API_KEY },
+    };
+
+    let url =
+      "https://api.api-ninjas.com/v1/geocoding?city=" + cityNameRequested;
+
+    const fetchCity = await fetch(url, options)
+      .then((res) => res.json()) // parse response as JSON
+      .then((data) => {
+        console.log(data[0]);
+        return data[0];
+      })
+      .catch((err) => {
+        console.log(`error ${err}`);
+      });
+
+    const latitude = fetchCity.latitude;
+    const name = fetchCity.name;
+    const longitude = fetchCity.longitude;
+
+    const cityData = {
+      name,
+      latitude,
+      longitude,
+    };
+    console.log(fetchCity);
+
+    await datasource.getRepository(City).save(cityData);
+
+    return cityNameRequested;
   }
 }

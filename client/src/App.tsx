@@ -5,7 +5,7 @@ import CSS from "csstype";
 import Login from "./screens/Login";
 import Home from "./screens/Home";
 import Header from "./components/Header";
-import AddManageCities from "./components/AddManageCities";
+import AddManageCities from "./screens/ManageCities";
 import Map from "./screens/Map";
 import "./App.css";
 import { useCitiesQuery } from "./gql/generated/schema";
