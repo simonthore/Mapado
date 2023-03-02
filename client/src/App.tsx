@@ -5,7 +5,7 @@ import CSS from "csstype";
 import Login from "./screens/Login";
 import Home from "./screens/Home";
 import Header from "./components/Header";
-import AddManageCities from "./components/AddManageCities";
+import ManageCities from "./screens/ManageCities";
 import Map from "./screens/Map";
 import "./App.css";
 import { useCitiesQuery } from "./gql/generated/schema";
@@ -39,7 +39,7 @@ function App() {
            <Route path="*" element={<Home cities={cities} />} />
           <Route
             path="/manage-cities"
-            element={<AddManageCities cities={cities} />}
+            element={<ManageCities cities={cities} />}
           />
            <Route path="/info/:cityName" element={<InfoCity/>}/>
           <Route path="/map" element={<Map />} />

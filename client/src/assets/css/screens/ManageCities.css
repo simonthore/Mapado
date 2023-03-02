@@ -1,0 +1,75 @@
+.addManageStyles {
+    margin: 0 auto;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #173472;
+    width: fit-content;
+}
+
+.title {
+    color: #EC5D5C;
+    font-family: Rubik;
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+.addCityContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    gap: 20px;
+}
+
+.manageOneCityContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.manageCitiesContainer {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cityLabel {
+    background-color: #EC5D5C;
+    color: #FFEBE9;
+    width: 21.5rem;
+    height: 3rem;
+    margin: 1.5rem;
+    border-radius: 5px;
+    padding: 10px;
+    font-weight: bold;
+}
+
+input {
+    text-align: center;
+    border-radius: 20px;
+    width: 20rem;
+    height: 2.5rem;
+    border: 3px solid #173472;
+    box-sizing: content-box;
+}
+
+.primaryButton {
+    height: 2.5rem;
+    width: 15rem;
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    border: 3px solid #173472;
+}
+
+.tertiaryButton {
+    height: 2.5rem;
+    width: 15rem;
+    border-radius: 15px;
+    border: 3px solid #173472;
+    background-color: #EC5D5C;
+    color: white;
+}
