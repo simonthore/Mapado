@@ -71,12 +71,14 @@ export default class City {
   poi?: Poi[];
 }
 
+// Petite entity pour le name qu'on récupère du front
+
 @InputType()
-export class CityNameRequested {
+export class CityRequested {
   @Field()
-  cityNameRequested: string;
+  cityName: string;
 }
 
 export const fetchCityName = async (
-  cityNameRequested: string
-): Promise<CityNameRequested> => ({ cityNameRequested });
+  cityName: string
+): Promise<CityRequested> => ({ cityName });

@@ -17,17 +17,19 @@ interface Cities {
 }
 
 export default function AddManageCities({ cities }: Cities) {
-  // gestion de l'input
-  const [cityNameRequested, setCityNameRequested] = useState({
-    cityNameRequested: "",
+  // Initialisation de l'objet cityRequested
+  const [cityRequested, setCityRequested] = useState({
+    cityName: "",
   });
 
+  // fonction gql qui récupère la valeur de l'input
   const [sendCityName] = useFetchCityNameMutation();
 
+  // Au click du bouton on lance la fonction gql
   const onClickSendCityName = () => {
-    console.log(cityNameRequested);
-    console.log(typeof cityNameRequested);
-    sendCityName({ variables: { data: cityNameRequested } });
+    console.log(cityRequested);
+    console.log(typeof cityRequested);
+    sendCityName({ variables: { data: cityRequested } });
   };
 
   return (
@@ -38,10 +40,8 @@ export default function AddManageCities({ cities }: Cities) {
         <input
           type="text"
           placeholder="Nom de la ville"
-          value={cityNameRequested.cityNameRequested}
-          onChange={(e) =>
-            setCityNameRequested({ cityNameRequested: e.target.value })
-          }
+          value={cityRequested.cityName}
+          onChange={(e) => setCityRequested({ cityName: e.target.value })}
         ></input>
         <button onClick={onClickSendCityName} className={"tertiaryButton"}>
           Ajouter
