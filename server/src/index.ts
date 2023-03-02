@@ -97,7 +97,7 @@ const start = async () => {
   );
 
   app.get("/", (req: Request, res: Response) => {
-    res.send("<h1>Bienvenue sur City Simononio</h1>");
+    res.send("<h1>Mapado</h1>");
   });
 
   await apolloServer.start();

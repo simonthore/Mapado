@@ -1,4 +1,8 @@
 import { EnvType, load } from 'ts-dotenv';
+import { IController } from './../types/IController';
+import datasource from '../db'
+import Category from '../entity/Category'
+
 
 export type Env = EnvType<typeof schema>;
 
@@ -17,12 +21,8 @@ export let env: Env;
 export function loadEnv(): void {
     env = load(schema);
 }
-import { IController } from './../types/IController';
-import datasource from '../db'
-import Category from '../entity/Category'
-import Poi from '../entity/Poi'
-import User from '../entity/User'
-import City from '../entity/City'
+
+
 
 
 const categoryController: IController = {
@@ -36,8 +36,9 @@ const categoryController: IController = {
         try {
             const created = await datasource.getRepository(Category).save({ name });
             res.status(201).send(created);
-        } catch (err)
+        } catch {(err)
         res.status(err).send('error while creating category');
+        }
     },
 }
 
