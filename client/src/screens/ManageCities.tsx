@@ -1,7 +1,5 @@
-import CSS from "csstype";
-import { FormEvent, useEffect, useState } from "react";
+import { useState } from "react";
 import { useFetchCityNameMutation } from "../gql/generated/schema";
-import { findByLabelText } from "@testing-library/react";
 import Card from "../components/Card";
 
 interface City {
