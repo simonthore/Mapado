@@ -1,0 +1,13 @@
+.headerStyle {
+    height: 8.6rem;
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    background-color: transparent;
+    font-family: Rubik;
+    font-weight: 800;
+    font-size: 3rem;
+    color: #000000;
+}

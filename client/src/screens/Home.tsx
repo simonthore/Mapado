@@ -1,6 +1,6 @@
 import CSS from "csstype";
 import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import {NavLink, useSearchParams} from "react-router-dom";
 import CityCard from "../components/CityCard";
 import { useCitiesQuery, useGetCityQuery } from "../gql/generated/schema";
 import Header from "../components/Header";
@@ -100,13 +100,16 @@ export default function Home({ cities }: Cities) {
         {state.query === ""
         // if there is no search, display all cities
           ? cities.map((city) => (
-              <AnimatedCard key={city.id} cityPhoto={city.photo} cityName={city.name} />
-            ))
+                <NavLink key={city.id} to={`/info/${city.name}`}>
+                    < AnimatedCard key={city.id} cityName={city.name} cityPhoto={city.photo}/>
+                </NavLink>            ))
             : state.list.map((city) => (
             // if there is a search display the cities corresponding 
-              <AnimatedCard key={city.id} cityPhoto={city.photo} cityName={city.name} />
-            ))}
+                <NavLink key={city.id} to={`/info/${city.name}`}>
+                    < AnimatedCard key={city.id} cityName={city.name} cityPhoto={city.photo}/>
+                </NavLink>            ))}
       </div>
     </>
   );
 }
+
