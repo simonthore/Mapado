@@ -3,8 +3,11 @@ import {View, Text, StyleSheet, Image} from "react-native";
 import {City} from "../gql/generated/schema";
 import MapView from 'react-native-maps';
 
+
+
 interface WilderListItemProps {
     city: City;
+    route: any;
 }
 
 export default function CityInfoScreen({route}: WilderListItemProps) {
