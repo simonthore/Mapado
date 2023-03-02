@@ -4,7 +4,7 @@ export default interface ICity {
     name: string;
     latitude?: number | undefined | null;
     longitude?: number | null | undefined;
-    // photo?: string;
+    photo?: string | null | undefined;
     // users?: User[];
     // poi?: Poi[];
   }

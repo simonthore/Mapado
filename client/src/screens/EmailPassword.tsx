@@ -1,59 +1,8 @@
-import CSS from "csstype";
 import { useState } from "react";
 import { useSendPasswordEmailMutation } from "../gql/generated/schema";
 import Header from "../components/Header";
+import Card from "../components/Card";
 import toast from "react-hot-toast";
-
-const resetPasswordStyles: CSS.Properties = {
-  height: "100vh",
-  width: "100vw",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "flex-start",
-  alignItems: "center",
-  backgroundColor: "#FFFFFF",
-  position: "absolute",
-  paddingTop: "2rem",
-};
-
-const passwordResetContainerStyles: CSS.Properties = {
-  height: "100vh",
-  width: "70vw",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "space-around",
-  alignItems: "center",
-  backgroundColor: "#FFFFFF",
-  border: "2px solid #E2FE53",
-};
-
-const inputStyles: CSS.Properties = {
-  textAlign: "center",
-  borderRadius: "10px",
-  width: "50rem",
-  height: "3.5rem",
-  border: "2px solid #EC5D5C",
-  fontFamily: "Rubik",
-};
-
-const primaryButtonStyles: CSS.Properties = {
-  height: "2.5rem",
-  width: "15rem",
-  backgroundColor: "#EC5D5C",
-  border: "3px solid #EC5D5C",
-  color: "#FFFFFF",
-  marginLeft: "10rem",
-};
-
-const secondaryButtonStyles: CSS.Properties = {
-  height: "2.5rem",
-  width: "15rem",
-  border: "3px solid #EC5D5C",
-};
-
-// interface onSendPasswordReset {
-// //
-// }
 
 export default function PasswordReset() {
   const [email, setEmail] = useState({
@@ -64,17 +13,18 @@ const [sendEmail] = useSendPasswordEmailMutation()
   return (
     <>
       <Header />
-      <div style={resetPasswordStyles}>
+      <Card customClass={"emailPasswordCard"}>
+
         <form
-          style={passwordResetContainerStyles}
-          onSubmit={(e) => {
-            e.preventDefault();
-            sendEmail({ variables: { data: email } })
-              .then(() => {
-                console.log("email sent");
-              })
-              .catch(console.error);
-          }}
+            className={"emailPasswordContainer"}
+            onSubmit={(e) => {
+              e.preventDefault();
+              sendEmail({variables: {data: email}})
+                  .then(() => {
+                    console.log("ok");
+                  })
+                  .catch(console.error);
+            }}
         >
           <p>
             Saissiez votre email. Vous y recevrez un lien permettant de modifier
@@ -82,23 +32,22 @@ const [sendEmail] = useSendPasswordEmailMutation()
           </p>
           <label htmlFor="email">
             <input
-              style={inputStyles}
-              type="email"
-              id="email"
-              name="email"
-              placeholder="Email"
-              value={email.email}
-              onChange={(e) => setEmail({ email: e.target.value })}
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Email"
+                value={email.email}
+                onChange={(e) => setEmail({email: e.target.value})}
             ></input>
           </label>
-          <div>
-            <button style={secondaryButtonStyles}>Retour</button>
-            <button type="submit" style={primaryButtonStyles} onClick={() => toast("Please check your email for the reset link")}>
+          <div className={"buttonsContainer"}>
+            <button className={"primaryButton"}>Retour</button>
+            <button type="submit" className={"tertiaryButton"} onClick={() => toast("please check your email")}>
               Valider
             </button>
           </div>
         </form>
-      </div>
+      </Card>
     </>
   );
 }

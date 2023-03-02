@@ -14,7 +14,7 @@ const resetPasswordStyles: CSS.Properties = {
   flexDirection: "column",
   justifyContent: "flex-start",
   alignItems: "center",
-  backgroundColor: "#FFFFFF",
+  backgroundColor: "#173472",
   position: "absolute",
   paddingTop: "2rem",
 };
@@ -24,9 +24,10 @@ const passwordResetContainerStyles: CSS.Properties = {
   width: "70vw",
   display: "flex",
   flexDirection: "column",
-  justifyContent: "space-around",
+    backgroundColor: "#173472",
+
+    justifyContent: "space-around",
   alignItems: "center",
-  backgroundColor: "#FFFFFF",
   border: "2px solid #E2FE53",
 };
 
@@ -89,7 +90,6 @@ export default function PasswordReset() {
 
   return (
     <>
-      <Header />
       <div style={resetPasswordStyles}>
         <form
           style={passwordResetContainerStyles}
