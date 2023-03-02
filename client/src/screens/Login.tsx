@@ -1,7 +1,7 @@
 import {useState} from "react";
 import {Navigate, Link} from "react-router-dom";
 import toast from "react-hot-toast";
-import login from "../assets/login.svg";
+import login from "../assets/images/login.svg";
 import {useGetProfileQuery, useLoginMutation} from "../gql/generated/schema";
 import Card from "../components/Card";
 import {useNavigate} from "react-router";

@@ -1,5 +1,5 @@
 import {useState} from "react";
-import login from "../assets/login.svg";
+import login from "../assets/images/login.svg";
 import Header from "../components/Header";
 import {useCreateUserMutation} from "../gql/generated/schema";
 import Card from "../components/Card";
