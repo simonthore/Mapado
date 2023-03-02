@@ -14,7 +14,7 @@ export default function AnimatedCard({cityName, cityPhoto}: CityProps) {
                 <p className="card-body">
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio, culpa.
                 </p>
-                <a href="#" className="button">
+                <a href="/info" className="button">
                     Learn More
                 </a>
             </div>
