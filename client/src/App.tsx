@@ -36,13 +36,13 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/password/email" element={<EmailPassword />} />
           <Route path="/password/reset/:token" element={<PasswordReset />} />
-          <Route path="*" element={<Home cities={cities} />} />
+           <Route path="*" element={<Home cities={cities} />} />
           <Route
             path="/manage-cities"
             element={<ManageCities cities={cities} />}
           />
-          <Route path="/info/:cityName" element={<InfoCity />} />
-          <Route path="/map" element={<Map />} />
+           <Route path="/info/:cityName" element={<InfoCity/>}/>
+          {/*<Route path="/map" element={<Map/>} />*/}
         </Routes>
       </div>
     </>
