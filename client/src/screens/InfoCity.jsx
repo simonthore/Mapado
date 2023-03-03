@@ -10,6 +10,7 @@ export default function InfoCity() {
     const {loading: loadingCities, data} = useGetCityQuery({variables: {query: cityName}})
 
     const city = data?.city ?? [];
+    console.log(city)
 
     return (
         <div>
