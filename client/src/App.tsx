@@ -42,7 +42,6 @@ function App() {
             element={<ManageCities cities={cities} />}
           />
           <Route path="/info/:cityName" element={<InfoCity />} />
-
           <Route path="/map" element={<Map />} />
         </Routes>
       </div>

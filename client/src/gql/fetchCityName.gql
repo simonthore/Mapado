@@ -1,0 +1,3 @@
+mutation FetchCityName($data: CityRequested!) {
+  fetchCityName(data: $data)
+}
