@@ -6,4 +6,6 @@ export const env = load({
   NODE_ENV: ["production" as const, "development" as const],
   SERVER_HOST: String,
   SERVER_PORT: Number,
+  REACT_APP_CITIES_API_KEY: String,
+  REACT_APP_PHOTOS_API_KEY: String,
 });

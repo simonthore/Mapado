@@ -1,13 +1,9 @@
 import {useState} from "react";
 import {NavLink, useSearchParams} from "react-router-dom";
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
-import {useCitiesQuery, useGetCityQuery} from "../gql/generated/schema";
-import Header from "../components/Header";
 import AnimatedCard from "../components/AnimatedCard";
 import ICity from "../interfaces/ICity";
 import { filterBySearch } from "../utils/helpers";
-
-
 
 interface Cities {
   cities: ICity[];
@@ -72,14 +68,18 @@ export default function Home({ cities }: Cities) {
                     ? cities.map((city) => (
                         <NavLink key={city.id} to={`/info/${city.name}`}>
                             < AnimatedCard key={city.id} cityName={city.name} cityPhoto={city.photo}/>
-                        </NavLink>))
-                    : state.list.map((city) => (
+                        </NavLink>)
+                    )
+                    :
+                    state.list.map((city) => (
                         // if there is a search display the cities corresponding
                         <NavLink key={city.id} to={`/info/${city.name}`}>
                             < AnimatedCard key={city.id} cityName={city.name} cityPhoto={city.photo}/>
-                        </NavLink>))}
+                        </NavLink>))
+                }
             </div>
         </>
-    );
+    )
+        ;
 }
 
