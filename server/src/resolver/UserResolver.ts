@@ -110,7 +110,6 @@ export class UserResolver {
       from: "mapado-wns@outlook.com",
     });
 
-    // const createEmailToken = (): string => {
     const userId = userToEmail.id;
     const hashedPassword = userToEmail.hashedPassword;
     const createdAt = userToEmail.created_at;
@@ -120,7 +119,7 @@ export class UserResolver {
 
     try {
       // create token
-      const url = `http://localhost:3000/password/reset/:${emailToken}`;
+      const url = `http://localhost:3000/password/reset/:${userId}/:${emailToken}`;
 
       //  send password reset email
       await transporter.sendMail({
@@ -146,10 +145,10 @@ export class UserResolver {
   // // Query to fetch and send changeEmailToken to client
 
   @Query(() => User)
-  async fetchToken(@Arg("email", () => String) email: string): Promise<User> {
+  async fetchToken(@Arg("id", () => Number) id: number): Promise<User> {
     const userToUpdatePassword = await datasource
       .getRepository(User)
-      .findOne({ where: { email } });
+      .findOne({ where: { id } });
     if (userToUpdatePassword === null)
       throw new ApolloError("user not found", "NOT_FOUND");
     return userToUpdatePassword;
@@ -158,16 +157,14 @@ export class UserResolver {
   // mutation to change password
   @Mutation(() => User)
   async changePassword(
-    // @Arg('id', () => Int) id: number,
-    @Arg("data") data: UserChangePassword
+    @Arg('id', () => Int) id: number,
+    @Arg('newPassword', () => String) newPassword: string
   ): Promise<boolean> {
-    // deconstruct data from User entity
-    const { email, newPassword } = data;
 
     //create userToUpdate which is the user in the db matching the email (with properties email, hashedPassword, etc)
     const userToUpdate = await datasource
       .getRepository(User)
-      .findOne({ where: { email } });
+      .findOne({ where: { id } });
     // verify if user is null > throw error
     if (!userToUpdate)
       throw new ApolloError("invalid credentials no such user");
