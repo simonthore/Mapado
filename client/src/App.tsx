@@ -1,5 +1,4 @@
-import { Route, Routes, useParams } from "react-router-dom";
-import { gql, useQuery } from "@apollo/client";
+import { Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import CSS from "csstype";
 import Login from "./screens/Login";
@@ -20,8 +19,6 @@ const styles: CSS.Properties = {
 };
 
 function App() {
-  const path = window.location.pathname;
-
   const { loading: loadingCities, data } = useCitiesQuery();
 
   const cities = data?.cities ?? [];
@@ -35,7 +32,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/password/email" element={<EmailPassword />} />
-          <Route path="/password/reset/:token" element={<PasswordReset />} />
+          <Route path="/password/reset/:id/:token" element={<PasswordReset />} />
            <Route path="*" element={<Home cities={cities} />} />
           <Route
             path="/manage-cities"

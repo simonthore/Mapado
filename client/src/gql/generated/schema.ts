@@ -53,7 +53,8 @@ export type Mutation = {
 
 
 export type MutationChangePasswordArgs = {
-  data: UserChangePassword;
+  id: Scalars['Int'];
+  newPassword: Scalars['String'];
 };
 
 
@@ -130,7 +131,7 @@ export type QueryCityArgs = {
 
 
 export type QueryFetchTokenArgs = {
-  email: Scalars['String'];
+  id: Scalars['Float'];
 };
 
 export type User = {
@@ -144,11 +145,6 @@ export type User = {
   role_id?: Maybe<Scalars['Float']>;
 };
 
-export type UserChangePassword = {
-  email: Scalars['String'];
-  newPassword: Scalars['String'];
-};
-
 export type UserInput = {
   email: Scalars['String'];
   password: Scalars['String'];
@@ -160,7 +156,8 @@ export type UserSendPassword = {
 };
 
 export type ChangePasswordMutationVariables = Exact<{
-  data: UserChangePassword;
+  newPassword: Scalars['String'];
+  changePasswordId: Scalars['Int'];
 }>;
 
 
@@ -193,7 +190,7 @@ export type GetCityQueryVariables = Exact<{
 export type GetCityQuery = { __typename?: 'Query', city: { __typename?: 'City', name: string, latitude?: number | null, longitude?: number | null } };
 
 export type FetchTokenQueryVariables = Exact<{
-  email: Scalars['String'];
+  fetchTokenId: Scalars['Float'];
 }>;
 
 
@@ -230,9 +227,9 @@ export type SendPasswordEmailMutation = { __typename?: 'Mutation', sendPasswordE
 
 
 export const ChangePasswordDocument = gql`
-    mutation ChangePassword($data: UserChangePassword!) {
-  changePassword(data: $data) {
-    email
+    mutation changePassword($newPassword: String!, $changePasswordId: Int!) {
+  changePassword(newPassword: $newPassword, id: $changePasswordId) {
+    hashedPassword
   }
 }
     `;
@@ -251,7 +248,8 @@ export type ChangePasswordMutationFn = Apollo.MutationFunction<ChangePasswordMut
  * @example
  * const [changePasswordMutation, { data, loading, error }] = useChangePasswordMutation({
  *   variables: {
- *      data: // value for 'data'
+ *      newPassword: // value for 'newPassword'
+ *      changePasswordId: // value for 'changePasswordId'
  *   },
  * });
  */
@@ -414,6 +412,10 @@ export const FetchTokenDocument = gql`
  *
  * To run a query within a React component, call `useFetchTokenQuery` and pass it any options that fit your needs.
  * When your component renders, `useFetchTokenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * __useGetCityQuery__
+ *
+ * To run a query within a React component, call `useGetCityQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCityQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -421,7 +423,7 @@ export const FetchTokenDocument = gql`
  * @example
  * const { data, loading, error } = useFetchTokenQuery({
  *   variables: {
- *      email: // value for 'email'
+ *      fetchTokenId: // value for 'fetchTokenId'
  *   },
  * });
  */
