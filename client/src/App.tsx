@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useParams } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import CSS from "csstype";
 import Login from "./screens/Login";
@@ -19,10 +19,12 @@ const styles: CSS.Properties = {
 };
 
 function App() {
-  const { loading: loadingCities, data } = useCitiesQuery();
+  const path = window.location.pathname;
 
-  const cities = data?.cities ?? [];
-  console.log(cities);
+    //const { loading: loadingCities, data, refetch } = useCitiesQuery();
+
+  //const cities = data?.cities ?? [];
+
   return (
     <>
       <Toaster position="top-center" />
@@ -32,8 +34,6 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/password/email" element={<EmailPassword />} />
-          <Route path="/password/reset/:id/:token" element={<PasswordReset />} />
-           <Route path="*" element={<Home />} />
           <Route path="/password/reset/:token" element={<PasswordReset />} />
            <Route path="*" element={<Home />} />
           <Route

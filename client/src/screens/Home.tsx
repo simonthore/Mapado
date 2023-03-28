@@ -4,7 +4,7 @@ import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOu
 import AnimatedCard from "../components/AnimatedCard";
 import ICity from "../interfaces/ICity";
 import { filterBySearch } from "../utils/helpers";
-import {useCitiesQuery} from "../gql/generated/schema";
+import { useCitiesQuery } from "../gql/generated/schema";
 
 interface Cities {
   cities: ICity[];
@@ -25,6 +25,7 @@ export default function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
 
     const { loading: loadingCities, data, refetch } = useCitiesQuery();
+
     const cities = data?.cities ?? [];
 
   // State to manage both URL query & cities to display
@@ -36,7 +37,7 @@ export default function Home() {
     // takes in value from the search bar and returns a filtered list of the cities to display
     //(filter improves with each letter)
     //searchParams controls the URL (what comes after the "?")
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const results = cities.filter((city) => {
             if (e.target.value === " ") return cities;
             return city.name.toLowerCase().includes(e.target.value.toLowerCase());
@@ -47,7 +48,6 @@ export default function Home() {
             query: e.target.value,
             list: results,
         });
-
     };
 
     return (
