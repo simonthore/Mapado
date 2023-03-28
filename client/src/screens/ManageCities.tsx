@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useFetchCityNameMutation } from "../gql/generated/schema";
+import {useCitiesQuery, useFetchCityNameMutation } from "../gql/generated/schema";
 import Card from "../components/Card";
 
 interface City {
@@ -16,26 +16,28 @@ interface Cities {
   cities: City[];
 }
 
-export default function AddManageCities({ cities }: Cities) {
+export default function AddManageCities() {
+
   // Initialisation de l'objet cityRequested
   const [cityRequested, setCityRequested] = useState({
     cityName: "",
   });
 
   // fonction gql qui récupère la valeur de l'input
+  //REFETCH POSSIBLE ICI
   const [sendCityName] = useFetchCityNameMutation();
+  const { loading: loadingCities, data, refetch } = useCitiesQuery();
+  const cities = data?.cities ?? [];
 
   // Au click du bouton on lance la fonction gql
   const onClickSendCityName = () => {
     console.log(cityRequested);
-    console.log(typeof cityRequested);
     sendCityName({ variables: { data: cityRequested } });
   };
 
   return (
     <Card customClass={"registerCard"}>
       <h2 className={"title"}>Ajouter une ville</h2>
-
       <div className={"addCityContainer"}>
         <input
           type="text"
