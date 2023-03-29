@@ -19,7 +19,7 @@ class User {
   id: number;
 
   @Field({ nullable: true })
-  @Column({nullable: true, type: "date"})
+  @Column({ nullable: true, type: "date" })
   created_at: number;
 
   @Field({ nullable: true })
@@ -43,7 +43,7 @@ class User {
 
   @Field({ nullable: true })
   @Column({ nullable: true, type: "text" })
-  changePasswordToken: string
+  changePasswordToken: string;
 }
 
 @InputType()
@@ -63,20 +63,24 @@ export class UserSendPassword {
   email: string;
 
   @Field({ nullable: true })
-  @Column({ nullable: true})
+  @Column({ nullable: true })
   token?: string;
 }
 
 @InputType()
 export class UserChangePassword {
-
   @Field()
-  @IsEmail()
-  email: string;
+  id: number;
 
   @Field()
   @Matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)
   newPassword: string;
+}
+
+@InputType()
+export class UserChangePasswordId {
+  @Field()
+  id: number;
 }
 
 const hashingOptions = {
@@ -99,9 +103,9 @@ export const getSafeAttributes = (user: User) => ({
   hashedPassword: undefined,
 });
 
-export const sendPasswordEmail = async (email: string, token?: string): Promise<UserSendPassword> => (
- { email, token }
-)
-
+export const sendPasswordEmail = async (
+  email: string,
+  token?: string
+): Promise<UserSendPassword> => ({ email, token });
 
 export default User;
