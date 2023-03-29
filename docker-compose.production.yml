@@ -24,6 +24,8 @@ services:
       - SERVER_PORT=${SERVER_PORT:-4000}
       - JWT_PRIVATE_KEY=${JWT_PRIVATE_KEY:-abcdfzfefzefzefzeefghijkl}
       - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-http://localhost:8000}
+      - REACT_APP_CITIES_API_KEY=${REACT_APP_CITIES_API_KEY}
+      - REACT_APP_PHOTOS_API_KEY=${REACT_APP_PHOTOS_API_KEY}
     image: scrip/mapado-server
     networks:
       - prodNetwork
@@ -37,8 +39,6 @@ services:
     image: scrip/mapado-client
     networks:
       - prodNetwork
-    volumes:
-      - web-client-build:/app/build
 
   nginx:
     image: nginx:1.21.3
