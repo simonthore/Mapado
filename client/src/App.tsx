@@ -19,10 +19,15 @@ const styles: CSS.Properties = {
 };
 
 function App() {
+
   const { loading: loadingCities, data } = useCitiesQuery();
 
+  const path = window.location.pathname;
+
+
   const cities = data?.cities ?? [];
-  console.log(cities);
+
+
   return (
     <>
       <Toaster position="top-center" />
@@ -36,7 +41,7 @@ function App() {
            <Route path="*" element={<Home cities={cities} />} />
           <Route
             path="/manage-cities"
-            element={<ManageCities cities={cities} />}
+            element={<ManageCities />}
           />
            <Route path="/info/:cityName" element={<InfoCity/>}/>
           {/*<Route path="/map" element={<Map/>} />*/}
