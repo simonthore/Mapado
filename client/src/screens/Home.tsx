@@ -4,6 +4,7 @@ import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOu
 import AnimatedCard from "../components/AnimatedCard";
 import ICity from "../interfaces/ICity";
 import { filterBySearch } from "../utils/helpers";
+import { useCitiesQuery } from "../gql/generated/schema";
 
 interface Cities {
   cities: ICity[];
@@ -19,9 +20,13 @@ interface IState {
 //   password: string
 // }
 
-export default function Home({ cities }: Cities) {
+export default function Home() {
   // gets the paras from URL
   const [searchParams, setSearchParams] = useSearchParams();
+
+    const { loading: loadingCities, data, refetch } = useCitiesQuery();
+
+    const cities = data?.cities ?? [];
 
   // State to manage both URL query & cities to display
   const [state, setState] = useState<IState>({
