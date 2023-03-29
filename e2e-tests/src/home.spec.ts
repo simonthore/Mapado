@@ -3,6 +3,9 @@ import db from "../../server/src/db";
 import City from "../../server/src/entity/City";
 import { clearDB, connect, disconnect } from "./dbHelpers";
 
+// commande pour lancer les tests
+// docker-compose -f docker-compose.e2e-tests.yml up --remove-orphans --build
+
 test.beforeAll(connect);
 test.beforeEach(clearDB);
 test.afterAll(disconnect);
