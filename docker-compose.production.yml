@@ -26,7 +26,7 @@ services:
       - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-http://localhost:8000}
       - REACT_APP_CITIES_API_KEY=${REACT_APP_CITIES_API_KEY}
       - REACT_APP_PHOTOS_API_KEY=${REACT_APP_PHOTOS_API_KEY}
-    image: scrip/production-server
+    image: mapado-server
     networks:
       - prodNetwork
     healthcheck:
@@ -36,7 +36,7 @@ services:
       retries: 10
 
   client:
-    image: scrip/production-client
+    image: mapado-client
     networks:
       - prodNetwork
 
