@@ -27,8 +27,6 @@ export default function AddManageCities({ cities }: Cities) {
 
   // Au click du bouton on lance la fonction gql
   const onClickSendCityName = () => {
-    console.log(cityRequested);
-    console.log(typeof cityRequested);
     sendCityName({ variables: { data: cityRequested } });
   };
 

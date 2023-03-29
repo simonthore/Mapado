@@ -66,7 +66,7 @@ const start = async () => {
     },
   });
 
-  const apolloServer = new ApolloServer({
+const apolloServer = new ApolloServer({
     schema,
     csrfPrevention: true,
     cache: "bounded",

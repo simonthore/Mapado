@@ -10,7 +10,7 @@ test.beforeAll(connect);
 test.beforeEach(clearDB);
 test.afterAll(disconnect);
 
-test("can view users in db", async ({ page }) => {
+test("can view cities in db", async ({ page }) => {
     await db
         .getRepository(City)
         .insert([{ name: "Niort" }, { name: "Roubaix" }]);
