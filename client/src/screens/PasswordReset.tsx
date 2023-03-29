@@ -68,7 +68,7 @@ export default function PasswordReset() {
   // mutation to get the changeEmailToken
   useFetchTokenQuery({
     // how to replace hard coded email ?
-    variables: { email: "ap_levy@hotmail.com" },
+    variables: { email: "grischka.gorski@gmail.com" },
     onCompleted: (response) => {
       setServerToken(JSON.stringify(response.fetchToken.changePasswordToken));
     },
