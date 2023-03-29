@@ -38,6 +38,7 @@ export default function AddManageCities() {
   return (
     <Card customClass={"registerCard"}>
       <h2 className={"title"}>Ajouter une ville</h2>
+
       <div className={"addCityContainer"}>
         <input
           type="text"
