@@ -12,12 +12,8 @@ interface City {
   // poi?: Poi[];
 }
 
-interface Cities {
-  cities: City[];
-}
-
 export default function AddManageCities() {
-    const { loading: loadingCities, data, refetch } = useCitiesQuery();
+    const { data, refetch } = useCitiesQuery();
     const cities = data?.cities ?? [];
 
   // Initialisation de l'objet cityRequested
@@ -26,7 +22,6 @@ export default function AddManageCities() {
   });
 
   // fonction gql qui récupère la valeur de l'input
-  //REFETCH POSSIBLE ICI
   const [sendCityName] = useFetchCityNameMutation();
 
   // Au click du bouton on lance la fonction gql
@@ -55,7 +50,7 @@ export default function AddManageCities() {
         <h2 className={"title"}>Gérer les villes</h2>
         {cities.map((city: City) => {
           return (
-            <div className={"manageOneCityContainer"}>
+            <div key={city.id} className={"manageOneCityContainer"}>
               <p className={"cityLabel"}>{city.name}</p>
               <button className={"primaryButton"}>Supprimer</button>
             </div>

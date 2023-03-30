@@ -1,15 +1,9 @@
-import {React, useState} from "react";
-import {NavLink, useSearchParams} from "react-router-dom";
+import {useState} from "react";
+import {Link, NavLink, useSearchParams} from "react-router-dom";
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import AnimatedCard from "../components/AnimatedCard";
 import ICity from "../interfaces/ICity";
-import { filterBySearch } from "../utils/helpers";
 import {useCitiesQuery} from "../gql/generated/schema";
-
-interface Cities {
-  cities: ICity[];
-}
-
 interface IState {
     query: string;
     list: ICity[];
@@ -24,11 +18,7 @@ export default function Home() {
   // gets the paras from URL
   const [searchParams, setSearchParams] = useSearchParams();
 
-    const { loading: loadingCities, data, refetch } = useCitiesQuery();
-    const cities = data?.cities ?? [];
-
-    const { loading: loadingCities, data, refetch } = useCitiesQuery();
-
+    const { data } = useCitiesQuery();
     const cities = data?.cities ?? [];
 
   // State to manage both URL query & cities to display
@@ -65,12 +55,12 @@ export default function Home() {
             </form>
 
             <div className={"homeStyle"}>
-                <a href="/manage-cities">
+                <Link to={"/manage-cities"}>
                     <button className={"addCityButtonStyles"}>
                         <AddCircleOutlineOutlinedIcon/>
                         <p>AJOUTER UNE VILLE</p>
                     </button>
-                </a>
+                </Link>
                 {state.query === ""
                     // if there is no search, display all cities
                     ? cities.map((city) => (

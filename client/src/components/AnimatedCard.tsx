@@ -1,3 +1,5 @@
+import {Link} from "react-router-dom";
+
 interface CityProps {
     id?: number;
     cityName?: string;
@@ -14,9 +16,9 @@ export default function AnimatedCard({cityName, cityPhoto}: CityProps) {
                 <p className="card-body">
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio, culpa.
                 </p>
-                <a href="/info" className="button">
+                <Link to={"/info"} className="button">
                     Learn More
-                </a>
+                </Link>
             </div>
         </div>
     )
