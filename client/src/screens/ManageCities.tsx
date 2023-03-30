@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useFetchCityNameMutation } from "../gql/generated/schema";
+import {useCitiesQuery, useFetchCityNameMutation} from "../gql/generated/schema";
 import Card from "../components/Card";
 
 interface City {
@@ -16,7 +16,10 @@ interface Cities {
   cities: City[];
 }
 
-export default function AddManageCities({ cities }: Cities) {
+export default function AddManageCities() {
+    const { loading: loadingCities, data, refetch } = useCitiesQuery();
+    const cities = data?.cities ?? [];
+
   // Initialisation de l'objet cityRequested
   const [cityRequested, setCityRequested] = useState({
     cityName: "",
@@ -27,7 +30,8 @@ export default function AddManageCities({ cities }: Cities) {
 
   // Au click du bouton on lance la fonction gql
   const onClickSendCityName = () => {
-    sendCityName({ variables: { data: cityRequested } });
+    // @ts-ignore
+      sendCityName({ variables: { data: cityRequested }, refetch: [{query: useCitiesQuery()}] });
   };
 
   return (
