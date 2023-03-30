@@ -17,6 +17,8 @@ interface Cities {
 }
 
 export default function AddManageCities() {
+    const { loading: loadingCities, data, refetch } = useCitiesQuery();
+    const cities = data?.cities ?? [];
 
   // Initialisation de l'objet cityRequested
   const [cityRequested, setCityRequested] = useState({
@@ -26,8 +28,6 @@ export default function AddManageCities() {
   // fonction gql qui récupère la valeur de l'input
   //REFETCH POSSIBLE ICI
   const [sendCityName] = useFetchCityNameMutation();
-  const { loading: loadingCities, data, refetch } = useCitiesQuery();
-  const cities = data?.cities ?? [];
 
   // Au click du bouton on lance la fonction gql
   const onClickSendCityName = () => {
