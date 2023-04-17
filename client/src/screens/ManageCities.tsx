@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {useCitiesQuery, useFetchCityNameMutation } from "../gql/generated/schema";
 import Card from "../components/Card";
+import {gql, useMutation} from "@apollo/client";
 
 interface City {
   id: number;
@@ -16,6 +17,12 @@ interface Cities {
   cities: City[];
 }
 
+const DELETECITY = gql`
+mutation DeleteCity($id: Int!) {
+  deleteCity(id: $id)
+}
+`;
+
 export default function AddManageCities() {
 
   // Initialisation de l'objet cityRequested
@@ -29,10 +36,17 @@ export default function AddManageCities() {
   const { loading: loadingCities, data, refetch } = useCitiesQuery();
   const cities = data?.cities ?? [];
 
+  const [deleteCity] = useMutation(DELETECITY);
+
   // Au click du bouton on lance la fonction gql
   const onClickSendCityName = () => {
     console.log(cityRequested);
     sendCityName({ variables: { data: cityRequested } });
+  };
+
+  const onClickDeleteCity = (cityId: number) => {
+    console.log(cityId)
+    deleteCity({ variables: { id: cityId } });
   };
 
   return (
@@ -56,7 +70,7 @@ export default function AddManageCities() {
           return (
             <div className={"manageOneCityContainer"}>
               <p className={"cityLabel"}>{city.name}</p>
-              <button className={"primaryButton"}>Supprimer</button>
+              <button className={"primaryButton"} onClick={(e)=>onClickDeleteCity(city.id)}>Supprimer</button>
             </div>
           );
         })}
