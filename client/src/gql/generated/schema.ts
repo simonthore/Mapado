@@ -26,6 +26,10 @@ export type City = {
   users?: Maybe<Array<User>>;
 };
 
+export type CityId = {
+  id: Scalars['Float'];
+};
+
 export type CityInput = {
   latitude?: InputMaybe<Scalars['Float']>;
   longitude?: InputMaybe<Scalars['Float']>;
@@ -49,6 +53,7 @@ export type Mutation = {
   logout: Scalars['String'];
   sendPasswordEmail: User;
   updateCity: City;
+  updateUser: Scalars['String'];
 };
 
 
@@ -98,6 +103,12 @@ export type MutationUpdateCityArgs = {
   id: Scalars['Int'];
 };
 
+
+export type MutationUpdateUserArgs = {
+  data: UpdateUserInput;
+  id: Scalars['Int'];
+};
+
 export type Poi = {
   __typename?: 'Poi';
   address: Scalars['String'];
@@ -134,9 +145,16 @@ export type QueryFetchTokenArgs = {
   id: Scalars['Float'];
 };
 
+export type UpdateUserInput = {
+  cities?: InputMaybe<Array<CityId>>;
+  email?: InputMaybe<Scalars['String']>;
+  hashedPassword?: InputMaybe<Scalars['String']>;
+};
+
 export type User = {
   __typename?: 'User';
   changePasswordToken?: Maybe<Scalars['String']>;
+  cities?: Maybe<Array<City>>;
   created_at?: Maybe<Scalars['Float']>;
   email?: Maybe<Scalars['String']>;
   hashedPassword?: Maybe<Scalars['String']>;
@@ -146,8 +164,9 @@ export type User = {
 };
 
 export type UserInput = {
+  cities?: InputMaybe<Array<CityId>>;
   email: Scalars['String'];
-  password: Scalars['String'];
+  hashedPassword: Scalars['String'];
 };
 
 export type UserSendPassword = {

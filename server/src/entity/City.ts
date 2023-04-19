@@ -39,21 +39,6 @@ export class UpdateCityInput {
   latitude?: number;
 }
 
-@InputType()
-export class UpdateCityInput{
-    @Field({ nullable: true })
-    name?: string;
-
-    @Field({ nullable: true })
-    photo?: string;
-
-    @Field(()=>Float, {nullable: true})
-    longitude?: number;
-
-    @Field(()=>Float, {nullable: true})
-    latitude?: number;
-}
-
 @Entity()
 @ObjectType()
 export default class City {
@@ -78,7 +63,7 @@ export default class City {
   longitude?: number;
 
   @Field(() => [User], { nullable: true })
-  @ManyToMany(() => User, (u) => u.cities, { cascade: true })
+  @ManyToMany(() => User, (u) => u.cities, )
   users?: User[];
 
   @Field(() => [Poi], { nullable: true })

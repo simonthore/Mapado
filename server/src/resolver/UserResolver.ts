@@ -37,7 +37,7 @@ export class UserResolver {
 
   @Mutation(() => User)
   async createUser(@Arg("data") data: UserInput): Promise<User> {
-    const hashedPassword = await hashPassword(data.password);
+    const hashedPassword = await hashPassword(data.hashedPassword);
     const createdAt = await Date.now();
     const user = await datasource
       .getRepository(User)
@@ -66,7 +66,7 @@ export class UserResolver {
             citiesEntities = await datasource.getRepository(City).find({where: {id: In(cities?.map(c => c.id))}})
             user.cities = [...(user?.cities ? user.cities : []), ...citiesEntities]
         }
-        if (hashedPassword) user.hashedPassword = await hashPassword(user.hashedPassword);
+        if (hashedPassword) user.hashedPassword = await hashPassword(user.hashedPassword ? user.hashedPassword : '');
 
         if (email) user.email = email
 
@@ -80,7 +80,7 @@ export class UserResolver {
 
   @Mutation(() => String)
   async login(
-    @Arg("data") { email, password }: UserInput,
+    @Arg("data") { email, hashedPassword }: UserInput,
     @Ctx() ctx: ContextType
   ): Promise<string> {
     const user = await datasource
@@ -91,7 +91,7 @@ export class UserResolver {
     if (
       user === null ||
       !user.hashedPassword ||
-      !(await verifyPassword(password, user.hashedPassword))
+      !(await verifyPassword(hashedPassword, user.hashedPassword))
     ) {
       throw new ApolloError("invalid credentials");
     }
