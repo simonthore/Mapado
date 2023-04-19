@@ -161,7 +161,7 @@ export type ChangePasswordMutationVariables = Exact<{
 }>;
 
 
-export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'User', email?: string | null } };
+export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'User', hashedPassword?: string | null } };
 
 export type CreateUserMutationVariables = Exact<{
   data: UserInput;
@@ -169,6 +169,13 @@ export type CreateUserMutationVariables = Exact<{
 
 
 export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: number } };
+
+export type DeleteCityMutationVariables = Exact<{
+  deleteCityId: Scalars['Int'];
+}>;
+
+
+export type DeleteCityMutation = { __typename?: 'Mutation', deleteCity: boolean };
 
 export type FetchCityNameMutationVariables = Exact<{
   data: CityRequested;
@@ -293,6 +300,37 @@ export function useCreateUserMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateUserMutationHookResult = ReturnType<typeof useCreateUserMutation>;
 export type CreateUserMutationResult = Apollo.MutationResult<CreateUserMutation>;
 export type CreateUserMutationOptions = Apollo.BaseMutationOptions<CreateUserMutation, CreateUserMutationVariables>;
+export const DeleteCityDocument = gql`
+    mutation DeleteCity($deleteCityId: Int!) {
+  deleteCity(id: $deleteCityId)
+}
+    `;
+export type DeleteCityMutationFn = Apollo.MutationFunction<DeleteCityMutation, DeleteCityMutationVariables>;
+
+/**
+ * __useDeleteCityMutation__
+ *
+ * To run a mutation, you first call `useDeleteCityMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCityMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCityMutation, { data, loading, error }] = useDeleteCityMutation({
+ *   variables: {
+ *      deleteCityId: // value for 'deleteCityId'
+ *   },
+ * });
+ */
+export function useDeleteCityMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCityMutation, DeleteCityMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteCityMutation, DeleteCityMutationVariables>(DeleteCityDocument, options);
+      }
+export type DeleteCityMutationHookResult = ReturnType<typeof useDeleteCityMutation>;
+export type DeleteCityMutationResult = Apollo.MutationResult<DeleteCityMutation>;
+export type DeleteCityMutationOptions = Apollo.BaseMutationOptions<DeleteCityMutation, DeleteCityMutationVariables>;
 export const FetchCityNameDocument = gql`
     mutation FetchCityName($data: CityRequested!) {
   fetchCityName(data: $data)
@@ -400,8 +438,8 @@ export type GetCityQueryHookResult = ReturnType<typeof useGetCityQuery>;
 export type GetCityLazyQueryHookResult = ReturnType<typeof useGetCityLazyQuery>;
 export type GetCityQueryResult = Apollo.QueryResult<GetCityQuery, GetCityQueryVariables>;
 export const FetchTokenDocument = gql`
-    query FetchToken($email: String!) {
-  fetchToken(email: $email) {
+    query FetchToken($fetchTokenId: Float!) {
+  fetchToken(id: $fetchTokenId) {
     changePasswordToken
   }
 }
@@ -412,10 +450,6 @@ export const FetchTokenDocument = gql`
  *
  * To run a query within a React component, call `useFetchTokenQuery` and pass it any options that fit your needs.
  * When your component renders, `useFetchTokenQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * __useGetCityQuery__
- *
- * To run a query within a React component, call `useGetCityQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCityQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
