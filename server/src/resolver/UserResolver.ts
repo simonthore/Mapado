@@ -70,9 +70,9 @@ export class UserResolver {
 
         if (email) user.email = email
 
-        // const updatedUser = await datasource
-        //     .getRepository(User)
-        //     .save(user);
+        const updatedUser = await datasource
+            .getRepository(User)
+            .save(user);
 
         return "data updated";
 
