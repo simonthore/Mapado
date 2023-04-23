@@ -67,7 +67,7 @@ export default class City {
   users?: User[];
 
   @Field(() => [Poi], { nullable: true })
-  @OneToMany(() => Poi, (p) => p.cities, { cascade: true })
+  @OneToMany(() => Poi, (p) => p.city)
   poi?: Poi[];
 }
 

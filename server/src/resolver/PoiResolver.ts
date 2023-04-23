@@ -2,14 +2,13 @@ import { Arg, Int, Mutation,Query, Resolver } from "type-graphql";
 import Poi, {PoiInput, UpdatePoiInput} from "../entity/Poi";
 import datasource from "../db";
 import { ApolloError } from "apollo-server-errors";
-import User, {UpgradeUserInput} from "../entity/User";
 
 
 @Resolver(Poi)
 export class PoiResolver {
     @Query(() => [Poi])
     async Pois(): Promise<Poi[]> {
-        return await datasource.getRepository(Poi).find();
+        return await datasource.getRepository(Poi).find({relations: {city: true}});
     }
 
     @Mutation(() => Poi)

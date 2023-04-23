@@ -1,6 +1,13 @@
-import {PrimaryGeneratedColumn, Column, ManyToOne, Entity} from "typeorm";
+import {PrimaryGeneratedColumn, Column, ManyToOne, Entity, JoinTable} from "typeorm";
 import {Field, InputType, ObjectType} from "type-graphql";
 import City from "./City";
+import {CityId} from "./User";
+
+@InputType()
+export class CityName {
+    @Field()
+    name: string;
+}
 
 @InputType()
 export class PoiInput {
@@ -15,6 +22,9 @@ export class PoiInput {
 
     @Field({nullable: true})
     rating?: number;
+
+    @Field(() => CityName, {nullable: true})
+    city?: CityName
 }
 
 @InputType()
@@ -98,8 +108,10 @@ class Poi {
     // @OneToMany(() => Category, (c) => c.poi)
     // category: Category;
 
-    @ManyToOne(() => City, (c) => c.id)
-    cities?: City;
+    @Field(()=>City, {nullable: true})
+    @ManyToOne(() => City, (c) => c.id, { cascade: true })
+    @JoinTable()
+    city: City
 }
 
 export default Poi;
