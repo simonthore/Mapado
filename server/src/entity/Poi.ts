@@ -3,11 +3,11 @@ import {Field, InputType, ObjectType} from "type-graphql";
 import City from "./City";
 import {CityId} from "./User";
 
-@InputType()
-export class CityName {
-    @Field()
-    name: string;
-}
+// @InputType()
+// export class CityId {
+//     @Field()
+//     id: number;
+// }
 
 @InputType()
 export class PoiInput {
@@ -23,8 +23,8 @@ export class PoiInput {
     @Field({nullable: true})
     rating?: number;
 
-    @Field(() => CityName, {nullable: true})
-    city?: CityName
+    @Field()
+    cityId?: number
 }
 
 @InputType()
@@ -112,6 +112,9 @@ class Poi {
     @ManyToOne(() => City, (c) => c.id, { cascade: true })
     @JoinTable()
     city: City
+
+    @Column()
+    cityId: number
 }
 
 export default Poi;
