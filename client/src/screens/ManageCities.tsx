@@ -33,12 +33,10 @@ export default function AddManageCities() {
 
   // Au click du bouton on lance la fonction gql
   const onClickSendCityName = () => {
-    console.log(cityRequested);
     sendCityName({ variables: { data: cityRequested } });
   };
 
   const onClickDeleteCity = (cityId: number) => {
-    console.log(cityId)
     deleteCity({ variables: {deleteCityId: cityId } });
   };
 
