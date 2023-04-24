@@ -8,7 +8,7 @@ import { env } from "../environment";
 export class CityResolver {
     @Query(() => [City])
     async cities(): Promise<City[]> {
-        return await datasource.getRepository(City).find({relations: ['users', 'poi']});
+        return await datasource.getRepository(City).find({relations: {users:true, poi:true}});
     }
 
   @Query(() => City)

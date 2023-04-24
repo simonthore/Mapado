@@ -109,7 +109,7 @@ class Poi {
     // category: Category;
 
     @Field(()=>City, {nullable: true})
-    @ManyToOne(() => City, (c) => c.id, { cascade: true })
+    @ManyToOne(() => City, (c) => c.poi, { cascade: true })
     @JoinTable()
     city: City
 
