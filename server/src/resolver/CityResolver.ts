@@ -8,14 +8,15 @@ import { env } from "../environment";
 export class CityResolver {
     @Query(() => [City])
     async cities(): Promise<City[]> {
-        return await datasource.getRepository(City).find({relations: {users: true}});
+      //Pour récupérer les utilisateurs et les poi des villes on ajoute les relations
+      return await datasource.getRepository(City).find({relations: {users:true, poi:true}});
     }
 
   @Query(() => City)
   async city(@Arg("name", () => String) name: string): Promise<City> {
     const city = await datasource
       .getRepository(City)
-      .findOne({ where: { name } });
+      .findOne({ where: { name }, relations: {users:true, poi: true} });
 
     if (city === null) throw new ApolloError("city not found", "NOT_FOUND");
 

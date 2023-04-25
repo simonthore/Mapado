@@ -69,6 +69,7 @@ export default function Login() {
                         {/*  */}
                         <label htmlFor="password">
                             <input
+                                id="password"
                                 type={passwordShown ? "text" : "password"}
                                 placeholder="Mot de passe"
                                 value={credentials.hashedPassword}

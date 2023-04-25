@@ -20,7 +20,7 @@ import User, {
   UserInput,
   UserSendPassword,
   verifyPassword,
-    UpdateUserInput
+  UpdateUserInput
 } from "../entity/User";
 import { env } from "../environment";
 import { ContextType } from "../index";

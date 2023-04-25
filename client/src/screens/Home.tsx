@@ -27,7 +27,7 @@ export default function Home() {
     const { loading: loadingCities, data, refetch } = useCitiesQuery();
 
     const cities = data?.cities ?? [];
-
+console.log(cities)
     // State to manage both URL query & cities to display
     const [state, setState] = useState<IState>({
         query: searchParams.get("query") ?? "",
@@ -42,7 +42,6 @@ export default function Home() {
             if (e.target.value === " ") return cities;
             return city.name.toLowerCase().includes(e.target.value.toLowerCase());
         });
-        console.log(results)
         setSearchParams({query: e.target.value});
         setState({
             query: e.target.value,
