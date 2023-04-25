@@ -15,7 +15,13 @@ export default function InfoCity() {
     return (
         <div>
             <Map longitude={city.longitude} latitude={city.latitude}>
-
+                {pois ? pois.map((e)=>
+                    <Marker position={[e.latitude, e.longitude]}>
+                        <Popup>
+                            {e.name}<br /> {e.address}.
+                        </Popup>
+                    </Marker>)
+                    : null}
             </Map>
         </div>
     )

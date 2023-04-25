@@ -3,12 +3,14 @@ import "../App.css";
 import "leaflet/dist/leaflet.css";
 import Card from "../components/Card";
 
+
 interface MapProps {
     longitude: number;
     latitude: number;
+    children: string | JSX.Element | JSX.Element[] | []
 }
 
-function Map({longitude, latitude}: MapProps) {
+function Map({longitude, latitude, children}: MapProps) {
 
     const poiLat = 44.832321057021645
     const poiLong = -0.571067289210998
@@ -27,11 +29,7 @@ function Map({longitude, latitude}: MapProps) {
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
-                    <Marker position={[poiLat, poiLong]}>
-                        <Popup>
-                            A pretty CSS3 popup. <br /> Easily customizable.
-                        </Popup>
-                    </Marker>
+                    {children}
                 </MapContainer>
             </Card>
 
