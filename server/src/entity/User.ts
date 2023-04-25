@@ -49,25 +49,25 @@ export class UpdateUserInput {
 @Entity()
 @ObjectType()
 class User {
-  @Field()
-  @PrimaryGeneratedColumn()
-  id: number;
+    @Field()
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Field({ nullable: true })
-  @Column({ nullable: true, type: "date" })
-  created_at: number;
+    @Field({ nullable: true })
+    @Column({ nullable: true, type: "date" })
+    created_at: number;
 
-  @Field({ nullable: true })
-  @Column({ nullable: true, type: "int" })
-  role_id?: number;
+    @Field({ nullable: true })
+    @Column({ nullable: true, type: "int" })
+    role_id?: number;
 
-  @Field({ nullable: true })
-  @Column({ nullable: true, type: "text" })
-  email?: string;
+    @Field({ nullable: true })
+    @Column({ nullable: true, type: "text" })
+    email?: string;
 
-  @Field({ nullable: true })
-  @Column({ nullable: true, type: "text" })
-  hashedPassword?: string;
+    @Field({ nullable: true })
+    @Column({ nullable: true, type: "text" })
+    hashedPassword?: string;
 
     @Field({nullable: true})
     @Column({nullable: true, type: "text"})
@@ -85,28 +85,28 @@ class User {
 
 @InputType()
 export class UserSendPassword {
-  @Field()
-  email: string;
+    @Field()
+    email: string;
 
-  @Field({ nullable: true })
-  @Column({ nullable: true })
-  token?: string;
+    @Field({ nullable: true })
+    @Column({ nullable: true })
+    token?: string;
 }
 
 @InputType()
 export class UserChangePassword {
-  @Field()
-  id: number;
+    @Field()
+    id: number;
 
-  @Field()
-  @Matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)
-  newPassword: string;
+    @Field()
+    @Matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)
+    newPassword: string;
 }
 
 @InputType()
 export class UserChangePasswordId {
-  @Field()
-  id: number;
+    @Field()
+    id: number;
 }
 
 const hashingOptions = {
