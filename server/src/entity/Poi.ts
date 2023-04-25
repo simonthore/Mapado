@@ -1,5 +1,5 @@
 import {PrimaryGeneratedColumn, Column, ManyToOne, Entity, JoinTable} from "typeorm";
-import {Field, InputType, ObjectType} from "type-graphql";
+import {Field, Float, InputType, ObjectType} from "type-graphql";
 import City from "./City";
 import {CityId} from "./User";
 
@@ -21,10 +21,16 @@ export class PoiInput {
     address: string;
 
     @Field({nullable: true})
+    latitude?: number;
+
+    @Field({nullable: true})
+    longitude?: number;
+
+    @Field({nullable: true})
     rating?: number;
 
     @Field()
-    cityId?: number
+    cityId: number
 }
 
 @InputType()
@@ -53,9 +59,13 @@ class Poi {
     @Column({length: 25})
     name: string;
 
-    @Field({nullable: true})
-    @Column({nullable: true, type: "int"})
-    gps_coordinates?: number;
+    @Field(() => Float, { nullable: true })
+    @Column({ nullable: true, type: "decimal" })
+    latitude?: number;
+
+    @Field(() => Float, { nullable: true })
+    @Column({ nullable: true, type: "decimal" })
+    longitude?: number;
 
     @Field({nullable: true})
     @Column({nullable: true, type: "text"})

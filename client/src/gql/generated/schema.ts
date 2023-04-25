@@ -45,14 +45,17 @@ export type Mutation = {
   __typename?: 'Mutation';
   changePassword: User;
   createCity: City;
+  createPoi: Poi;
   createUser: User;
   deleteCity: Scalars['Boolean'];
+  deletePoi: Scalars['Boolean'];
   deleteUser: Scalars['Boolean'];
   fetchCityName: Scalars['String'];
   login: Scalars['String'];
   logout: Scalars['String'];
   sendPasswordEmail: User;
   updateCity: City;
+  updatePoi: Scalars['String'];
   updateUser: Scalars['String'];
 };
 
@@ -68,12 +71,22 @@ export type MutationCreateCityArgs = {
 };
 
 
+export type MutationCreatePoiArgs = {
+  data: PoiInput;
+};
+
+
 export type MutationCreateUserArgs = {
   data: UserInput;
 };
 
 
 export type MutationDeleteCityArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationDeletePoiArgs = {
   id: Scalars['Int'];
 };
 
@@ -104,6 +117,12 @@ export type MutationUpdateCityArgs = {
 };
 
 
+export type MutationUpdatePoiArgs = {
+  data: UpdatePoiInput;
+  id: Scalars['Int'];
+};
+
+
 export type MutationUpdateUserArgs = {
   data: UpdateUserInput;
   id: Scalars['Int'];
@@ -114,11 +133,13 @@ export type Poi = {
   address: Scalars['String'];
   audio?: Maybe<Scalars['String']>;
   categoryId?: Maybe<Scalars['Float']>;
+  city?: Maybe<City>;
   comments?: Maybe<Scalars['String']>;
   customize_gps_marker?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  gps_coordinates?: Maybe<Scalars['Float']>;
+  description: Scalars['String'];
   id: Scalars['Float'];
+  latitude?: Maybe<Scalars['Float']>;
+  longitude?: Maybe<Scalars['Float']>;
   name: Scalars['String'];
   phone?: Maybe<Scalars['Float']>;
   photo?: Maybe<Scalars['String']>;
@@ -126,8 +147,17 @@ export type Poi = {
   website?: Maybe<Scalars['String']>;
 };
 
+export type PoiInput = {
+  address: Scalars['String'];
+  cityId: Scalars['Float'];
+  description: Scalars['String'];
+  name: Scalars['String'];
+  rating?: InputMaybe<Scalars['Float']>;
+};
+
 export type Query = {
   __typename?: 'Query';
+  Pois: Array<Poi>;
   cities: Array<City>;
   city: City;
   fetchToken: User;
@@ -143,6 +173,13 @@ export type QueryCityArgs = {
 
 export type QueryFetchTokenArgs = {
   id: Scalars['Float'];
+};
+
+export type UpdatePoiInput = {
+  address: Scalars['String'];
+  description: Scalars['String'];
+  name: Scalars['String'];
+  rating?: InputMaybe<Scalars['Float']>;
 };
 
 export type UpdateUserInput = {
@@ -213,7 +250,7 @@ export type GetCityQueryVariables = Exact<{
 }>;
 
 
-export type GetCityQuery = { __typename?: 'Query', city: { __typename?: 'City', name: string, latitude?: number | null, longitude?: number | null } };
+export type GetCityQuery = { __typename?: 'Query', city: { __typename?: 'City', name: string, latitude?: number | null, longitude?: number | null, poi?: Array<{ __typename?: 'Poi', id: number, name: string, address: string, latitude?: number | null, longitude?: number | null }> | null } };
 
 export type FetchTokenQueryVariables = Exact<{
   fetchTokenId: Scalars['Float'];
@@ -425,6 +462,13 @@ export const GetCityDocument = gql`
     name
     latitude
     longitude
+    poi {
+      id
+      name
+      address
+      latitude
+      longitude
+    }
   }
 }
     `;

@@ -42,7 +42,6 @@ console.log(cities)
             if (e.target.value === " ") return cities;
             return city.name.toLowerCase().includes(e.target.value.toLowerCase());
         });
-        console.log(results)
         setSearchParams({query: e.target.value});
         setState({
             query: e.target.value,
