@@ -1,8 +1,7 @@
-import {MapContainer, TileLayer, Marker, Popup} from "react-leaflet";
+import {MapContainer, TileLayer} from "react-leaflet";
 import "../App.css";
 import "leaflet/dist/leaflet.css";
 import Card from "../components/Card";
-
 
 interface MapProps {
     longitude: number;
@@ -11,9 +10,6 @@ interface MapProps {
 }
 
 function Map({longitude, latitude, children}: MapProps) {
-
-    const poiLat = 44.832321057021645
-    const poiLong = -0.571067289210998
 
     return (
         //Si on a une latitude et longitude on affiche la carte
