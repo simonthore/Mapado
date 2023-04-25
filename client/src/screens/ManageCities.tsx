@@ -1,5 +1,5 @@
 import { useState } from "react";
-import {useCitiesQuery, useFetchCityNameMutation } from "../gql/generated/schema";
+import {useCitiesQuery, useFetchCityNameMutation, useDeleteCityMutation } from "../gql/generated/schema";
 import Card from "../components/Card";
 
 interface City {
@@ -29,10 +29,15 @@ export default function AddManageCities() {
   const { loading: loadingCities, data, refetch } = useCitiesQuery();
   const cities = data?.cities ?? [];
 
+  const [deleteCity] = useDeleteCityMutation();
+
   // Au click du bouton on lance la fonction gql
   const onClickSendCityName = () => {
-    console.log(cityRequested);
     sendCityName({ variables: { data: cityRequested } });
+  };
+
+  const onClickDeleteCity = (cityId: number) => {
+    deleteCity({ variables: {deleteCityId: cityId } });
   };
 
   return (
@@ -56,7 +61,7 @@ export default function AddManageCities() {
           return (
             <div className={"manageOneCityContainer"}>
               <p className={"cityLabel"}>{city.name}</p>
-              <button className={"primaryButton"}>Supprimer</button>
+              <button className={"primaryButton"} onClick={(e)=>onClickDeleteCity(city.id)}>Supprimer</button>
             </div>
           );
         })}
