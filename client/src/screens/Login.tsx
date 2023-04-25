@@ -8,7 +8,7 @@ import {useNavigate} from "react-router";
 import Header from "../components/Header";
 
 export default function Login() {
-    const [credentials, setCredentials] = useState({email: "", password: ""});
+    const [credentials, setCredentials] = useState({email: "", hashedPassword: ""});
     const [passwordShown, setPasswordShown] = useState(false);
     const [login] = useLoginMutation();
     const {data: currentUser, client} = useGetProfileQuery();
@@ -71,9 +71,9 @@ export default function Login() {
                             <input
                                 type={passwordShown ? "text" : "password"}
                                 placeholder="Mot de passe"
-                                value={credentials.password}
+                                value={credentials.hashedPassword}
                                 onChange={(e) =>
-                                    setCredentials({...credentials, password: e.target.value})
+                                    setCredentials({...credentials, hashedPassword: e.target.value})
                                 }
                             ></input>
                             <div>

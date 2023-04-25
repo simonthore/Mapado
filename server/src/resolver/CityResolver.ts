@@ -1,15 +1,15 @@
 import { Arg, Int, Mutation, Query, Resolver } from "type-graphql";
-import City, { CityInput, CityRequested } from "../entity/City";
+import City, { CityInput, CityRequested, UpdateCityInput } from "../entity/City";
 import datasource from "../db";
 import { ApolloError } from "apollo-server-errors";
 import { env } from "../environment";
 
 @Resolver(City)
 export class CityResolver {
-  @Query(() => [City])
-  async cities(): Promise<City[]> {
-    return await datasource.getRepository(City).find();
-  }
+    @Query(() => [City])
+    async cities(): Promise<City[]> {
+        return await datasource.getRepository(City).find({relations: {users: true}});
+    }
 
   @Query(() => City)
   async city(@Arg("name", () => String) name: string): Promise<City> {
