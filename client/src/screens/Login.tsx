@@ -8,7 +8,7 @@ import {useNavigate} from "react-router";
 import Header from "../components/Header";
 
 export default function Login() {
-    const [credentials, setCredentials] = useState({email: "", hashedPassword: ""});
+    const [credentials, setCredentials] = useState({email: "", password: ""});
     const [passwordShown, setPasswordShown] = useState(false);
     const [login] = useLoginMutation();
     const {data: currentUser, client} = useGetProfileQuery();
@@ -39,6 +39,7 @@ export default function Login() {
                                     client.resetStore();
                                 })
                                 .catch((error) => {
+                                    console.log(error);
                                     toast.error("Invalid credentials", {
                                         style: {
                                             border: "3px solid #EC5D5C",
@@ -72,9 +73,9 @@ export default function Login() {
                                 id="password"
                                 type={passwordShown ? "text" : "password"}
                                 placeholder="Mot de passe"
-                                value={credentials.hashedPassword}
+                                value={credentials.password}
                                 onChange={(e) =>
-                                    setCredentials({...credentials, hashedPassword: e.target.value})
+                                    setCredentials({...credentials, password: e.target.value})
                                 }
                             ></input>
                             <div>
