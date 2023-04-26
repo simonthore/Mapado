@@ -112,6 +112,8 @@ class Poi {
     // category: Category;
 
     @Field(() => City, {nullable: true})
+    // cascade: true permet de lier les POI à la ville concernée
+    // onDelete: "CASCADE" permet de supprimer une ville avec tous les POIs qu'elle possède, sinon ça ne fonctionne pas.
     @ManyToOne(() => City, (c) => c.poi, {cascade: true, onDelete: "CASCADE"})
     @JoinTable()
     city: City
