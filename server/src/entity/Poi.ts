@@ -1,21 +1,14 @@
 import {PrimaryGeneratedColumn, Column, ManyToOne, Entity, JoinTable} from "typeorm";
 import {Field, Float, InputType, ObjectType} from "type-graphql";
 import City from "./City";
-import {CityId} from "./User";
-
-// @InputType()
-// export class CityId {
-//     @Field()
-//     id: number;
-// }
 
 @InputType()
 export class PoiInput {
     @Field()
     name: string;
 
-    @Field()
-    description: string;
+    @Field({nullable: true})
+    description?: string;
 
     @Field()
     address: string;
@@ -35,13 +28,13 @@ export class PoiInput {
 
 @InputType()
 export class UpdatePoiInput {
-    @Field()
+    @Field({nullable: true})
     name?: string;
 
-    @Field()
+    @Field({nullable: true})
     description?: string;
 
-    @Field()
+    @Field({nullable: true})
     address?: string;
 
     @Field({nullable: true})
@@ -59,12 +52,12 @@ class Poi {
     @Column({length: 25})
     name: string;
 
-    @Field(() => Float, { nullable: true })
-    @Column({ nullable: true, type: "decimal" })
+    @Field(() => Float, {nullable: true})
+    @Column({nullable: true, type: "decimal"})
     latitude?: number;
 
-    @Field(() => Float, { nullable: true })
-    @Column({ nullable: true, type: "decimal" })
+    @Field(() => Float, {nullable: true})
+    @Column({nullable: true, type: "decimal"})
     longitude?: number;
 
     @Field({nullable: true})
@@ -75,9 +68,9 @@ class Poi {
     @Column({length: 100})
     address: string;
 
-    @Field()
-    @Column({length: 500})
-    description: string;
+    @Field({nullable: true})
+    @Column({nullable: true, length: 500})
+    description?: string;
 
     @Field({nullable: true})
     @Column({nullable: true, type: "text"})
@@ -118,8 +111,8 @@ class Poi {
     // @OneToMany(() => Category, (c) => c.poi)
     // category: Category;
 
-    @Field(()=>City, {nullable: true})
-    @ManyToOne(() => City, (c) => c.poi, { cascade: true })
+    @Field(() => City, {nullable: true})
+    @ManyToOne(() => City, (c) => c.poi, {cascade: true})
     @JoinTable()
     city: City
 
