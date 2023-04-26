@@ -15,7 +15,7 @@ export class UserInput {
     @Field()
     @MinLength(8)
     @Matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)
-    hashedPassword: string;
+    password: string;
 
     @Field(() => [CityId], {nullable: true})
     cities?: CityId[];

@@ -4,7 +4,7 @@ import { useCreateUserMutation } from "../gql/generated/schema";
 import Card from "../components/Card";
 
 export default function Register() {
-  const [userInfo, setUserInfo] = useState({ email: "", hashedPassword: "" });
+  const [userInfo, setUserInfo] = useState({ email: "", password: "" });
   const [passwordShown, setPasswordShown] = useState(false);
 
   const [createUser] = useCreateUserMutation();
@@ -45,9 +45,9 @@ export default function Register() {
               type={passwordShown ? "text" : "password"}
               id="password"
               placeholder="Mot de passe"
-              value={userInfo.hashedPassword}
+              value={userInfo.password}
               onChange={(e) =>
-                setUserInfo({ ...userInfo, hashedPassword: e.target.value })
+                setUserInfo({ ...userInfo, password: e.target.value })
               }
             ></input>
           </label>

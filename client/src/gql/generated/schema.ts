@@ -205,7 +205,7 @@ export type User = {
 export type UserInput = {
   cities?: InputMaybe<Array<CityId>>;
   email: Scalars['String'];
-  hashedPassword: Scalars['String'];
+  password: Scalars['String'];
 };
 
 export type UserSendPassword = {
