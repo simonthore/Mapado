@@ -10,6 +10,9 @@ interface MapProps {
 
 function Map({longitude, latitude}: MapProps) {
 
+    const poiLat = 44.832321057021645
+    const poiLong = -0.571067289210998
+
     return (
         //Si on a une latitude et longitude on affiche la carte
         longitude && latitude ?(
@@ -24,11 +27,11 @@ function Map({longitude, latitude}: MapProps) {
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
-                    {/*<Marker position={[48.85842, 2.3535]}>*/}
-                    {/*    <Popup>*/}
-                    {/*        A pretty CSS3 popup. <br/> Easily customizable.*/}
-                    {/*    </Popup>*/}
-                    {/*</Marker>*/}
+                    <Marker position={[poiLat, poiLong]}>
+                        <Popup>
+                            A pretty CSS3 popup. <br /> Easily customizable.
+                        </Popup>
+                    </Marker>
                 </MapContainer>
             </Card>
 

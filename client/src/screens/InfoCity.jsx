@@ -1,20 +1,22 @@
 import Map from "../screens/Map";
 import {useParams} from "react-router-dom";
 import {useGetCityQuery} from "../gql/generated/schema";
+import {Marker, Popup, TileLayer} from "react-leaflet";
 
 export default function InfoCity() {
     const {cityName} = useParams();
 
-    console.log(cityName)
-
     const {loading: loadingCities, data} = useGetCityQuery({variables: {query: cityName}})
 
     const city = data?.city ?? [];
-    console.log(city)
+    const pois = city.poi
+    console.log(pois)
 
     return (
         <div>
-            <Map longitude={city.longitude} latitude={city.latitude}></Map>
+            <Map longitude={city.longitude} latitude={city.latitude}>
+
+            </Map>
         </div>
     )
 }

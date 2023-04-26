@@ -17,16 +17,6 @@ import jwt from "jsonwebtoken";
 import User from "./entity/User";
 import cookieParser from "cookie-parser";
 
-// @Resolver()
-// class CityResolver {
-//     // private citiesCollection: City[] = [];
-//
-//     @Query(() => String, {name: "helloworld"})
-//     async hello() {
-//         return "hello world";
-//     }
-// }
-
 export interface ContextType {
   req: express.Request;
   res: express.Response;
@@ -40,8 +30,7 @@ const start = async () => {
   const httpServer = http.createServer(app);
 
   const schema = await buildSchema({
-    // resolvers: [__dirname + "/resolvers/*.{ts,js}"]
-    resolvers: [CityResolver, UserResolver],
+    resolvers: [CityResolver, UserResolver, PoiResolver],
     authChecker: async ({ context }: { context: ContextType }, roles) => {
       const tokenInHeaders = context.req.headers.authorization?.split(" ")[1];
       const tokenInCookie = context.req.cookies?.["token"];
@@ -67,7 +56,7 @@ const start = async () => {
     },
   });
 
-const apolloServer = new ApolloServer({
+  const apolloServer = new ApolloServer({
     schema,
     csrfPrevention: true,
     cache: "bounded",
