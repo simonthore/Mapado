@@ -55,7 +55,7 @@ describe("User resolver", () => {
         it("should not create user given invalid attributes and return an error", async () => {
             await expect(() => client.mutate({
                 mutation: createUserMutation, variables: {data: {email: "", password: "potato"}}
-            })).rejects.toThrowErrorMatchingInlineSnapshot(`"Response not successful: Received status code 400"`);
+            })).rejects.toThrowErrorMatchingInlineSnapshot(`"Argument Validation Error"`);
         });
     });
 
