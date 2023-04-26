@@ -14,11 +14,11 @@ id
 }*/
 
 const createUserMutation = gql`
-  mutation CreateUser($data: UserInput!) {
-      createUser(data: $data) {
-          email
-      }
-  }
+    mutation CreateUser($data: UserInput!) {
+        createUser(data: $data) {
+            email
+        }
+    }
 `;
 
 /*query Users {
@@ -28,11 +28,11 @@ const createUserMutation = gql`
 }*/
 
 const getUsersQuery = gql`
-  query Users {
-    users {
-      id
+    query Users {
+        users {
+            id
+        }
     }
-  }
 `;
 
 /* if error =>
@@ -46,24 +46,16 @@ try{
 describe("User resolver", () => {
     describe("create user", () => {
         it("should create user given valid attributes", async () => {
-
-
             const res = await client.mutate({
-                mutation: createUserMutation,
-                variables: {data: {email: "testing@gmail.com", password: "Greengr@pes2019"}},
+                mutation: createUserMutation, variables: {data: {email: "plato@plato.com", password: "Pl@to123"}},
             });
             expect(res.data?.createUser).toHaveProperty("email");
-
-
         });
 
         it("should not create user given invalid attributes and return an error", async () => {
-            await expect(() =>
-client.mutate({
-  mutation: createUserMutation,
-  variables: { data: { email: "", password: "potato" } }
-})).
-rejects.toThrowErrorMatchingInlineSnapshot(`"Response not successful: Received status code 400"`);
+            await expect(() => client.mutate({
+                mutation: createUserMutation, variables: {data: {email: "", password: "potato"}}
+            })).rejects.toThrowErrorMatchingInlineSnapshot(`"Response not successful: Received status code 400"`);
         });
     });
 
@@ -74,8 +66,7 @@ rejects.toThrowErrorMatchingInlineSnapshot(`"Response not successful: Received s
                 .insert([{id: 1}, {id: 2}]);
 
             const res = await client.query({
-                query: getUsersQuery,
-                fetchPolicy: "no-cache",
+                query: getUsersQuery, fetchPolicy: "no-cache",
             });
 
             expect(res.data.users.length).toBe(2);
