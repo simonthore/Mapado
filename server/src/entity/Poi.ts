@@ -1,13 +1,14 @@
 import {PrimaryGeneratedColumn, Column, ManyToOne, Entity, JoinTable} from "typeorm";
 import {Field, Float, InputType, ObjectType} from "type-graphql";
 import City from "./City";
-import {CityId} from "./User";
+//import {CityId} from "./User";
 
 // @InputType()
 // export class CityId {
 //     @Field()
 //     id: number;
 // }
+
 
 @InputType()
 export class PoiInput {
