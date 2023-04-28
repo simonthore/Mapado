@@ -15,12 +15,12 @@ import {In} from "typeorm";
 import User, {
   getSafeAttributes,
   hashPassword,
-  Role,
   UserChangePassword,
   UserInput,
   UserSendPassword,
   verifyPassword,
-  UpdateUserInput
+  UpdateUserInput,
+  UserRole
 } from "../entity/User";
 import { env } from "../environment";
 import { ContextType } from "../index";
@@ -45,7 +45,7 @@ export class UserResolver {
     return user;
   }
 
-  @Authorized<Role>(["cityAdmin"])
+  @Authorized<UserRole>([UserRole.SUPERADMIN])
   @Mutation(() => Boolean)
   async deleteUser(@Arg("id", () => Int) id: number): Promise<boolean> {
     const { affected } = await datasource.getRepository(User).delete(id);

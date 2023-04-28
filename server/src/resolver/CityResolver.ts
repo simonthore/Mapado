@@ -1,32 +1,41 @@
-import { Arg, Int, Mutation, Query, Resolver } from "type-graphql";
-import City, { CityInput, CityRequested, UpdateCityInput } from "../entity/City";
+import { Arg, Int, Mutation, Query, Resolver, Authorized } from "type-graphql";
+import City, {
+  CityInput,
+  CityRequested,
+  UpdateCityInput,
+} from "../entity/City";
 import datasource from "../db";
 import { ApolloError } from "apollo-server-errors";
 import { env } from "../environment";
+import { UserRole } from "../entity/User";
 
 @Resolver(City)
 export class CityResolver {
-    @Query(() => [City])
-    async cities(): Promise<City[]> {
-      //Pour récupérer les utilisateurs et les poi des villes on ajoute les relations
-      return await datasource.getRepository(City).find({relations: {users:true, poi:true}});
-    }
+  @Query(() => [City])
+  async cities(): Promise<City[]> {
+    //Pour récupérer les utilisateurs et les poi des villes on ajoute les relations
+    return await datasource
+      .getRepository(City)
+      .find({ relations: { users: true, poi: true } });
+  }
 
   @Query(() => City)
   async city(@Arg("name", () => String) name: string): Promise<City> {
     const city = await datasource
       .getRepository(City)
-      .findOne({ where: { name }, relations: {users:true, poi: true} });
+      .findOne({ where: { name }, relations: { users: true, poi: true } });
 
     if (city === null) throw new ApolloError("city not found", "NOT_FOUND");
 
     return city;
   }
-
+  @Authorized<UserRole>([UserRole.SUPERADMIN])
   @Mutation(() => City)
   async createCity(@Arg("data") data: CityInput): Promise<City> {
     return await datasource.getRepository(City).save(data);
   }
+
+  @Authorized<UserRole>([UserRole.SUPERADMIN])
   @Mutation(() => Boolean)
   async deleteCity(@Arg("id", () => Int) id: number): Promise<boolean> {
     const { affected } = await datasource.getRepository(City).delete(id);
