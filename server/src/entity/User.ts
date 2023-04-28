@@ -13,6 +13,7 @@ import { argon2id, hash, verify } from "argon2";
 export enum UserRole {
   SUPERADMIN = "superAdmin",
   CITYADMIN = "cityAdmin",
+  POICREATOR = "POICreator",
   VISITOR = "visitor",
 }
 
@@ -79,7 +80,7 @@ class User {
   @Column({ nullable: true, type: "text" })
   hashedPassword?: string;
 
-  @Field({ nullable: true })
+  @Field()
   @Column({ default: UserRole.VISITOR, enum: UserRole })
   role: string;
 

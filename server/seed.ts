@@ -37,6 +37,13 @@ async function seed(): Promise<void> {
     ]);
     await db.getRepository(User).insert([
         {
+            email: "admin@test.com",
+            id: 50,
+            //password: Red@pples123
+            hashedPassword: "$argon2id$v=19$m=65536,t=5,p=4$ESNK5+jJkIYHHrEhPsoo4w$LDyT5r3NBDE5GxT0Ksva/XdovpmRLnAgUnb3wpdKeaY",
+            role: "superAdmin"
+        },
+        {
             email: "gg@test.com",
             id: 7,
             hashedPassword: "$argon2id$v=19$m=65536,t=5,p=4$to+4ziOVZQe7ypnIs36mjg$3F6fWRb6FWRbd/U0XAEaleJnF+N86Dx1lp7Kk8sNEWk"
