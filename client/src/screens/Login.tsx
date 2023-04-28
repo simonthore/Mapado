@@ -10,7 +10,9 @@ export default function Login() {
     const [credentials, setCredentials] = useState({email: "", password: ""});
     const [passwordShown, setPasswordShown] = useState(false);
     const [login] = useLoginMutation();
-    const {data: currentUser, client} = useGetProfileQuery();
+    const {data: currentUser, client } = useGetProfileQuery({
+      errorPolicy: "ignore",
+    });
 
     const navigate = useNavigate();
 

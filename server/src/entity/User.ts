@@ -18,6 +18,16 @@ export enum UserRole {
 }
 
 @InputType()
+export class UserRoleInput {
+  @Field()
+  @IsEmail()
+  email: string;
+
+  @Field()
+  role: string;
+}
+
+@InputType()
 export class UserInput {
   @Field()
   @IsEmail()

@@ -4,7 +4,7 @@ import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOu
 import AnimatedCard from "../components/AnimatedCard";
 import ICity from "../interfaces/ICity";
 import {filterBySearch} from "../utils/helpers";
-import {useCitiesQuery} from "../gql/generated/schema";
+import {useCitiesQuery, useGetProfileQuery} from "../gql/generated/schema";
 
 interface Cities {
     cities: ICity[];
@@ -29,6 +29,12 @@ export default function Home() {
         query: searchParams.get("query") ?? "",
         list: [],
     });
+
+    const { data: currentUser } = useGetProfileQuery({
+        errorPolicy: "ignore",
+    });
+
+    const canCreate = currentUser?.profile?.role === "superAdmin";
 
     // takes in value from the search bar and returns a filtered list of the cities to display
     //(filter improves with each letter)
@@ -57,12 +63,22 @@ export default function Home() {
             </form>
 
             <div className={"homeStyle"}>
+                {canCreate &&
                 <Link to={"/manage-cities"}>
                     <button className={"addCityButtonStyles"}>
                         <AddCircleOutlineOutlinedIcon/>
                         <p>AJOUTER UNE VILLE</p>
                     </button>
                 </Link>
+                }
+                {canCreate &&
+                    <Link to={"/manage-users"}>
+                        <button className={"addCityButtonStyles"}>
+                            <AddCircleOutlineOutlinedIcon/>
+                            <p>GERER LES UTILISATEURS</p>
+                        </button>
+                    </Link>
+                }
                 {state.query === ""
                     // if there is no search, display all cities
                     ? cities.map((city) => (

@@ -57,6 +57,7 @@ export type Mutation = {
   updateCity: City;
   updatePoi: Scalars['String'];
   updateUser: Scalars['String'];
+  updateUserRole: Scalars['String'];
 };
 
 
@@ -126,6 +127,11 @@ export type MutationUpdatePoiArgs = {
 export type MutationUpdateUserArgs = {
   data: UpdateUserInput;
   id: Scalars['Int'];
+};
+
+
+export type MutationUpdateUserRoleArgs = {
+  data: UserRoleInput;
 };
 
 export type Poi = {
@@ -198,14 +204,18 @@ export type User = {
   email?: Maybe<Scalars['String']>;
   hashedPassword?: Maybe<Scalars['String']>;
   id: Scalars['Float'];
-  role?: Maybe<Scalars['String']>;
-  role_id?: Maybe<Scalars['Float']>;
+  role: Scalars['String'];
 };
 
 export type UserInput = {
   cities?: InputMaybe<Array<CityId>>;
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type UserRoleInput = {
+  email: Scalars['String'];
+  role: Scalars['String'];
 };
 
 export type UserSendPassword = {
@@ -271,7 +281,7 @@ export type FetchTokenQuery = { __typename?: 'Query', fetchToken: { __typename?:
 export type GetProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetProfileQuery = { __typename?: 'Query', profile: { __typename?: 'User', id: number, email?: string | null, role?: string | null } };
+export type GetProfileQuery = { __typename?: 'Query', profile: { __typename?: 'User', id: number, email?: string | null, role: string } };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -296,6 +306,13 @@ export type SendPasswordEmailMutationVariables = Exact<{
 
 
 export type SendPasswordEmailMutation = { __typename?: 'Mutation', sendPasswordEmail: { __typename?: 'User', email?: string | null } };
+
+export type UpdateUserRoleMutationVariables = Exact<{
+  data: UserRoleInput;
+}>;
+
+
+export type UpdateUserRoleMutation = { __typename?: 'Mutation', updateUserRole: string };
 
 
 export const ChangePasswordDocument = gql`
@@ -743,3 +760,34 @@ export function useSendPasswordEmailMutation(baseOptions?: Apollo.MutationHookOp
 export type SendPasswordEmailMutationHookResult = ReturnType<typeof useSendPasswordEmailMutation>;
 export type SendPasswordEmailMutationResult = Apollo.MutationResult<SendPasswordEmailMutation>;
 export type SendPasswordEmailMutationOptions = Apollo.BaseMutationOptions<SendPasswordEmailMutation, SendPasswordEmailMutationVariables>;
+export const UpdateUserRoleDocument = gql`
+    mutation UpdateUserRole($data: UserRoleInput!) {
+  updateUserRole(data: $data)
+}
+    `;
+export type UpdateUserRoleMutationFn = Apollo.MutationFunction<UpdateUserRoleMutation, UpdateUserRoleMutationVariables>;
+
+/**
+ * __useUpdateUserRoleMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserRoleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserRoleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserRoleMutation, { data, loading, error }] = useUpdateUserRoleMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateUserRoleMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserRoleMutation, UpdateUserRoleMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUserRoleMutation, UpdateUserRoleMutationVariables>(UpdateUserRoleDocument, options);
+      }
+export type UpdateUserRoleMutationHookResult = ReturnType<typeof useUpdateUserRoleMutation>;
+export type UpdateUserRoleMutationResult = Apollo.MutationResult<UpdateUserRoleMutation>;
+export type UpdateUserRoleMutationOptions = Apollo.BaseMutationOptions<UpdateUserRoleMutation, UpdateUserRoleMutationVariables>;

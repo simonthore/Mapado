@@ -10,6 +10,7 @@ import User, {
     UpdateUserInput,
     UserInput,
     UserRole,
+    UserRoleInput,
     UserSendPassword,
     verifyPassword
 } from "../entity/User";
@@ -35,20 +36,19 @@ export class UserResolver {
         return user;
     }
 
-    @Authorized<UserRole>([UserRole.SUPERADMIN])
-    @Mutation(() => Boolean)
+    @Authorized<UserRole>([UserRole.SUPERADMIN]) @Mutation(() => Boolean)
     async deleteUser(@Arg("id", () => Int) id: number): Promise<boolean> {
         const {affected} = await datasource.getRepository(User).delete(id);
         if (affected === 0) throw new ApolloError("user not found", "NOT_FOUND");
         return true;
     }
 
-    //Give user City Admin rights: UserAdmin only has rights over their own city
-    @Authorized<UserRole>([UserRole.SUPERADMIN])
     @Mutation(() => String)
-    async updateUserToCityAdmin(
-        @Arg("id", () => Int) id: number,
-        @Arg("data", () => UpdateUserInput) {email, hashedPassword, cities}: UpdateUserInput): Promise<String> {
+    async updateUser(@Arg("id", () => Int) id: number, @Arg("data", () => UpdateUserInput) {
+        email,
+        hashedPassword,
+        cities
+    }: UpdateUserInput): Promise<String> {
         let citiesEntities: City[] = []
         let user = await datasource.getRepository(User).findOne({where: {id}, relations: {cities: true}})
         if (!user) throw new ApolloError("User not found", "NOT_FOUND")
@@ -66,59 +66,41 @@ export class UserResolver {
             .getRepository(User)
             .save(user);
 
-        return `${updatedUser.email} been assigned ${updatedUser.role} role`;
+        return `${updatedUser.email} has been updated`;
     }
 
-    //Give user POI creation rights: CityAdmin can only give rights over their own city
-    @Authorized<UserRole>([UserRole.SUPERADMIN, UserRole.CITYADMIN])
-    @Mutation(() => String)
-    async updateUserToPOICreator(
-        @Arg("id", () => Int) id: number,
-        @Arg("data", () => UpdateUserInput) {email, hashedPassword, cities}: UpdateUserInput): Promise<String> {
-        let citiesEntities: City[] = []
-        let user = await datasource.getRepository(User).findOne({where: {id}, relations: {cities: true}})
-        if (!user) throw new ApolloError("User not found", "NOT_FOUND")
+    //Update User Role
+    @Authorized<UserRole>([UserRole.SUPERADMIN, UserRole.CITYADMIN]) @Mutation(() => String)
+    async updateUserRole(@Arg("data", () => UserRoleInput) {email, role}: UserRoleInput): Promise<String> {
+        let userToUpdate = await datasource.getRepository(User).findOne({where: {email}})
+        if (!userToUpdate) throw new ApolloError("User not found", "NOT_FOUND")
 
-        if (cities) {
-            citiesEntities = await datasource.getRepository(City).find({where: {id: In(cities?.map(c => c.id))}})
-            user.cities = [...(user?.cities ? user.cities : []), ...citiesEntities];
-            user.role = UserRole.POICREATOR;
-        }
-        if (hashedPassword) user.hashedPassword = await hashPassword(user.hashedPassword ? user.hashedPassword : '');
-
-        if (email) user.email = email
+        userToUpdate.role = role;
 
         const updatedUser = await datasource
             .getRepository(User)
-            .save(user);
+            .save(userToUpdate);
+
+        console.log(updatedUser)
 
         return `${updatedUser.email} been assigned ${updatedUser.role} role`;
     }
 
     @Mutation(() => String)
-    async login(
-        @Arg("data") {email, password}: UserInput,
-        @Ctx() ctx: ContextType
-    ): Promise<string> {
+    async login(@Arg("data") {email, password}: UserInput, @Ctx() ctx: ContextType): Promise<string> {
         const user = await datasource
             .getRepository(User)
             .findOne({where: {email}});
         ///const hashedPassword = await hashPassword(password);
 
-        if (
-            user === null ||
-            !user.hashedPassword ||
-            !(await verifyPassword(password, user.hashedPassword))
-        ) {
+        if (user === null || !user.hashedPassword || !(await verifyPassword(password, user.hashedPassword))) {
             throw new ApolloError("invalid credentials");
         }
 
         const token = jwt.sign({userId: user.id}, env.JWT_PRIVATE_KEY);
 
         ctx.res.cookie("token", token, {
-            secure: env.NODE_ENV === "production",
-            domain: env.SERVER_HOST,
-            httpOnly: true,
+            secure: env.NODE_ENV === "production", domain: env.SERVER_HOST, httpOnly: true,
         });
 
         return token;
@@ -130,8 +112,7 @@ export class UserResolver {
         return "logged out";
     }
 
-    @Authorized()
-    @Query(() => User)
+    @Authorized() @Query(() => User)
     async profile(@Ctx() ctx: ContextType): Promise<User> {
         return getSafeAttributes(ctx.currentUser as User);
     }
@@ -148,12 +129,9 @@ export class UserResolver {
 
         // sender information used to authenticate
         const transporter = nodemailer.createTransport({
-            service: "hotmail",
-            auth: {
-                user: "mapado-wns@outlook.com",
-                pass: "projetMapado",
-            },
-            from: "mapado-wns@outlook.com",
+            service: "hotmail", auth: {
+                user: "mapado-wns@outlook.com", pass: "projetMapado",
+            }, from: "mapado-wns@outlook.com",
         });
 
         const userId = userToEmail.id;
@@ -195,29 +173,23 @@ export class UserResolver {
         const userToUpdatePassword = await datasource
             .getRepository(User)
             .findOne({where: {id}});
-        if (userToUpdatePassword === null)
-            throw new ApolloError("user not found", "NOT_FOUND");
+        if (userToUpdatePassword === null) throw new ApolloError("user not found", "NOT_FOUND");
         return userToUpdatePassword;
     }
 
     // mutation to change password
     @Mutation(() => User)
-    async changePassword(
-        @Arg('id', () => Int) id: number,
-        @Arg('newPassword', () => String) newPassword: string
-    ): Promise<boolean> {
+    async changePassword(@Arg('id', () => Int) id: number, @Arg('newPassword', () => String) newPassword: string): Promise<boolean> {
 
         //create userToUpdate which is the user in the db matching the email (with properties email, hashedPassword, etc)
         const userToUpdate = await datasource
             .getRepository(User)
             .findOne({where: {id}});
         // verify if user is null > throw error
-        if (!userToUpdate)
-            throw new ApolloError("invalid credentials no such user");
+        if (!userToUpdate) throw new ApolloError("invalid credentials no such user");
 
         // match UserSendPassword token to token in headers
-        if (!userToUpdate.changePasswordToken)
-            throw new ApolloError("invalid credentials no such token");
+        if (!userToUpdate.changePasswordToken) throw new ApolloError("invalid credentials no such token");
 
         // hash new password
         const newHashedPassword = await hashPassword(newPassword);

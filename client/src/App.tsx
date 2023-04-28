@@ -5,6 +5,7 @@ import Login from "./screens/Login";
 import Home from "./screens/Home";
 import Header from "./components/Header";
 import ManageCities from "./screens/ManageCities";
+import ManageUsers from "./screens/ManageUsers";
 import Map from "./screens/Map";
 import "./App.css";
 import { useCitiesQuery } from "./gql/generated/schema";
@@ -43,6 +44,10 @@ function App() {
             path="/manage-cities"
             element={<ManageCities />}
           />
+            <Route
+                path="/manage-users"
+                element={<ManageUsers />}
+            />
            <Route path="/info/:cityName" element={<InfoCity/>}/>
           {/*<Route path="/map" element={<Map/>} />*/}
         </Routes>

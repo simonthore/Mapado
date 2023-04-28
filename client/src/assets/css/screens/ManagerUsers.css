@@ -1,0 +1,13 @@
+.userRoleContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.userRoleOptions {
+    text-align: center;
+    border-radius: 20px;
+    width: 20rem;
+    height: 2.5rem;
+    border: 3px solid #173472;
+    box-sizing: content-box;
+}
