@@ -43,9 +43,9 @@ export default function InfoCity() {
     <div>
       <Map longitude={city.longitude} latitude={city.latitude}>
         {city.pois
-          ? city.pois.map((e: IPoi) => (
+          ? city.pois.map((e: IPoi, index: number) => (
               <Marker
-                key={e.id}
+                key={index}
                 position={[e.latitude!, e.longitude!]}
                 icon={
                   new Icon({

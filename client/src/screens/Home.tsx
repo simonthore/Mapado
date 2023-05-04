@@ -55,8 +55,8 @@ export default function Home() {
         </a>
         {state.query === ""
           ? // if there is no search, display all cities
-            cities.map((city) => (
-              <NavLink key={city.id} to={`/info/${city.name}`}>
+            cities.map((city: ICity, index: number) => (
+              <NavLink key={index} to={`/info/${city.name}`}>
                 <AnimatedCard
                   key={city.id}
                   cityName={city.name}
@@ -64,11 +64,11 @@ export default function Home() {
                 />
               </NavLink>
             ))
-          : state.list.map((city) => (
+          : state.list.map((city: ICity, index: number) => (
               // if there is a search display the cities corresponding
-              <NavLink key={city.id} to={`/info/${city.name}`}>
+              <NavLink key={index} to={`/info/${city.name}`}>
                 <AnimatedCard
-                  key={city.id}
+                  key={index}
                   cityName={city.name}
                   cityPhoto={city.photo}
                 />
