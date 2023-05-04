@@ -8,4 +8,5 @@ export const env = load({
   SERVER_PORT: Number,
   REACT_APP_CITIES_API_KEY: String,
   REACT_APP_PHOTOS_API_KEY: String,
+  REACT_APP_POI_API_KEY: String,
 });
