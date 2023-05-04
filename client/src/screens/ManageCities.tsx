@@ -8,6 +8,7 @@ import {
 } from "../gql/generated/schema";
 import Card from "../components/Card";
 import ICity from "../interfaces/ICity";
+import AddPoi from "../components/AddPoi";
 
 export default function AddManageCities() {
   //
@@ -16,12 +17,6 @@ export default function AddManageCities() {
 
   // Initialisation de l'objet cityRequested
   const [cityRequested, setCityRequested] = useState({
-    cityName: "",
-  });
-  // Initialisation de l'objet poiRequested
-  const [poiRequested, setPoiRequested] = useState({
-    poiNameOrAdress: "",
-    cityId: 0,
     cityName: "",
   });
 
@@ -36,8 +31,6 @@ export default function AddManageCities() {
   const { loading: loadingCities, data, refetch } = useCitiesQuery();
   const cities = data?.cities ?? [];
 
-  const [sendPoiNameOrAdress] = useFetchPoiCoordinatesMutation();
-
   //
   // FONCTIONS ONCLICK
   //
@@ -49,11 +42,6 @@ export default function AddManageCities() {
 
   const onClickDeleteCity = (cityId: number) => {
     deleteCity({ variables: { deleteCityId: cityId } });
-  };
-
-  const onClickSendNewPoi = () => {
-    sendPoiNameOrAdress({ variables: { data: poiRequested } });
-    console.log("data envoyée au back", poiRequested);
   };
 
   return (
@@ -75,9 +63,9 @@ export default function AddManageCities() {
         <h2 className={"title"}>Gérer les villes</h2>
         <div className="max-w-screen-xl mx-auto px-5 min-h-screen">
           <div className="grid divide-y divide-neutral-200 max-w-xl mx-auto mt-8">
-            {cities.map((city: ICity) => {
+            {cities.map((city: ICity, index: number) => {
               return (
-                <div key={city.id} className="py-5">
+                <div key={index} className="py-5">
                   <details className="group">
                     <summary className="flex justify-between items-center font-medium cursor-pointer list-none">
                       <div className={"manageOneCityContainer"}>
@@ -106,25 +94,7 @@ export default function AddManageCities() {
                       </span>
                     </summary>
                     <h2 className={"title"}>Ajouter un point d'intérêt</h2>
-                    <input
-                      type="text"
-                      placeholder="Nom ou Adresse du POI"
-                      value={poiRequested.poiNameOrAdress}
-                      onChange={(e) =>
-                        setPoiRequested((prevState) => ({
-                          ...prevState,
-                          poiNameOrAdress: e.target.value,
-                          cityId: city.id,
-                          cityName: city.name,
-                        }))
-                      }
-                    ></input>
-                    <button
-                      onClick={onClickSendNewPoi}
-                      className={"tertiaryButton"}
-                    >
-                      Ajouter
-                    </button>
+                    <AddPoi cityId={city.id} cityName={city.name}></AddPoi>
                   </details>
                 </div>
               );
