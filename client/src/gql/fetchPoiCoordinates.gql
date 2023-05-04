@@ -1,0 +1,3 @@
+mutation FetchPoiCoordinates($data: findPOI!) {
+  fetchPoiCoordinates(data: $data)
+}
