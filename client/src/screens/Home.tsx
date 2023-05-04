@@ -11,6 +11,7 @@ export default function Home() {
   // gets the params from URL
   const [searchParams, setSearchParams] = useSearchParams();
 
+
   const { loading: loadingCities, data, refetch } = useCitiesQuery();
 
   const cities = data?.cities ?? [];
@@ -46,35 +47,32 @@ export default function Home() {
         ></input>
       </form>
 
-      <div className={"homeStyle"}>
-        <a href="/manage-cities">
-          <button className={"addCityButtonStyles"}>
-            <AddCircleOutlineOutlinedIcon />
-            <p>AJOUTER UNE VILLE</p>
-          </button>
-        </a>
-        {state.query === ""
-          ? // if there is no search, display all cities
-            cities.map((city) => (
-              <NavLink key={city.id} to={`/info/${city.name}`}>
-                <AnimatedCard
-                  key={city.id}
-                  cityName={city.name}
-                  cityPhoto={city.photo}
-                />
-              </NavLink>
-            ))
-          : state.list.map((city) => (
-              // if there is a search display the cities corresponding
-              <NavLink key={city.id} to={`/info/${city.name}`}>
-                <AnimatedCard
-                  key={city.id}
-                  cityName={city.name}
-                  cityPhoto={city.photo}
-                />
-              </NavLink>
-            ))}
-      </div>
-    </>
-  );
+
+            <div className={"homeStyle"}>
+                <Link to={"/manage-cities"}>
+                    <button className={"addCityButtonStyles"}>
+                        <AddCircleOutlineOutlinedIcon/>
+                        <p>AJOUTER UNE VILLE</p>
+                    </button>
+                </Link>
+                {state.query === ""
+                    // if there is no search, display all cities
+                    ? cities.map((city) => (
+                        <NavLink key={city.id} to={`/info/${city.name}`}>
+                            < AnimatedCard key={city.id} cityName={city.name} cityPhoto={city.photo}
+                                           data-testid="city-list"/>
+                        </NavLink>)
+                    )
+                    :
+                    state.list.map((city) => (
+                        // if there is a search display the cities corresponding
+                        <NavLink key={city.id} to={`/info/${city.name}`}>
+                            < AnimatedCard key={city.id} cityName={city.name} cityPhoto={city.photo}
+                                           data-testid="city-list"/>
+                        </NavLink>))
+                }
+            </div>
+        </>
+    )
+        ;
 }
