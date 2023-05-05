@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink, useSearchParams } from "react-router-dom";
+import { Link, NavLink, useSearchParams } from "react-router-dom";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import AnimatedCard from "../components/AnimatedCard";
 import ICity from "../interfaces/ICity";
@@ -47,12 +47,12 @@ export default function Home() {
       </form>
 
       <div className={"homeStyle"}>
-        <a href="/manage-cities">
+        <Link to="/manage-cities">
           <button className={"addCityButtonStyles"}>
             <AddCircleOutlineOutlinedIcon />
             <p>AJOUTER UNE VILLE</p>
           </button>
-        </a>
+        </Link>
         {state.query === ""
           ? // if there is no search, display all cities
             cities.map((city: ICity, index: number) => (
