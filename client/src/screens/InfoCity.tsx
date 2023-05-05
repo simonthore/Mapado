@@ -2,7 +2,7 @@ import Map from "../components/Map";
 import { useParams } from "react-router-dom";
 import { useGetCityQuery } from "../gql/generated/schema";
 import { Marker, Popup } from "react-leaflet";
-import markerIconPng from "leaflet/dist/images/marker-icon.png";
+import markerIconPng from "../assets/images/starred.png";
 import { Icon } from "leaflet";
 import ICity from "../interfaces/ICity";
 import IPoi from "../interfaces/IPoi";
@@ -46,12 +46,13 @@ export default function InfoCity() {
           ? city.pois.map((e: IPoi, index: number) => (
               <Marker
                 key={index}
+                riseOnHover={true}
                 position={[e.latitude!, e.longitude!]}
                 icon={
                   new Icon({
                     iconUrl: markerIconPng,
-                    iconSize: [25, 41],
-                    iconAnchor: [12, 41],
+                    iconSize: [25, 25],
+                    iconAnchor: [13, 28],
                   })
                 }
               >
