@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink, useSearchParams } from "react-router-dom";
+import { Link, NavLink, useSearchParams } from "react-router-dom";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import AnimatedCard from "../components/AnimatedCard";
 import ICity from "../interfaces/ICity";
@@ -10,7 +10,6 @@ import IState from "../interfaces/IState";
 export default function Home() {
   // gets the params from URL
   const [searchParams, setSearchParams] = useSearchParams();
-
 
   const { loading: loadingCities, data, refetch } = useCitiesQuery();
 
@@ -47,32 +46,35 @@ export default function Home() {
         ></input>
       </form>
 
-
-            <div className={"homeStyle"}>
-                <Link to={"/manage-cities"}>
-                    <button className={"addCityButtonStyles"}>
-                        <AddCircleOutlineOutlinedIcon/>
-                        <p>AJOUTER UNE VILLE</p>
-                    </button>
-                </Link>
-                {state.query === ""
-                    // if there is no search, display all cities
-                    ? cities.map((city) => (
-                        <NavLink key={city.id} to={`/info/${city.name}`}>
-                            < AnimatedCard key={city.id} cityName={city.name} cityPhoto={city.photo}
-                                           data-testid="city-list"/>
-                        </NavLink>)
-                    )
-                    :
-                    state.list.map((city) => (
-                        // if there is a search display the cities corresponding
-                        <NavLink key={city.id} to={`/info/${city.name}`}>
-                            < AnimatedCard key={city.id} cityName={city.name} cityPhoto={city.photo}
-                                           data-testid="city-list"/>
-                        </NavLink>))
-                }
-            </div>
-        </>
-    )
-        ;
+      <div className={"homeStyle"}>
+        <Link to="/manage-cities">
+          <button className={"addCityButtonStyles"}>
+            <AddCircleOutlineOutlinedIcon />
+            <p>AJOUTER UNE VILLE</p>
+          </button>
+        </Link>
+        {state.query === ""
+          ? // if there is no search, display all cities
+            cities.map((city: ICity, index: number) => (
+              <NavLink key={index} to={`/info/${city.name}`}>
+                <AnimatedCard
+                  key={city.id}
+                  cityName={city.name}
+                  cityPhoto={city.photo}
+                />
+              </NavLink>
+            ))
+          : state.list.map((city: ICity, index: number) => (
+              // if there is a search display the cities corresponding
+              <NavLink key={index} to={`/info/${city.name}`}>
+                <AnimatedCard
+                  key={index}
+                  cityName={city.name}
+                  cityPhoto={city.photo}
+                />
+              </NavLink>
+            ))}
+      </div>
+    </>
+  );
 }
