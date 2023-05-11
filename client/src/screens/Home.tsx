@@ -11,7 +11,7 @@ export default function Home() {
   // gets the params from URL
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const { loading: loadingCities, data, refetch } = useCitiesQuery();
+  const { loading: loadingCities, data } = useCitiesQuery();
 
   const cities = data?.cities ?? [];
   // State to manage both URL query & cities to display
