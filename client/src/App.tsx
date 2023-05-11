@@ -5,7 +5,6 @@ import Login from "./screens/Login";
 import Home from "./screens/Home";
 import Header from "./components/Header";
 import ManageCities from "./screens/ManageCities";
-import Map from "./components/Map";
 import "./App.css";
 import { useCitiesQuery } from "./gql/generated/schema";
 import Register from "./screens/Register";
@@ -21,15 +20,13 @@ const styles: CSS.Properties = {
 function App() {
   const { loading: loadingCities, data } = useCitiesQuery();
 
-  const path = window.location.pathname;
-
   const cities = data?.cities ?? [];
 
   return (
     <>
       <Toaster position="top-center" />
       <div style={styles}>
-        {window.location.pathname !== "/login" ? <Header /> : null}
+        <Header />
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -41,7 +38,6 @@ function App() {
           <Route path="*" element={<Home />} />
           <Route path="/manage-cities" element={<ManageCities />} />
           <Route path="/info/:cityName" element={<InfoCity />} />
-          {/*<Route path="/map" element={<Map/>} />*/}
         </Routes>
       </div>
     </>
