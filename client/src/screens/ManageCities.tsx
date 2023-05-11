@@ -15,7 +15,7 @@ export default function AddManageCities() {
       <AddCity />
       <div className={"manageCitiesContainer"}>
         <h2 className={"title"}>Gérer les villes</h2>
-        <div className="max-w-screen-xl mx-auto px-5 min-h-screen">
+        <div className="max-w-screen-xl mx-auto px-5">
           <div className="grid divide-y divide-neutral-200 max-w-xl mx-auto mt-8">
             {cities.map((city: ICity, index: number) => {
               return (
