@@ -30,13 +30,13 @@ export default function AddCity() {
     })
       .then((res) => {
         setPopupTitle(res.data?.fetchCityName!);
+        refetch();
       })
       .catch((erreur: ApolloError) => {
         setPopupTitle(erreur.message);
       })
       .finally(() => {
         setShowPopup(true);
-        refetch();
       });
   };
 
