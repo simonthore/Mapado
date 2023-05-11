@@ -13,21 +13,19 @@ function Map({ longitude, latitude, children }: MapProps) {
   return (
     //Si on a une latitude et longitude on affiche la carte
     longitude && latitude ? (
-      <Card customClass={"mapCard"}>
-        <MapContainer
-          className="map-container"
-          center={[latitude, longitude]}
-          zoom={13}
-          scrollWheelZoom={true}
-        >
-          <TileLayer
-            attribution='<a href=\"https://www.jawg.io\" target=\"_blank\">&copy; Jawg</a> - <a href=\"https://www.openstreetmap.org\" target=\"_blank\">&copy; OpenStreetMap</a>&nbsp;<br> <a href="https://www.flaticon.com/packs/location-pins-22" title="Icons">Icons created by juicy_fish - Flaticon</a>'
-            url="https://tile.jawg.io/jawg-streets/{z}/{x}/{y}{r}.png?access-token=VqQyBZW73JCmOiH4lxXOFUUryQ2SN7iMhXKNwltmAvEtodz5ZQqRp71PgTn7dEDd"
-            detectRetina={false}
-          />
-          {children}
-        </MapContainer>
-      </Card>
+      <MapContainer
+        className="map-container"
+        center={[latitude, longitude]}
+        zoom={13}
+        scrollWheelZoom={true}
+      >
+        <TileLayer
+          attribution='<a href=\"https://www.jawg.io\" target=\"_blank\">&copy; Jawg</a> - <a href=\"https://www.openstreetmap.org\" target=\"_blank\">&copy; OpenStreetMap</a>&nbsp;<br> <a href="https://www.flaticon.com/packs/location-pins-22" title="Icons">Icons created by juicy_fish - Flaticon</a>'
+          url="https://tile.jawg.io/jawg-streets/{z}/{x}/{y}{r}.png?access-token=VqQyBZW73JCmOiH4lxXOFUUryQ2SN7iMhXKNwltmAvEtodz5ZQqRp71PgTn7dEDd"
+          detectRetina={false}
+        />
+        {children}
+      </MapContainer>
     ) : (
       //     //Si on a pas de longitude et latitude on affiche un loader 'tailwind loader'
       <div className={"mapLoader"}>

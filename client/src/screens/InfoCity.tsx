@@ -40,7 +40,7 @@ export default function InfoCity() {
   //   const pois = city.poi;
 
   return (
-    <div>
+    <>
       <Map longitude={city.longitude} latitude={city.latitude}>
         {city.pois
           ? city.pois.map((e: IPoi, index: number) => (
@@ -64,6 +64,6 @@ export default function InfoCity() {
             ))
           : null}
       </Map>
-    </div>
+    </>
   );
 }
