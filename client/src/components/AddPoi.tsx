@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useFetchPoiCoordinatesMutation } from "../gql/generated/schema";
+import CustomPopup from "./CustomPopup";
+import { ApolloError } from "@apollo/client";
 
 interface PoiProps {
   cityId: number;
@@ -14,10 +16,25 @@ export default function AddPoi({ cityId, cityName }: PoiProps) {
     cityName: "",
   });
 
+  const [popupTitle, setPopupTitle] = useState("");
+
   const [sendPoiNameOrAdress] = useFetchPoiCoordinatesMutation();
 
+  const [showPopup, setShowPopup] = useState(false);
+
   const onClickSendNewPoi = () => {
-    sendPoiNameOrAdress({ variables: { data: poiRequested } });
+    sendPoiNameOrAdress({ variables: { data: poiRequested } })
+      .then((res) => {
+        console.log("log du then", res);
+        setPopupTitle(res?.data?.fetchPoiCoordinates!);
+      })
+      .catch((erreur: ApolloError) => {
+        console.log(erreur);
+        setPopupTitle(erreur.message);
+      })
+      .finally(() => {
+        setShowPopup(true);
+      });
     console.log("data envoyée au back", poiRequested);
   };
 
@@ -39,6 +56,11 @@ export default function AddPoi({ cityId, cityName }: PoiProps) {
       <button onClick={onClickSendNewPoi} className={"tertiaryButton"}>
         Ajouter
       </button>
+      <CustomPopup
+        trigger={showPopup}
+        setTrigger={setShowPopup}
+        popupTitle={popupTitle}
+      ></CustomPopup>
     </>
   );
 }

@@ -1,64 +1,18 @@
-import { useState } from "react";
-import {
-  useCitiesQuery,
-  useFetchCityNameMutation,
-  useDeleteCityMutation,
-  useCreateUserMutation,
-  useFetchPoiCoordinatesMutation,
-} from "../gql/generated/schema";
+import { useCitiesQuery, useDeleteCityMutation } from "../gql/generated/schema";
 import Card from "../components/Card";
 import ICity from "../interfaces/ICity";
 import AddPoi from "../components/AddPoi";
+import AddCity from "../components/AddCity";
+import DeleteCity from "../components/DeleteCity";
 
 export default function AddManageCities() {
-  //
-  // STATES
-  //
-
-  // Initialisation de l'objet cityRequested
-  const [cityRequested, setCityRequested] = useState({
-    cityName: "",
-  });
-
-  //
-  // MUTATIONS GRAPHQL
-  //
-
-  // fonction gql qui récupère la valeur de l'input
-  //REFETCH POSSIBLE ICI
-  const [sendCityName] = useFetchCityNameMutation();
-  const [deleteCity] = useDeleteCityMutation();
   const { loading: loadingCities, data, refetch } = useCitiesQuery();
   const cities = data?.cities ?? [];
-
-  //
-  // FONCTIONS ONCLICK
-  //
-
-  // Au click du bouton on lance la fonction gql
-  const onClickSendCityName = () => {
-    sendCityName({ variables: { data: cityRequested } });
-  };
-
-  const onClickDeleteCity = (cityId: number) => {
-    deleteCity({ variables: { deleteCityId: cityId } });
-  };
 
   return (
     <Card customClass={"registerCard"}>
       <h2 className={"title"}>Ajouter une ville</h2>
-      <div className={"addCityContainer"}>
-        <input
-          type="text"
-          placeholder="Nom de la ville"
-          value={cityRequested.cityName}
-          onChange={(e) => setCityRequested({ cityName: e.target.value })}
-        ></input>
-        <button onClick={onClickSendCityName} className={"tertiaryButton"}>
-          Ajouter
-        </button>
-      </div>
-
+      <AddCity />
       <div className={"manageCitiesContainer"}>
         <h2 className={"title"}>Gérer les villes</h2>
         <div className="max-w-screen-xl mx-auto px-5 min-h-screen">
@@ -68,14 +22,9 @@ export default function AddManageCities() {
                 <div key={index} className="py-5">
                   <details className="group">
                     <summary className="flex justify-between items-center font-medium cursor-pointer list-none">
-                      <div className={"manageOneCityContainer"}>
+                      <div className={" manageOneCityContainer"}>
                         <p className={"cityLabel"}>{city.name}</p>
-                        <button
-                          className={"primaryButton"}
-                          onClick={(e) => onClickDeleteCity(city.id)}
-                        >
-                          Supprimer
-                        </button>
+                        <DeleteCity cityId={city.id} cityName={city.name} />
                       </div>
                       <span className="transition group-open:rotate-180">
                         <svg
