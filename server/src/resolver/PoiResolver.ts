@@ -43,8 +43,16 @@ export class PoiResolver {
   // On enregistre l'objet dans notre bdd
 
   @Mutation(() => String)
-  async fetchPoiCoordinates(@Arg("data") data: findPOI): Promise<string> {
+  async fetchPoiCoordinates(
+    @Arg("data") data: findPOI
+  ): Promise<string | ApolloError> {
     const { poiNameOrAdress, cityName, cityId } = data;
+
+    if (poiNameOrAdress === "") {
+      return new ApolloError("Entrez un point d'intêret svp");
+    } else if (poiNameOrAdress.length <= 2) {
+      return new ApolloError("Entrez un nom de ville correct svp");
+    }
 
     let optionsPoiAPI = {
       method: "GET",
@@ -77,13 +85,18 @@ export class PoiResolver {
       // address: getPoiAddress(street, postalcode, city),
       cityId: cityId,
     };
-    console.log("Log de l'adresse complete du poi", fetchPoi.formatted);
 
-    if (poiData.name !== cityName) {
+    const PoiExists = await datasource
+      .getRepository(Poi)
+      .findOne({ where: { name: poiData.name } });
+
+    // console.log("Log de l'adresse complete du poi", fetchPoi.formatted);
+
+    if (!PoiExists && poiData.name !== cityName) {
       await datasource.getRepository(Poi).save(poiData);
+      return "Le POI a bien été créé";
     } else {
-      console.error("Ce POI n'existe pas, tenter une autre addresse !");
+      return new ApolloError("Ce POI existe déjà ou n'est pas conforme");
     }
-    return poiNameOrAdress;
   }
 }

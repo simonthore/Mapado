@@ -61,8 +61,16 @@ export class CityResolver {
   // On enregistre l'objet dans notre bdd
 
   @Mutation(() => String)
-  async fetchCityName(@Arg("data") data: CityRequested): Promise<string> {
+  async fetchCityName(
+    @Arg("data") data: CityRequested
+  ): Promise<string | ApolloError> {
     const { cityName } = data;
+
+    if (cityName === "") {
+      return new ApolloError("Entrez un nom de ville svp");
+    } else if (cityName.length <= 2) {
+      return new ApolloError("Entrez un nom de ville correct svp");
+    }
 
     let optionsCityAPI = {
       method: "GET",
@@ -100,6 +108,9 @@ export class CityResolver {
       .then((res) => res.json())
       .then((data) => {
         let urlOfCityPhoto = data["results"][0].urls["regular"];
+        // Récupérer le nom du photographe pour passer à la version VIP de l'API Unsplash
+        // let photographer = data["results"][0].user["name"];
+
         return urlOfCityPhoto;
       })
       .catch((err) => {
@@ -113,9 +124,24 @@ export class CityResolver {
       photo: fetchPhoto,
     };
     //console.log(fetchCity);
+    const cityExists = await datasource
+      .getRepository(City)
+      .findOne({ where: { name: cityData.name } });
+    console.log(cityExists);
 
-    await datasource.getRepository(City).save(cityData);
+    if (!cityExists) {
+      await datasource.getRepository(City).save(cityData);
+      console.log(cityData.name + " a bien été créée");
 
-    return cityName;
+      return cityData.name + " a bien été créée";
+    } else {
+      console.log(
+        cityData.name + " existe déjà, essayez d'ajouter une autre ville!"
+      );
+
+      return new ApolloError(
+        cityData.name + " existe déjà, essayez d'ajouter une autre ville!"
+      );
+    }
   }
 }
