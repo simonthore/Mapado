@@ -51,6 +51,7 @@ export type Mutation = {
   deletePoi: Scalars['Boolean'];
   deleteUser: Scalars['Boolean'];
   fetchCityName: Scalars['String'];
+  fetchPoiCoordinates: Scalars['String'];
   login: Scalars['String'];
   logout: Scalars['String'];
   sendPasswordEmail: User;
@@ -99,6 +100,11 @@ export type MutationDeleteUserArgs = {
 
 export type MutationFetchCityNameArgs = {
   data: CityRequested;
+};
+
+
+export type MutationFetchPoiCoordinatesArgs = {
+  data: FindPoi;
 };
 
 
@@ -184,7 +190,7 @@ export type QueryFetchTokenArgs = {
 };
 
 export type UpdatePoiInput = {
-  address?: InputMaybe<Scalars['String']>;
+  address: Scalars['String'];
   description?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   rating?: InputMaybe<Scalars['Float']>;
@@ -223,6 +229,12 @@ export type UserSendPassword = {
   token?: InputMaybe<Scalars['String']>;
 };
 
+export type FindPoi = {
+  cityId: Scalars['Float'];
+  cityName: Scalars['String'];
+  poiNameOrAdress: Scalars['String'];
+};
+
 export type ChangePasswordMutationVariables = Exact<{
   newPassword: Scalars['String'];
   changePasswordId: Scalars['Int'];
@@ -230,13 +242,6 @@ export type ChangePasswordMutationVariables = Exact<{
 
 
 export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'User', hashedPassword?: string | null } };
-
-export type CreatePoiMutationVariables = Exact<{
-  data: PoiInput;
-}>;
-
-
-export type CreatePoiMutation = { __typename?: 'Mutation', createPoi: { __typename?: 'Poi', id: number, name: string, address: string } };
 
 export type CreateUserMutationVariables = Exact<{
   data: UserInput;
@@ -259,6 +264,13 @@ export type FetchCityNameMutationVariables = Exact<{
 
 export type FetchCityNameMutation = { __typename?: 'Mutation', fetchCityName: string };
 
+export type FetchPoiCoordinatesMutationVariables = Exact<{
+  data: FindPoi;
+}>;
+
+
+export type FetchPoiCoordinatesMutation = { __typename?: 'Mutation', fetchPoiCoordinates: string };
+
 export type CitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -269,7 +281,7 @@ export type GetCityQueryVariables = Exact<{
 }>;
 
 
-export type GetCityQuery = { __typename?: 'Query', city: { __typename?: 'City', name: string, latitude?: number | null, longitude?: number | null, poi?: Array<{ __typename?: 'Poi', id: number, name: string, address: string, latitude?: number | null, longitude?: number | null }> | null } };
+export type GetCityQuery = { __typename?: 'Query', city: { __typename?: 'City', id: number, name: string, latitude?: number | null, longitude?: number | null, poi?: Array<{ __typename?: 'Poi', id: number, name: string, address: string, latitude?: number | null, longitude?: number | null }> | null } };
 
 export type FetchTokenQueryVariables = Exact<{
   fetchTokenId: Scalars['Float'];
@@ -349,41 +361,6 @@ export function useChangePasswordMutation(baseOptions?: Apollo.MutationHookOptio
 export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswordMutation>;
 export type ChangePasswordMutationResult = Apollo.MutationResult<ChangePasswordMutation>;
 export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
-export const CreatePoiDocument = gql`
-    mutation CreatePoi($data: PoiInput!) {
-  createPoi(data: $data) {
-    id
-    name
-    address
-  }
-}
-    `;
-export type CreatePoiMutationFn = Apollo.MutationFunction<CreatePoiMutation, CreatePoiMutationVariables>;
-
-/**
- * __useCreatePoiMutation__
- *
- * To run a mutation, you first call `useCreatePoiMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreatePoiMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createPoiMutation, { data, loading, error }] = useCreatePoiMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
-export function useCreatePoiMutation(baseOptions?: Apollo.MutationHookOptions<CreatePoiMutation, CreatePoiMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreatePoiMutation, CreatePoiMutationVariables>(CreatePoiDocument, options);
-      }
-export type CreatePoiMutationHookResult = ReturnType<typeof useCreatePoiMutation>;
-export type CreatePoiMutationResult = Apollo.MutationResult<CreatePoiMutation>;
-export type CreatePoiMutationOptions = Apollo.BaseMutationOptions<CreatePoiMutation, CreatePoiMutationVariables>;
 export const CreateUserDocument = gql`
     mutation CreateUser($data: UserInput!) {
   createUser(data: $data) {
@@ -479,6 +456,37 @@ export function useFetchCityNameMutation(baseOptions?: Apollo.MutationHookOption
 export type FetchCityNameMutationHookResult = ReturnType<typeof useFetchCityNameMutation>;
 export type FetchCityNameMutationResult = Apollo.MutationResult<FetchCityNameMutation>;
 export type FetchCityNameMutationOptions = Apollo.BaseMutationOptions<FetchCityNameMutation, FetchCityNameMutationVariables>;
+export const FetchPoiCoordinatesDocument = gql`
+    mutation FetchPoiCoordinates($data: findPOI!) {
+  fetchPoiCoordinates(data: $data)
+}
+    `;
+export type FetchPoiCoordinatesMutationFn = Apollo.MutationFunction<FetchPoiCoordinatesMutation, FetchPoiCoordinatesMutationVariables>;
+
+/**
+ * __useFetchPoiCoordinatesMutation__
+ *
+ * To run a mutation, you first call `useFetchPoiCoordinatesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFetchPoiCoordinatesMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [fetchPoiCoordinatesMutation, { data, loading, error }] = useFetchPoiCoordinatesMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useFetchPoiCoordinatesMutation(baseOptions?: Apollo.MutationHookOptions<FetchPoiCoordinatesMutation, FetchPoiCoordinatesMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<FetchPoiCoordinatesMutation, FetchPoiCoordinatesMutationVariables>(FetchPoiCoordinatesDocument, options);
+      }
+export type FetchPoiCoordinatesMutationHookResult = ReturnType<typeof useFetchPoiCoordinatesMutation>;
+export type FetchPoiCoordinatesMutationResult = Apollo.MutationResult<FetchPoiCoordinatesMutation>;
+export type FetchPoiCoordinatesMutationOptions = Apollo.BaseMutationOptions<FetchPoiCoordinatesMutation, FetchPoiCoordinatesMutationVariables>;
 export const CitiesDocument = gql`
     query Cities {
   cities {
@@ -520,6 +528,7 @@ export type CitiesQueryResult = Apollo.QueryResult<CitiesQuery, CitiesQueryVaria
 export const GetCityDocument = gql`
     query getCity($query: String!) {
   city(name: $query) {
+    id
     name
     latitude
     longitude

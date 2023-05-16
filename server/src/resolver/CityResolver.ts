@@ -73,13 +73,15 @@ export class CityResolver {
       headers: { "x-api-key": env.REACT_APP_CITIES_API_KEY },
     };
 
+    // Ajouter des try / catch pour les appels
+
     let urlCityAPI =
       "https://api.api-ninjas.com/v1/geocoding?country=FR&city=" + cityName;
 
     const fetchCity = await fetch(urlCityAPI, optionsCityAPI)
       .then((res) => res.json()) // parse response as JSON
       .then((data) => {
-        //console.log(data);
+        console.log(data);
         return data.shift();
       })
       .catch((err) => {
@@ -102,7 +104,6 @@ export class CityResolver {
       .then((res) => res.json())
       .then((data) => {
         let urlOfCityPhoto = data["results"][0].urls["regular"];
-        console.log(urlOfCityPhoto);
         return urlOfCityPhoto;
       })
       .catch((err) => {

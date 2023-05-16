@@ -6,7 +6,7 @@ import Home from "./screens/Home";
 import Header from "./components/Header";
 import ManageCities from "./screens/ManageCities";
 import ManageUsers from "./screens/ManageUsers";
-import Map from "./screens/Map";
+import Map from "./components/Map";
 import "./App.css";
 import { useCitiesQuery } from "./gql/generated/schema";
 import Register from "./screens/Register";
@@ -20,14 +20,11 @@ const styles: CSS.Properties = {
 };
 
 function App() {
-
   const { loading: loadingCities, data } = useCitiesQuery();
 
   const path = window.location.pathname;
 
-
   const cities = data?.cities ?? [];
-
 
   return (
     <>
@@ -38,17 +35,15 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/password/email" element={<EmailPassword />} />
-          <Route path="/password/reset/:id/:token" element={<PasswordReset />} />
-           <Route path="*" element={<Home/>} />
           <Route
-            path="/manage-cities"
-            element={<ManageCities />}
+            path="/password/reset/:id/:token"
+            element={<PasswordReset />}
           />
-            <Route
-                path="/manage-users"
-                element={<ManageUsers />}
-            />
-           <Route path="/info/:cityName" element={<InfoCity/>}/>
+          <Route path="/manage-users" element={<ManageUsers />} />
+          <Route path="/info/:cityName" element={<InfoCity />} />
+          <Route path="*" element={<Home />} />
+          <Route path="/manage-cities" element={<ManageCities />} />
+          <Route path="/info/:cityName" element={<InfoCity />} />
           {/*<Route path="/map" element={<Map/>} />*/}
         </Routes>
       </div>
