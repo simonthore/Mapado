@@ -22,6 +22,7 @@ jobs:
           envkey_POSTGRES_DB: "postgres"
           envkey_REACT_APP_CITIES_API_KEY: 5HOTkyRP3F+ivysH6OfZSg==LKaQCvFY6GtmLgG5
           envkey_REACT_APP_PHOTOS_API_KEY: U9bVu9v8lwaT6Dd8FblqWfns-f_VAhgubahj0hXRmFc
+          envkey_REACTAPP_POI_API_KEY: 0cf069e424c34e86ae1e62d00e506430
           directory: server
           file_name: .env
       - name: Run integration test
