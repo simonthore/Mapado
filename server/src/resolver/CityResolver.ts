@@ -1,22 +1,28 @@
 import { Arg, Int, Mutation, Query, Resolver } from "type-graphql";
-import City, { CityInput, CityRequested, UpdateCityInput } from "../entity/City";
+import City, {
+  CityInput,
+  CityRequested,
+  UpdateCityInput,
+} from "../entity/City";
 import datasource from "../db";
 import { ApolloError } from "apollo-server-errors";
 import { env } from "../environment";
 
 @Resolver(City)
 export class CityResolver {
-    @Query(() => [City])
-    async cities(): Promise<City[]> {
-      //Pour récupérer les utilisateurs et les poi des villes on ajoute les relations
-      return await datasource.getRepository(City).find({relations: {users:true, poi:true}});
-    }
+  @Query(() => [City])
+  async cities(): Promise<City[]> {
+    //Pour récupérer les utilisateurs et les poi des villes on ajoute les relations
+    return await datasource
+      .getRepository(City)
+      .find({ relations: { users: true, poi: true } });
+  }
 
   @Query(() => City)
   async city(@Arg("name", () => String) name: string): Promise<City> {
     const city = await datasource
       .getRepository(City)
-      .findOne({ where: { name }, relations: {users:true, poi: true} });
+      .findOne({ where: { name }, relations: { users: true, poi: true } });
 
     if (city === null) throw new ApolloError("city not found", "NOT_FOUND");
 
@@ -63,13 +69,15 @@ export class CityResolver {
       headers: { "x-api-key": env.REACT_APP_CITIES_API_KEY },
     };
 
+    // Ajouter des try / catch pour les appels
+
     let urlCityAPI =
       "https://api.api-ninjas.com/v1/geocoding?country=FR&city=" + cityName;
 
     const fetchCity = await fetch(urlCityAPI, optionsCityAPI)
       .then((res) => res.json()) // parse response as JSON
       .then((data) => {
-        //console.log(data);
+        console.log(data);
         return data.shift();
       })
       .catch((err) => {
@@ -92,7 +100,6 @@ export class CityResolver {
       .then((res) => res.json())
       .then((data) => {
         let urlOfCityPhoto = data["results"][0].urls["regular"];
-        console.log(urlOfCityPhoto);
         return urlOfCityPhoto;
       })
       .catch((err) => {

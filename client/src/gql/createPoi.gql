@@ -1,7 +1,0 @@
-mutation CreatePoi($data: PoiInput!) {
-  createPoi(data: $data) {
-    id
-    name
-    address
-  }
-}
