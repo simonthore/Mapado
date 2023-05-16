@@ -21,7 +21,7 @@ export enum UserRole {
 export class UserRoleInput {
   @Field()
   @IsEmail()
-  email: string;
+  email?: string;
 
   @Field()
   role: string;

@@ -286,7 +286,7 @@ export type GetProfileQuery = { __typename?: 'Query', profile: { __typename?: 'U
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: number }> };
+export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: number, email?: string | null, role: string }> };
 
 export type LoginMutationVariables = Exact<{
   data: UserInput;
@@ -636,6 +636,8 @@ export const UsersDocument = gql`
     query Users {
   users {
     id
+    email
+    role
   }
 }
     `;

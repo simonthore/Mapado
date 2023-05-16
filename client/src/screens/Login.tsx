@@ -10,9 +10,11 @@ export default function Login() {
     const [credentials, setCredentials] = useState({email: "", password: ""});
     const [passwordShown, setPasswordShown] = useState(false);
     const [login] = useLoginMutation();
+    
     const {data: currentUser, client } = useGetProfileQuery({
       errorPolicy: "ignore",
     });
+    console.log(currentUser);
 
     const navigate = useNavigate();
 
@@ -40,7 +42,8 @@ export default function Login() {
                                     client.resetStore();
                                 })
                                 .catch((error) => {
-                                    console.log(error);
+
+                                    console.log("here be error", error);
                                     toast.error("Invalid credentials", {
                                         style: {
                                             border: "3px solid #EC5D5C",

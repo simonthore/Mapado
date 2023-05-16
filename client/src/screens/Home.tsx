@@ -34,7 +34,8 @@ export default function Home() {
         errorPolicy: "ignore",
     });
 
-    const canCreate = currentUser?.profile?.role === "superAdmin";
+    const currentUserRole = currentUser?.profile?.role;
+    console.log(currentUserRole);
 
     // takes in value from the search bar and returns a filtered list of the cities to display
     //(filter improves with each letter)
@@ -63,7 +64,7 @@ export default function Home() {
             </form>
 
             <div className={"homeStyle"}>
-                {canCreate &&
+                {(currentUserRole === "cityAdmin" || currentUserRole === "superAdmin") &&
                 <Link to={"/manage-cities"}>
                     <button className={"addCityButtonStyles"}>
                         <AddCircleOutlineOutlinedIcon/>
@@ -71,7 +72,7 @@ export default function Home() {
                     </button>
                 </Link>
                 }
-                {canCreate &&
+                {(currentUserRole === "cityAdmin" || currentUserRole === "superAdmin") &&
                     <Link to={"/manage-users"}>
                         <button className={"addCityButtonStyles"}>
                             <AddCircleOutlineOutlinedIcon/>
