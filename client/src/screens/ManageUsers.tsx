@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../assets/css/screens/ManagerUsers.css";
 import {
   useGetProfileQuery,
@@ -18,11 +18,12 @@ import {
 //     }
 // ]
 
-const roles = ["visitor", "cityAdmin", "cityAdmin"];
+const roles = ["visitor", "cityAdmin", "superAdmin"];
 
 export default function ManageUsers() {
   const [email, setEmail] = useState("");
   const [userRole, setUserRole] = useState("");
+  const [role, setRole] = useState("");
 
   const { loading: loadingUsers, data, refetch } = useUsersQuery();
   const users = data?.users ?? [];
@@ -30,13 +31,13 @@ export default function ManageUsers() {
   const [updateUser] = useUpdateUserRoleMutation();
 
   const currentUser = useGetProfileQuery();
-  console.log("currentUSer", currentUser.data?.profile);
+  console.log("currentUser", currentUser.data?.profile);
 
-  const handleRoleChange = (email: string, role: string): void => {
+  const onClickRoleChange = (email: string, role: string): void => {
     setEmail(email);
     setUserRole(role);
-    console.log(`${email} now has has role of ${role}`);
     updateUser({ variables: { data: { email, role } } });
+    console.log(`${email} now has role of ${role}`);
   };
 
   return (
@@ -45,12 +46,15 @@ export default function ManageUsers() {
       <div className="max-w-screen-xl mx-auto px-5 min-h-screen">
         <div className="grid divide-y divide-neutral-200 max-w-xl mx-auto mt-8">
           {users.map((user) => {
+            console.log(user)
             return (
               <div className="py-5" key={user.email}>
                 <details className="group">
                   <summary className="flex justify-between items-center font-medium cursor-pointer list-none">
                     <div className={"manageOneCityContainer"}>
-                      <p className={"cityLabel"}>{user.email}</p>
+                      <p className={"cityLabel"}>
+                        {user.email} is a {user.role}
+                      </p>
                     </div>
                     <span className="transition group-open:rotate-180">
                       <svg
@@ -69,24 +73,23 @@ export default function ManageUsers() {
                     </span>
                   </summary>
                   <h2 className={"title"}>Assigner un rôle à un utilisateur</h2>
-                  {roles.map((role) => {
+
+                  {roles.map((role, index) => {
                     return (
-                      <div key="role[i]">
-                        <h3 id="userRole">
+                      <div key={index}>
+                        <option key={index} value={role}>
                           {role}
-                        </h3>
+                        </option>
                         <button
                           className={"primaryButton"}
                           onClick={(): void => {
-                            const HTMLRole = document.getElementById("userRole");
-                            const role = HTMLRole?.outerHTML;
                             if (user.email && role)
-                              handleRoleChange(user.email, role);
+                              onClickRoleChange(user.email, role);
                           }}
                         >
                           Submit
                         </button>
-                      </div >
+                      </div>
                     );
                   })}
                 </details>
