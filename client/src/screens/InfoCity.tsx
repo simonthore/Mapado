@@ -3,7 +3,7 @@ import {useParams} from "react-router-dom";
 import {useGetCityQuery} from "../gql/generated/schema";
 import {Marker, Popup} from "react-leaflet";
 import markerIconPng from "../assets/images/starred.png";
-import leftArrow from "../assets/images/left-arrow.svg"
+import leftArrow from "../assets/images/svg/left-arrow.svg"
 import {Icon} from "leaflet";
 import ICity from "../interfaces/ICity";
 import IPoi from "../interfaces/IPoi";
@@ -52,7 +52,7 @@ export default function InfoCity() {
     //   const pois = city.poi;
 
     return (
-        <div>
+        <div className="infoCity_container">
             <button className={"backButton"} onClick={goBack}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25">
                     <path d="M24 12.001H2.914l5.294-5.295-.707-.707L1 12.501l6.5 6.5.707-.707-5.293-5.293H24v-1z"/>
