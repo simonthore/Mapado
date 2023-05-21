@@ -158,7 +158,7 @@ export default function EditCity() {
                                 }))
                             }/>
                     </div>
-                    {city.pois ? (<>
+                    {city.pois?.length ? (<>
                             <label id={"name"}>Points d'intérêt</label>
                             {city.pois.map((poi) => (
                                 <Badge key={poi.id} text={poi.name} functionOnClick={(e)=>handleRemovePoi(e,poi.id)}/>
