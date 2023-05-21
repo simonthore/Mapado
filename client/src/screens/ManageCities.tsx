@@ -11,11 +11,14 @@ import ICity from "../interfaces/ICity";
 import {Link} from "react-router-dom";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
+import {useNavigate} from "react-router";
 
 export default function AddManageCities() {
     //
     // STATES
     //
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         document.body.style.overflow = "scroll"
@@ -41,6 +44,11 @@ export default function AddManageCities() {
     // FONCTIONS ONCLICK
     //
 
+    // Au click navigation à la page précédente
+    const goBack = () => {
+        navigate(-1);
+    }
+
     // Au click du bouton on lance la fonction gql
     const onClickSendCityName = () => {
         sendCityName({variables: {data: cityRequested}});
@@ -53,8 +61,13 @@ export default function AddManageCities() {
 
 
     return (
-        <Card customClass={"registerCard"}>
+        <Card>
             <div className={"addCityContainer"}>
+                <button className={"backButton"} onClick={goBack}>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25">
+                        <path d="M24 12.001H2.914l5.294-5.295-.707-.707L1 12.501l6.5 6.5.707-.707-5.293-5.293H24v-1z"/>
+                    </svg>
+                </button>
                 <h2 className={"title"}>Ajouter une ville</h2>
                 <div>
                     <input
@@ -62,7 +75,7 @@ export default function AddManageCities() {
                         placeholder="Nom de la ville"
                         value={cityRequested.cityName}
                         onChange={(e) => setCityRequested({cityName: e.target.value})}
-                    ></input>
+                    />
                     <button onClick={onClickSendCityName} className={"tertiaryButton"}>
                         Ajouter
                     </button>
@@ -74,24 +87,26 @@ export default function AddManageCities() {
                 <div className="max-w-screen-xl mx-auto px-5 min-h-screen w-full cities_card_container">
                     {cities.map((city: ICity, index: number) => {
                         return (
-                            <div key={index} className="py-5 divide-y divide-neutral-200 h-fit">
-                                <p className={"cityLabel"}>{city.name}</p>
-                                <div className="p-5 manageCities_buttonContainer">
-                                    <button
-                                        className={"primaryButton"}
-                                        onClick={(e) => onClickDeleteCity(city.id)}
-                                    >
-                                        <DeleteForeverIcon/>
-                                    </button>
-                                    <Link to={`/edit-city/${city.name}`}>
+                            <Card customClass={" manageCities-card"}>
+                                <div key={index} className="py-5 divide-y divide-neutral-200 h-fit">
+                                    <p className={"cityLabel"}>{city.name}</p>
+                                    <div className="p-5 manageCities_buttonContainer">
                                         <button
                                             className={"primaryButton"}
+                                            onClick={(e) => onClickDeleteCity(city.id)}
                                         >
-                                            <EditIcon/>
+                                            <DeleteForeverIcon/>
                                         </button>
-                                    </Link>
+                                        <Link to={`/edit-city/${city.name}`}>
+                                            <button
+                                                className={"primaryButton"}
+                                            >
+                                                <EditIcon/>
+                                            </button>
+                                        </Link>
+                                    </div>
                                 </div>
-                            </div>
+                            </Card>
                         );
                     })}
                 </div>

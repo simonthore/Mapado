@@ -13,7 +13,7 @@ function Map({ longitude, latitude, children }: MapProps) {
   return (
     //Si on a une latitude et longitude on affiche la carte
     longitude && latitude ? (
-      <Card customClass={"mapCard"}>
+      <Card customClass={" mapCard"}>
         <MapContainer
           className="map-container"
           center={[latitude, longitude]}

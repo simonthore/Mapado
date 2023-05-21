@@ -9,6 +9,7 @@ import ICity from "../interfaces/ICity";
 import AddPoi from "../components/AddPoi";
 import {useParams} from "react-router-dom";
 import {useNavigate} from "react-router";
+import Badge from "../components/Badge";
 
 export default function EditCity() {
     //
@@ -71,15 +72,57 @@ export default function EditCity() {
 
 
     return (
-        <Card customClass={"registerCard"}>
-            <h1>{city.name}</h1>
+        <Card>
+            <h1 className="cityLabel">{city.name}</h1>
             <button className={"backButton"} onClick={goBack}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25">
                     <path d="M24 12.001H2.914l5.294-5.295-.707-.707L1 12.501l6.5 6.5.707-.707-5.293-5.293H24v-1z"/>
                 </svg>
             </button>
-            <h2 className={"title"}>Ajouter un point d'intérêt</h2>
-            <AddPoi cityId={city.id} cityName={city.name}></AddPoi>
+            <div className={"addPoi_InputsContainer"}>
+                <h2 className={"title"}>Ajouter un point d'intérêt</h2>
+                <AddPoi cityId={city.id} cityName={city.name}></AddPoi>
+            </div>
+            <div className={"editCity_InputsContainer"}>
+                <h2 className={"title"}>Modifier la ville</h2>
+                <form className={"editCity_form"}>
+                    <div className={"editCity_form_inputContainer"}>
+                        <label id={"name"}>Nom</label>
+                        <input
+                            type="text"
+                            placeholder={city.name}
+                            value={cityRequested.cityName}
+                            onChange={(e) => setCityRequested({cityName: e.target.value})}
+                        />
+                    </div>
+
+                    <div className={"editCity_form_inputContainer"}>
+
+                        <label id={"name"}>Longitude</label>
+                        <input
+                            type="text"
+                            placeholder={city.longitude?.toString()}
+                            value={cityRequested.cityName}
+                            onChange={(e) => setCityRequested({cityName: e.target.value})}
+                        />
+                    </div>
+                    <div className={"editCity_form_inputContainer"}>
+
+                        <label id={"name"}>Latitude</label>
+                        <input
+                            type="text"
+                            placeholder={city.latitude?.toString()}
+                            value={cityRequested.cityName}
+                            onChange={(e) => setCityRequested({cityName: e.target.value})}
+                        />
+                    </div>
+                    {city.pois ? (
+                        city.pois.map((poi) => (
+                            <Badge text={poi.name}/>
+                        ))
+                    ) : null}
+                </form>
+            </div>
         </Card>
     );
 }

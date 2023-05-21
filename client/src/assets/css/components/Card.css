@@ -10,22 +10,19 @@
     padding: 2rem;
 }
 
-/*.cardStyle:hover {*/
-/*    box-shadow: 0 0 10px #ccc;*/
-/*}*/
+.cardStyle.manageCities-card:hover {
+    box-shadow: 0 0 10px #ccc;
+}
 
-.registerCard {
-    /*display: flex;*/
-    /*flex-direction: column;*/
-    /*align-items: center;*/
+.cardStyle.manageCities-card {
+    height: fit-content;
+    width: fit-content;
 
-    /*height: fit-content;*/
-    /*width: fit-content;*/
-
-    /*margin: 9rem auto 0 auto;*/
-    /*padding: 2rem;*/
-    /*border: 1px solid white;*/
-    /*background-color: #173472;*/
+    margin: 0;
+    padding: 2rem;
+    border: 1px solid white;
+    border-radius: 12px;
+    background-color: #173472;
 }
 
 .emailPasswordCard {

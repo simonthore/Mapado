@@ -32,18 +32,19 @@
 }
 
 .manageCitiesContainer {
+    width: 100%;
+    gap: 20px;
     padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
 }
 
 .cities_card_container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    grid-column-gap: 12px;
+    grid-column-gap: 36px;
     grid-row-gap: 12px;
 }
 
