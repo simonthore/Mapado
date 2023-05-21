@@ -23,8 +23,6 @@ export default function AddManageCities() {
     const handleAnimation = () => {
         if(window.scrollY >= 10){
             setRemoveAnimation(true)
-        }else{
-            setRemoveAnimation(false)
         }
     }
 

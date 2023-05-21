@@ -26,12 +26,21 @@ export default function EditCity() {
     const goBack = () => {
         navigate(-1);
     }
+    const [animeRocket, setAnimeRocket] = useState(false)
+    const handleRocket = () => {
+        if(window.scrollY >= 10){
+            setAnimeRocket(true)
+        }
+    }
+
+    window.addEventListener('scroll', handleRocket)
 
     //
     // USE EFFECT
     //
     useEffect(() => {
-        document.body.style.overflow = "scroll"
+        document.body.style.overflow = "scroll";
+        window.scrollTo(0, 0);
     })
 
     // Initialisation de l'objet cityRequested
@@ -102,7 +111,7 @@ export default function EditCity() {
         <Card>
             <Link to={`/info/${city.name}`} className="cityInfo_link">
                 <h1 className="cityLabel">{city.name}</h1>
-                <img className={"rocket"} src={Rocket} alt="rocket"/>
+                <img className={`rocket${animeRocket ? " rocket--animated" : ""}`} src={Rocket} alt="rocket"/>
             </Link>
             <button className={"backButton"} onClick={goBack}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25">

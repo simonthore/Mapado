@@ -31,6 +31,19 @@
 
 .rocket {
     width: 100px;
+    position: absolute;
+
+    top: 30%;
+    right: 47%;
+
+    transition-property: all;
+    transition: ease-in 2s;
+}
+
+.rocket.rocket--animated {
+    position: absolute;
+    top: 0px;
+    right: 300px;
 }
 
 .backButton {
