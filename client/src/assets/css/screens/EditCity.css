@@ -23,6 +23,7 @@
 }
 
 .cityInfo_link {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -33,8 +34,8 @@
     width: 100px;
     position: absolute;
 
-    top: 30%;
-    right: 47%;
+    top: 80px;
+    right: 60px;
 
     transition-property: all;
     transition: ease-in 2s;
@@ -42,8 +43,8 @@
 
 .rocket.rocket--animated {
     position: absolute;
-    top: 0px;
-    right: 300px;
+    top: -500px;
+    right: -1000px;
 }
 
 .backButton {

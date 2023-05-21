@@ -29,7 +29,11 @@ export default function AddManageCities() {
     window.addEventListener('scroll', handleAnimation)
 
     useEffect(() => {
-        document.body.style.overflow = "scroll"
+        document.body.style.overflowY = "scroll"
+        const timer = setTimeout(() => {
+            setRemoveAnimation(true)
+        }, 5000);
+        return () => clearTimeout(timer);
     })
 
     // Initialisation de l'objet cityRequested

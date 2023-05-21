@@ -27,20 +27,16 @@ export default function EditCity() {
         navigate(-1);
     }
     const [animeRocket, setAnimeRocket] = useState(false)
-    const handleRocket = () => {
-        if(window.scrollY >= 10){
-            setAnimeRocket(true)
-        }
-    }
-
-    window.addEventListener('scroll', handleRocket)
 
     //
     // USE EFFECT
     //
     useEffect(() => {
-        document.body.style.overflow = "scroll";
-        window.scrollTo(0, 0);
+        document.body.style.overflowY = "scroll";
+        const timer = setTimeout(() => {
+            setAnimeRocket(true)
+        }, 500);
+        return () => clearTimeout(timer);
     })
 
     // Initialisation de l'objet cityRequested
