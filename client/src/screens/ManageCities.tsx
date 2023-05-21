@@ -12,13 +12,23 @@ import {Link} from "react-router-dom";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 import {useNavigate} from "react-router";
+import Edit from "../assets/images/edit.gif"
 
 export default function AddManageCities() {
     //
     // STATES
     //
     const navigate = useNavigate();
+    const [removeAnimation, setRemoveAnimation] = useState(false)
+    const handleAnimation = () => {
+        if(window.scrollY >= 10){
+            setRemoveAnimation(true)
+        }else{
+            setRemoveAnimation(false)
+        }
+    }
 
+    window.addEventListener('scroll', handleAnimation)
 
     useEffect(() => {
         document.body.style.overflow = "scroll"
@@ -84,6 +94,7 @@ export default function AddManageCities() {
 
             <div className={"manageCitiesContainer"}>
                 <h2 className={"title"}>Gérer les villes</h2>
+                <img src={Edit} alt="hand writting" className={`edit_animation${removeAnimation ? ' edit_animation--removed' : ''}`}/>
                 <div className="max-w-screen-xl mx-auto px-5 min-h-screen w-full cities_card_container">
                     {cities.map((city: ICity, index: number) => {
                         return (

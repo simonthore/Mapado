@@ -1,12 +1,23 @@
-import React from "react";
+import React, {useState} from "react";
 import Logout from "./Logout";
 import {Link} from "react-router-dom";
 import Mapado from "../assets/images/mapado_logo.png"
 
 export default function Header() {
+    const [headerWithShadow, setHeaderWithShadow] = useState(false)
+    const changeNavStyle = () => {
+        if(window.scrollY >= 10){
+            setHeaderWithShadow(true)
+        }else{
+            setHeaderWithShadow(false)
+        }
+    }
+
+    window.addEventListener('scroll', changeNavStyle)
+
     return (
 
-        <nav className="headerStyle">
+        <nav className={`headerStyle${headerWithShadow ? " headerWithShadow" : ''}`}>
             <Link to="/">
                 <img src={Mapado}/>
             </Link>

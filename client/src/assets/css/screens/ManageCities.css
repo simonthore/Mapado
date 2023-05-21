@@ -32,6 +32,7 @@
 }
 
 .manageCitiesContainer {
+    position: relative;
     width: 100%;
     gap: 20px;
     padding: 20px;
@@ -89,4 +90,17 @@ input {
     border: 3px solid #173472;
     background-color: #EC5D5C;
     color: white;
+}
+
+.edit_animation {
+    width: 200px;
+    position: absolute;
+    top: -10px;
+    left: 15px;
+    opacity: 1;
+    transition: opacity 0.5s;
+}
+
+.edit_animation.edit_animation--removed {
+    opacity: 0;
 }

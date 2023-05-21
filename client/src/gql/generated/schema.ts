@@ -247,6 +247,13 @@ export type DeleteCityMutationVariables = Exact<{
 
 export type DeleteCityMutation = { __typename?: 'Mutation', deleteCity: boolean };
 
+export type DeletePoiMutationVariables = Exact<{
+  deletePoiId: Scalars['Int'];
+}>;
+
+
+export type DeletePoiMutation = { __typename?: 'Mutation', deletePoi: boolean };
+
 export type FetchCityNameMutationVariables = Exact<{
   data: CityRequested;
 }>;
@@ -416,6 +423,37 @@ export function useDeleteCityMutation(baseOptions?: Apollo.MutationHookOptions<D
 export type DeleteCityMutationHookResult = ReturnType<typeof useDeleteCityMutation>;
 export type DeleteCityMutationResult = Apollo.MutationResult<DeleteCityMutation>;
 export type DeleteCityMutationOptions = Apollo.BaseMutationOptions<DeleteCityMutation, DeleteCityMutationVariables>;
+export const DeletePoiDocument = gql`
+    mutation DeletePoi($deletePoiId: Int!) {
+  deletePoi(id: $deletePoiId)
+}
+    `;
+export type DeletePoiMutationFn = Apollo.MutationFunction<DeletePoiMutation, DeletePoiMutationVariables>;
+
+/**
+ * __useDeletePoiMutation__
+ *
+ * To run a mutation, you first call `useDeletePoiMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePoiMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePoiMutation, { data, loading, error }] = useDeletePoiMutation({
+ *   variables: {
+ *      deletePoiId: // value for 'deletePoiId'
+ *   },
+ * });
+ */
+export function useDeletePoiMutation(baseOptions?: Apollo.MutationHookOptions<DeletePoiMutation, DeletePoiMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeletePoiMutation, DeletePoiMutationVariables>(DeletePoiDocument, options);
+      }
+export type DeletePoiMutationHookResult = ReturnType<typeof useDeletePoiMutation>;
+export type DeletePoiMutationResult = Apollo.MutationResult<DeletePoiMutation>;
+export type DeletePoiMutationOptions = Apollo.BaseMutationOptions<DeletePoiMutation, DeletePoiMutationVariables>;
 export const FetchCityNameDocument = gql`
     mutation FetchCityName($data: CityRequested!) {
   fetchCityName(data: $data)

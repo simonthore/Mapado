@@ -21,3 +21,18 @@
     display: flex;
     flex-direction: column;
 }
+
+.cityInfo_link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 48px;
+}
+
+.rocket {
+    width: 100px;
+}
+
+.backButton {
+    position: fixed;
+}

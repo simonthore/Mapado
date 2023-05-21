@@ -2,14 +2,16 @@ import {useEffect, useState} from "react";
 import {
     useCitiesQuery,
     useFetchCityNameMutation,
-    useDeleteCityMutation, useGetCityQuery
+    useDeleteCityMutation, useGetCityQuery, useUpdateCityMutation
 } from "../gql/generated/schema";
 import Card from "../components/Card";
 import ICity from "../interfaces/ICity";
 import AddPoi from "../components/AddPoi";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {useNavigate} from "react-router";
 import Badge from "../components/Badge";
+import IPoi from "../interfaces/IPoi";
+import Rocket from "../assets/images/rocket.gif"
 
 export default function EditCity() {
     //
@@ -24,7 +26,7 @@ export default function EditCity() {
     const goBack = () => {
         navigate(-1);
     }
-    console.log(cityName)
+
     //
     // USE EFFECT
     //
@@ -33,8 +35,11 @@ export default function EditCity() {
     })
 
     // Initialisation de l'objet cityRequested
-    const [cityRequested, setCityRequested] = useState({
-        cityName: "",
+    const [cityDataToUpdate, setCityDataToUpdate] = useState({
+        name: "",
+        longitude: "",
+        latitude: "",
+        pois: []
     });
 
     //
@@ -45,6 +50,7 @@ export default function EditCity() {
     //REFETCH POSSIBLE ICI
     const [sendCityName] = useFetchCityNameMutation();
     const [deleteCity] = useDeleteCityMutation();
+    const [updateCity] = useUpdateCityMutation()
     const {loading, data} = useGetCityQuery({
         variables: {query: cityName!},
     });
@@ -56,24 +62,48 @@ export default function EditCity() {
         pois: [],
     };
 
+    data?.city?.poi?.forEach((e) => {
+        const poi: IPoi = {
+            id: e.id,
+            name: e.name,
+            longitude: e.longitude!,
+            latitude: e.latitude!,
+            address: e.address,
+        };
+        city?.pois?.push(poi);
+    });
+
     console.log(city)
     //
     // FONCTIONS ONCLICK
     //
 
     // Au click du bouton on lance la fonction gql
-    const onClickSendCityName = () => {
-        sendCityName({variables: {data: cityRequested}});
-    };
+    // const onClickSendCityName = () => {
+    //     sendCityName({variables: {data: cityRequested}});
+    // };
 
-    const onClickDeleteCity = (cityId: number) => {
+    const onClickRemovePoi = (cityId: number) => {
         deleteCity({variables: {deleteCityId: cityId}});
     };
+
+    const handleRemovePoi = (e:any, id: number) => {
+        e.preventDefault()
+        console.log(city.pois)
+
+        if (city.pois) {
+            const newPoiList = city.pois.filter(e => e.id !==id)
+        }
+    }
+
 
 
     return (
         <Card>
-            <h1 className="cityLabel">{city.name}</h1>
+            <Link to={`/info/${city.name}`} className="cityInfo_link">
+                <h1 className="cityLabel">{city.name}</h1>
+                <img className={"rocket"} src={Rocket} alt="rocket"/>
+            </Link>
             <button className={"backButton"} onClick={goBack}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25">
                     <path d="M24 12.001H2.914l5.294-5.295-.707-.707L1 12.501l6.5 6.5.707-.707-5.293-5.293H24v-1z"/>
@@ -91,8 +121,13 @@ export default function EditCity() {
                         <input
                             type="text"
                             placeholder={city.name}
-                            value={cityRequested.cityName}
-                            onChange={(e) => setCityRequested({cityName: e.target.value})}
+                            value={cityDataToUpdate.name}
+                            onChange={(e) =>
+                                setCityDataToUpdate((prevState) => ({
+                                    ...prevState,
+                                    name: e.target.value,
+                                }))
+                            }
                         />
                     </div>
 
@@ -102,24 +137,34 @@ export default function EditCity() {
                         <input
                             type="text"
                             placeholder={city.longitude?.toString()}
-                            value={cityRequested.cityName}
-                            onChange={(e) => setCityRequested({cityName: e.target.value})}
-                        />
+                            value={cityDataToUpdate.longitude}
+                            onChange={(e) =>
+                                setCityDataToUpdate((prevState) => ({
+                                    ...prevState,
+                                    longitude: e.target.value
+                                }))
+                            }/>
                     </div>
                     <div className={"editCity_form_inputContainer"}>
-
                         <label id={"name"}>Latitude</label>
                         <input
                             type="text"
                             placeholder={city.latitude?.toString()}
-                            value={cityRequested.cityName}
-                            onChange={(e) => setCityRequested({cityName: e.target.value})}
-                        />
+                            value={cityDataToUpdate.latitude}
+                            onChange={(e) =>
+                                setCityDataToUpdate((prevState) => ({
+                                    ...prevState,
+                                    latitude: e.target.value,
+                                }))
+                            }/>
                     </div>
-                    {city.pois ? (
-                        city.pois.map((poi) => (
-                            <Badge text={poi.name}/>
-                        ))
+                    {city.pois ? (<>
+                            <label id={"name"}>Points d'intérêt</label>
+                            {city.pois.map((poi) => (
+                                <Badge key={poi.id} text={poi.name} functionOnClick={(e)=>handleRemovePoi(e,poi.id)}/>
+                            ))}
+                        </>
+
                     ) : null}
                 </form>
             </div>
