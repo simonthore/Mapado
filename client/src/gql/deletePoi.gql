@@ -1,0 +1,3 @@
+mutation DeletePoi($deletePoiId: Int!) {
+  deletePoi(id: $deletePoiId)
+}

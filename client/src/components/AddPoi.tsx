@@ -22,7 +22,7 @@ export default function AddPoi({ cityId, cityName }: PoiProps) {
   };
 
   return (
-    <>
+    <div>
       <input
         type="text"
         placeholder="Nom ou Adresse du POI"
@@ -39,6 +39,6 @@ export default function AddPoi({ cityId, cityName }: PoiProps) {
       <button onClick={onClickSendNewPoi} className={"tertiaryButton"}>
         Ajouter
       </button>
-    </>
+    </div>
   );
 }

@@ -247,6 +247,13 @@ export type DeleteCityMutationVariables = Exact<{
 
 export type DeleteCityMutation = { __typename?: 'Mutation', deleteCity: boolean };
 
+export type DeletePoiMutationVariables = Exact<{
+  deletePoiId: Scalars['Int'];
+}>;
+
+
+export type DeletePoiMutation = { __typename?: 'Mutation', deletePoi: boolean };
+
 export type FetchCityNameMutationVariables = Exact<{
   data: CityRequested;
 }>;
@@ -308,6 +315,14 @@ export type SendPasswordEmailMutationVariables = Exact<{
 
 
 export type SendPasswordEmailMutation = { __typename?: 'Mutation', sendPasswordEmail: { __typename?: 'User', email?: string | null } };
+
+export type UpdateCityMutationVariables = Exact<{
+  data: CityInput;
+  updateCityId: Scalars['Int'];
+}>;
+
+
+export type UpdateCityMutation = { __typename?: 'Mutation', updateCity: { __typename?: 'City', id: number, name: string, latitude?: number | null, longitude?: number | null, users?: Array<{ __typename?: 'User', id: number, email?: string | null }> | null, poi?: Array<{ __typename?: 'Poi', id: number, name: string, address: string }> | null } };
 
 
 export const ChangePasswordDocument = gql`
@@ -408,6 +423,37 @@ export function useDeleteCityMutation(baseOptions?: Apollo.MutationHookOptions<D
 export type DeleteCityMutationHookResult = ReturnType<typeof useDeleteCityMutation>;
 export type DeleteCityMutationResult = Apollo.MutationResult<DeleteCityMutation>;
 export type DeleteCityMutationOptions = Apollo.BaseMutationOptions<DeleteCityMutation, DeleteCityMutationVariables>;
+export const DeletePoiDocument = gql`
+    mutation DeletePoi($deletePoiId: Int!) {
+  deletePoi(id: $deletePoiId)
+}
+    `;
+export type DeletePoiMutationFn = Apollo.MutationFunction<DeletePoiMutation, DeletePoiMutationVariables>;
+
+/**
+ * __useDeletePoiMutation__
+ *
+ * To run a mutation, you first call `useDeletePoiMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePoiMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePoiMutation, { data, loading, error }] = useDeletePoiMutation({
+ *   variables: {
+ *      deletePoiId: // value for 'deletePoiId'
+ *   },
+ * });
+ */
+export function useDeletePoiMutation(baseOptions?: Apollo.MutationHookOptions<DeletePoiMutation, DeletePoiMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeletePoiMutation, DeletePoiMutationVariables>(DeletePoiDocument, options);
+      }
+export type DeletePoiMutationHookResult = ReturnType<typeof useDeletePoiMutation>;
+export type DeletePoiMutationResult = Apollo.MutationResult<DeletePoiMutation>;
+export type DeletePoiMutationOptions = Apollo.BaseMutationOptions<DeletePoiMutation, DeletePoiMutationVariables>;
 export const FetchCityNameDocument = gql`
     mutation FetchCityName($data: CityRequested!) {
   fetchCityName(data: $data)
@@ -752,3 +798,49 @@ export function useSendPasswordEmailMutation(baseOptions?: Apollo.MutationHookOp
 export type SendPasswordEmailMutationHookResult = ReturnType<typeof useSendPasswordEmailMutation>;
 export type SendPasswordEmailMutationResult = Apollo.MutationResult<SendPasswordEmailMutation>;
 export type SendPasswordEmailMutationOptions = Apollo.BaseMutationOptions<SendPasswordEmailMutation, SendPasswordEmailMutationVariables>;
+export const UpdateCityDocument = gql`
+    mutation UpdateCity($data: CityInput!, $updateCityId: Int!) {
+  updateCity(data: $data, id: $updateCityId) {
+    id
+    name
+    latitude
+    longitude
+    users {
+      id
+      email
+    }
+    poi {
+      id
+      name
+      address
+    }
+  }
+}
+    `;
+export type UpdateCityMutationFn = Apollo.MutationFunction<UpdateCityMutation, UpdateCityMutationVariables>;
+
+/**
+ * __useUpdateCityMutation__
+ *
+ * To run a mutation, you first call `useUpdateCityMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCityMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCityMutation, { data, loading, error }] = useUpdateCityMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *      updateCityId: // value for 'updateCityId'
+ *   },
+ * });
+ */
+export function useUpdateCityMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCityMutation, UpdateCityMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateCityMutation, UpdateCityMutationVariables>(UpdateCityDocument, options);
+      }
+export type UpdateCityMutationHookResult = ReturnType<typeof useUpdateCityMutation>;
+export type UpdateCityMutationResult = Apollo.MutationResult<UpdateCityMutation>;
+export type UpdateCityMutationOptions = Apollo.BaseMutationOptions<UpdateCityMutation, UpdateCityMutationVariables>;

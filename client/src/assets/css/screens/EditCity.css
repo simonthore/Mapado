@@ -1,0 +1,56 @@
+.editCity_container {
+    overflow-x: hidden;
+}
+
+.addPoi_InputsContainer, .editCity_InputsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    gap: 20px;
+}
+
+.editCity_form {
+    display: flex;
+    flex-direction: column;
+}
+
+.editCity_form label {
+    font-family: Rubik, serif;
+    color: #EC5D5C;
+}
+
+.editCity_form_inputContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.cityInfo_link {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 48px;
+}
+
+.rocket {
+    width: 100px;
+    position: absolute;
+
+    top: 80px;
+    right: 60px;
+
+    transition-property: all;
+    transition: ease-in 2s;
+}
+
+.rocket.rocket--animated {
+    position: absolute;
+    top: -500px;
+    right: -1000px;
+}
+
+.backButton {
+    position: fixed;
+}

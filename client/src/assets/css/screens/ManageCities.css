@@ -18,6 +18,7 @@
 
 .addCityContainer {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 20px;
@@ -31,10 +32,26 @@
 }
 
 .manageCitiesContainer {
+    position: relative;
+    width: 100%;
+    gap: 20px;
     padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.cities_card_container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    grid-column-gap: 36px;
+    grid-row-gap: 12px;
+}
+
+.manageCities_buttonContainer {
+    display: flex;
+    justify-content: center;
 }
 
 .cityLabel {
@@ -46,6 +63,7 @@
     border-radius: 5px;
     padding: 10px;
     font-weight: bold;
+    text-align: center;
 }
 
 input {
@@ -72,4 +90,17 @@ input {
     border: 3px solid #173472;
     background-color: #EC5D5C;
     color: white;
+}
+
+.edit_animation {
+    width: 200px;
+    position: absolute;
+    top: -10px;
+    left: 15px;
+    opacity: 1;
+    transition: opacity 0.5s;
+}
+
+.edit_animation.edit_animation--removed {
+    opacity: 0;
 }
