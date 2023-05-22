@@ -2,8 +2,6 @@ import { useState } from "react";
 import { Link, NavLink, useSearchParams } from "react-router-dom";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import AnimatedCard from "../components/AnimatedCard";
-import ICity from "../interfaces/ICity";
-import { filterBySearch } from "../utils/helpers";
 import { useCitiesQuery, useGetProfileQuery } from "../gql/generated/schema";
 import IState from "../interfaces/IState";
 

@@ -1,8 +1,9 @@
-import { Arg, Int, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Authorized, Int, Mutation, Query, Resolver } from "type-graphql";
 import Poi, { PoiInput, UpdatePoiInput, findPOI } from "../entity/Poi";
 import datasource from "../db";
 import { ApolloError } from "apollo-server-errors";
 import { env } from "../env";
+import { UserRole } from "../entity/User";
 
 @Resolver(Poi)
 export class PoiResolver {
@@ -13,19 +14,19 @@ export class PoiResolver {
       .find({ relations: { city: true } });
   }
 
-  @Mutation(() => Poi)
+  @Authorized<UserRole>([UserRole.SUPERADMIN, UserRole.CITYADMIN, UserRole.POICREATOR]) @Mutation(() => Poi)
   async createPoi(@Arg("data") data: PoiInput): Promise<Poi> {
     return await datasource.getRepository(Poi).save(data);
   }
 
-  @Mutation(() => Boolean)
+  @Authorized<UserRole>([UserRole.SUPERADMIN, UserRole.CITYADMIN]) @Mutation(() => Boolean)
   async deletePoi(@Arg("id", () => Int) id: number): Promise<boolean> {
     const { affected } = await datasource.getRepository(Poi).delete(id);
     if (affected === 0) throw new ApolloError("Poi not found", "NOT_FOUND");
     return true;
   }
 
-  @Mutation(() => String)
+  @Authorized<UserRole>([UserRole.SUPERADMIN, UserRole.CITYADMIN]) @Mutation(() => String)
   async updatePoi(
     @Arg("id", () => Int) id: number,
     @Arg("data") data: UpdatePoiInput
