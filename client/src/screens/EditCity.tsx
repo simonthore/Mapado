@@ -32,7 +32,7 @@ export default function EditCity() {
     // USE EFFECT
     //
     useEffect(() => {
-        document.body.style.overflowY = "scroll";
+        // document.body.style.overflowY = "scroll";
         const timer = setTimeout(() => {
             setAnimeRocket(true)
         }, 500);
@@ -104,7 +104,7 @@ export default function EditCity() {
 
 
     return (
-        <Card>
+        <Card customClass={" editCity_container"}>
             <Link to={`/info/${city.name}`} className="cityInfo_link">
                 <h1 className="cityLabel">{city.name}</h1>
                 <img className={`rocket${animeRocket ? " rocket--animated" : ""}`} src={Rocket} alt="rocket"/>

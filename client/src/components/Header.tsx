@@ -29,6 +29,7 @@ export default function Header() {
                             Locate, discover & share !
                         </p>
                         <div className="demos">
+                            <Link to="/cities-list">Accueil</Link>
                             <Link to="/manage-cities">
                                 Admin
                             </Link>

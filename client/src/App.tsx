@@ -15,6 +15,7 @@ import InfoCity from "./screens/InfoCity";
 import {useEffect, useState} from "react";
 import {useLocation} from "react-router";
 import EditCity from "./screens/EditCity";
+import CitiesList from "./screens/CitiesList";
 
 const styles: CSS.Properties = {
     margin: 0,
@@ -39,6 +40,7 @@ function App() {
             <div style={styles}>
                 {showHeader && <Header/>}
                 <Routes>
+                    <Route path="/" element={<Home/>}/>
                     <Route path="/login" element={<Login/>}/>
                     <Route path="/register" element={<Register/>}/>
                     <Route path="/password/email" element={<EmailPassword/>}/>
@@ -46,9 +48,9 @@ function App() {
                         path="/password/reset/:id/:token"
                         element={<PasswordReset/>}
                     />
-                    <Route path="/" element={<Home/>}/>
-                    <Route path="/manage-cities" element={<ManageCities/>}/>
+                    <Route path="/cities-list" element={<CitiesList/>}/>
                     <Route path="/info/:cityName" element={<InfoCity/>}/>
+                    <Route path="/manage-cities" element={<ManageCities/>}/>
                     <Route path="/edit-city/:cityName" element={<EditCity/>}/>
                     {/*<Route path="/map" element={<Map/>} />*/}
                 </Routes>

@@ -10,7 +10,7 @@ input {
 
 form {
     display: flex;
-    justify-content: center;
+    justify-content: end;
 }
 
 .homeStyle {
@@ -146,6 +146,39 @@ form {
     flex: none;
 }
 
+.hero-section-trigger {
+    width: fit-content;
+    position: absolute;
+    bottom: 70px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100000;
+    opacity: 0.5;
+    cursor: pointer;
+    transition: opacity 600ms;
+    rotate: 180deg;
+}
+
+.hero-section-trigger svg path {
+    stroke: #000;
+    stroke-dasharray: 500;
+    stroke-dashoffset: -500;
+}
+
+.hero-section-trigger svg {
+    width: 40px;
+    fill: #EC5D5C;
+}
+
+.hero-section-trigger svg:hover {
+    cursor: pointer;
+}
+
+.container--open .hero-section-trigger {
+    opacity: 0;
+    pointer-events: none;
+}
+
 .trigger span {
     position: absolute;
     top: 100%;
@@ -232,6 +265,55 @@ form {
     position: absolute;
     top: 20px;
     width: 500px;
+}
+
+/*Arrow Bottom*/
+div.arrow {
+    width: 4vmin;
+    height: 4vmin;
+    box-sizing: border-box;
+    left: 50%;
+    top: 50%;
+    transform: rotate(-45deg);
+}
+
+div.arrow::before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    border-width: .5vmin .5vmin 0 0;
+    border-style: solid;
+    border-color: #fafafa;
+    transition: .2s ease;
+    display: block;
+    transform-origin: 100% 0;
+}
+
+
+div.arrow:after {
+    content: '';
+    float: left;
+    position: relative;
+    top: -91%;
+    width: 100%;
+    height: 100%;
+    border-width: 0 .5vmin 0 0;
+    border-style: solid;
+    border-color: #fafafa;
+    transform-origin: 100% 0;
+    transition: .2s ease;
+}
+
+button:hover div.arrow::after {
+    transform: rotate(45deg);
+    border-color: #EC5D5C;
+    height: 120%;
+}
+
+button:hover div.arrow::before {
+    border-color: #EC5D5C;
+    transform: scale(.8);
+
 }
 
 

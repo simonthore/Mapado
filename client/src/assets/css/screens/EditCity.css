@@ -1,3 +1,7 @@
+.editCity_container {
+    overflow-x: hidden;
+}
+
 .addPoi_InputsContainer, .editCity_InputsContainer {
     display: flex;
     flex-direction: column;

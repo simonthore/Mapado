@@ -1,11 +1,12 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Link, NavLink, useSearchParams} from "react-router-dom";
 import AnimatedCard from "../components/AnimatedCard";
 import ICity from "../interfaces/ICity";
 import {filterBySearch} from "../utils/helpers";
 import {useCitiesQuery} from "../gql/generated/schema";
 import IState from "../interfaces/IState";
-import directions from "../assets/images/directions.png"
+import directions from "../assets/images/directions.png";
+import {ReactComponent as BottomArrow} from "../assets/images/svg/bottom-arrow.svg";
 
 export default function Home() {
     // gets the params from URL
@@ -61,7 +62,7 @@ export default function Home() {
         <>
             <div id="container">
                 <header className="intro">
-                    <div className="intro__image" style={{display:"flex", alignItems: "center"}}>
+                    <div className="intro__image" style={{display: "flex", alignItems: "center"}}>
                         <img src={directions} alt="character-with-map"/>
                     </div>
                     <div className="intro__content">
@@ -76,7 +77,8 @@ export default function Home() {
                                         visitez.
                                     </p>
                                     <div className="demos">
-                                        <Link to="/manage-cities" onClick={()=> setHeaderShown(false)}>
+                                        <Link to="/cities-list">Accueil</Link>
+                                        <Link to="/manage-cities" onClick={() => setHeaderShown(false)}>
                                             Admin
                                         </Link>
                                         <Link to="/login">
@@ -93,6 +95,7 @@ export default function Home() {
                                             ></input>
                                         </form>
                                     </div>
+
                                 </div>
                                 <button className="trigger" onClick={toggleMenu}>
                                     <svg width="100%" height="100%" viewBox="0 0 60 60" preserveAspectRatio="none">
@@ -112,6 +115,9 @@ export default function Home() {
                             </div>
                         </div>
                     </div>
+                    <button className="hero-section-trigger" onClick={toggleMenu}>
+                        <div className="arrow"></div>
+                    </button>
                 </header>
                 <section className="items-wrap">
                     {state.query === ""
