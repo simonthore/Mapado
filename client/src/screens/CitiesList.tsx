@@ -20,6 +20,11 @@ export default function CitiesList() {
         list: [],
     });
 
+    useEffect(() => {
+
+        document.body.style.overflow = "auto"
+
+    })
 
 
     // takes in value from the search bar and returns a filtered list of the cities to display
