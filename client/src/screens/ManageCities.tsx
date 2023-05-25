@@ -1,4 +1,4 @@
-import { useCitiesQuery, useDeleteCityMutation } from "../gql/generated/schema";
+import { useCitiesQuery } from "../gql/generated/schema";
 import Card from "../components/Card";
 import ICity from "../interfaces/ICity";
 import AddPoi from "../components/AddPoi";
@@ -6,7 +6,7 @@ import AddCity from "../components/AddCity";
 import DeleteCity from "../components/DeleteCity";
 
 export default function AddManageCities() {
-  const { loading: loadingCities, data, refetch } = useCitiesQuery();
+  const { loading: loadingCities, data } = useCitiesQuery();
   const cities = data?.cities ?? [];
 
   return (
