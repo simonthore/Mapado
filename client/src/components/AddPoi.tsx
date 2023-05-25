@@ -1,11 +1,20 @@
 import { useState } from "react";
 import { useFetchPoiCoordinatesMutation } from "../gql/generated/schema";
-import CustomPopup from "./CustomPopup";
 import { ApolloError } from "@apollo/client";
+import checkIcon from "../assets/svg/check.svg";
+import errorIcon from "../assets/svg/error.svg";
+import Toast from "./Toast";
 
 interface PoiProps {
   cityId: number;
   cityName: string;
+}
+interface ToastInterface {
+  id: number;
+  title: string;
+  description: string;
+  icon: string;
+  backgroundColor: string;
 }
 
 export default function AddPoi({ cityId, cityName }: PoiProps) {
@@ -16,26 +25,46 @@ export default function AddPoi({ cityId, cityName }: PoiProps) {
     cityName: "",
   });
 
-  const [popupTitle, setPopupTitle] = useState("");
+  // Initialisation de l'objet Toast
+  const [toastData, setToastData] = useState<ToastInterface>({
+    id: 0,
+    title: "",
+    description: "",
+    icon: "",
+    backgroundColor: "",
+  });
+  const [showToast, setShowToast] = useState(false);
 
   const [sendPoiNameOrAdress] = useFetchPoiCoordinatesMutation();
-
-  const [showPopup, setShowPopup] = useState(false);
 
   const onClickSendNewPoi = () => {
     sendPoiNameOrAdress({ variables: { data: poiRequested } })
       .then((res) => {
         console.log("log du then", res);
-        setPopupTitle(res?.data?.fetchPoiCoordinates!);
+
+        setToastData({
+          id: Math.floor(Math.random() * 100 + 1),
+          description: res?.data?.fetchPoiCoordinates!,
+          title: "Super ! 👍",
+          backgroundColor: "green",
+          icon: checkIcon,
+        });
+        console.log("log de toastData au click avant le set", toastData);
       })
       .catch((erreur: ApolloError) => {
         console.log(erreur);
-        setPopupTitle(erreur.message);
+
+        setToastData({
+          id: Math.floor(Math.random() * 100 + 1),
+          description: erreur.message,
+          title: "Oups... 🧐",
+          backgroundColor: "#bd2424",
+          icon: errorIcon,
+        });
       })
       .finally(() => {
-        setShowPopup(true);
+        setShowToast(true);
       });
-    console.log("data envoyée au back", poiRequested);
   };
 
   return (
@@ -56,11 +85,14 @@ export default function AddPoi({ cityId, cityName }: PoiProps) {
       <button onClick={onClickSendNewPoi} className={"tertiaryButton"}>
         Ajouter
       </button>
-      <CustomPopup
-        trigger={showPopup}
-        setTrigger={setShowPopup}
-        popupTitle={popupTitle}
-      ></CustomPopup>
+      <Toast
+        toast={toastData}
+        position={"bottomRight"}
+        autoDelete={false}
+        autoDeleteTime={5000}
+        visible={showToast}
+        setVisible={setShowToast}
+      />
     </>
   );
 }
