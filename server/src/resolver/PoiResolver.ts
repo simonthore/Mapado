@@ -49,9 +49,9 @@ export class PoiResolver {
     const { poiNameOrAdress, cityName, cityId } = data;
 
     if (poiNameOrAdress === "") {
-      return new ApolloError("Entrez un point d'intêret svp");
+      return new ApolloError("Entrez un point d'intêret svp !");
     } else if (poiNameOrAdress.length <= 2) {
-      return new ApolloError("Entrez un nom de ville correct svp");
+      return new ApolloError("Entrez un point d'intérêt correct svp !");
     }
 
     let optionsPoiAPI = {
@@ -94,9 +94,11 @@ export class PoiResolver {
 
     if (!PoiExists && poiData.name !== cityName) {
       await datasource.getRepository(Poi).save(poiData);
-      return "Le POI a bien été créé";
+      return "Le point d'intérêt a bien été ajouté.";
     } else {
-      return new ApolloError("Ce POI existe déjà ou n'est pas conforme");
+      return new ApolloError(
+        "Ce point d'intérêt existe déjà ou n'est pas conforme."
+      );
     }
   }
 }
