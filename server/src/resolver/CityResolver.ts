@@ -67,9 +67,9 @@ export class CityResolver {
     const { cityName } = data;
 
     if (cityName === "") {
-      return new ApolloError("Entrez un nom de ville svp");
+      return new ApolloError("Entrez un nom de ville svp ! 🙏");
     } else if (cityName.length <= 2) {
-      return new ApolloError("Entrez un nom de ville correct svp");
+      return new ApolloError("Entrez un nom de ville correct svp ! 🙏");
     }
 
     let optionsCityAPI = {
@@ -129,18 +129,18 @@ export class CityResolver {
       .findOne({ where: { name: cityData.name } });
     console.log(cityExists);
 
-    if (!cityExists) {
+    // vérifier correspondance entre cityName et cityData.name
+
+    if (cityName !== cityData.name) {
+      return new ApolloError("Cette ville n'existe pas ! Essayez autre chose.");
+    } else if (!cityExists) {
       await datasource.getRepository(City).save(cityData);
-      console.log(cityData.name + " a bien été créée");
-
-      return cityData.name + " a bien été créée";
+      return cityData.name + " a bien été ajoutée. ";
     } else {
-      console.log(
-        cityData.name + " existe déjà, essayez d'ajouter une autre ville!"
-      );
-
       return new ApolloError(
-        cityData.name + " existe déjà, essayez d'ajouter une autre ville!"
+        "Il semblerait que " +
+          cityData.name +
+          " existe déjà, essayez d'ajouter une autre ville !"
       );
     }
   }
