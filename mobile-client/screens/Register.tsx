@@ -20,7 +20,6 @@ export default function UserRegister({navigation}) {
 
       const [userInfo, setUserInfo] = useState({email: "", password: ""});
       const [CreateUser] = useCreateUserMutation();
-     
 
     return (
         <View style={styles.container}>
@@ -33,7 +32,7 @@ export default function UserRegister({navigation}) {
         }
         style={styles.ScrollView}
       >
-               <View style={styles.contain}>
+              <View style={styles.contain}>
             <TouchableHighlight
           style={{
             borderRadius:
@@ -48,7 +47,7 @@ export default function UserRegister({navigation}) {
             alignItems: "center",
             marginBottom: 30,
             marginTop: 20,
-           
+          
           }}
           underlayColor="#CCC30A"
           onPress={() => alert("Mapado's Rule")}
@@ -56,10 +55,10 @@ export default function UserRegister({navigation}) {
           <Text style={styles.mainName}>Mapado</Text>
         </TouchableHighlight>
         </View>
-           <Text style={styles.welcome}>Bienvenue sur Mapado</Text>
+          <Text style={styles.welcome}>Bienvenue sur Mapado</Text>
           
               
-           <TextInput
+          <TextInput
           placeholder="adresse e-mail"
           style={styles.info}
           value={userInfo.email}
@@ -101,6 +100,7 @@ export default function UserRegister({navigation}) {
                       ]);
                   })
                   .catch(console.error);
+                  
           }}
         >
           <Text style={styles.connexionText}>Créer son compte</Text>

@@ -3,15 +3,16 @@ import { FlatList, StyleSheet, TextInput, View, Text } from 'react-native';
 import {useCitiesQuery} from "../gql/generated/schema";
 import CityListItem from "../components/CityListItem";
 import React from "react";
+import { useEffect } from 'react';
 
 
 export default function CitiesScreen({navigation}) {
     const [text, onChangeText] = React.useState('');
-
     const {data} = useCitiesQuery();
     const cities = data?.cities || [];
-
-
+    console.log(cities)
+    
+    
     return (
         <View style={styles.container}>
             <StatusBar/>
@@ -27,7 +28,7 @@ export default function CitiesScreen({navigation}) {
                 keyExtractor={(item) => item.id.toString()}
                 data={cities}
                 renderItem={({item}) => <CityListItem navigation={navigation} city={item}/>}
-            />
+                />
         </View>
     );
 }

@@ -19,12 +19,42 @@ const Stack = createNativeStackNavigator();
 function Cities() {
     return (
         <Stack.Navigator screenOptions={{headerShown: false}}>
-            <Stack.Screen name="Home" component={CitiesScreen} />
-            <Stack.Screen name="Info" component={CityInfoScreen} />
-            <Stack.Screen name="Profile" component={UserProfile} />
-            <Stack.Screen name="Forgot" component={ForgotPassword} />
-            <Stack.Screen name="Register" component={UserRegister} />
-
+            <Stack.Screen name="Home" component={CitiesScreen} 
+            options={{
+                headerTitle: "Simon",
+                headerRight: () => (
+                    <Ionicons name={"person-circle-outline"} size={40} color={"#EC5D5B"} style={{marginRight: 20}}/>
+                ),
+            }}/>
+            <Stack.Screen name="Info" component={CityInfoScreen} 
+                    options={{
+                        headerTitle: "Simon",
+                        headerRight: () => (
+                            <Ionicons name={"person-circle-outline"} size={40} color={"#EC5D5B"} style={{marginRight: 20}}/>
+                        ),
+                    }}/>
+            <Stack.Screen name="Profile" component={UserProfile}
+            options={{
+                headerTitle: "Simon",
+                headerRight: () => (
+                    <Ionicons name={"person-circle-outline"} size={40} color={"#EC5D5B"} style={{marginRight: 20}}/>
+                ),
+            }}
+            />
+            <Stack.Screen name="Forgot" component={ForgotPassword}
+            options={{
+                headerTitle: "Simon",
+                headerRight: () => (
+                    <Ionicons name={"person-circle-outline"} size={40} color={"#EC5D5B"} style={{marginRight: 20}}/>
+                ),
+            }} />
+            <Stack.Screen name="Register" component={UserRegister} 
+               options={{
+                headerTitle: "Simon",
+                headerRight: () => (
+                    <Ionicons name={"person-circle-outline"} size={40} color={"#EC5D5B"} style={{marginRight: 20}}/>
+                ),
+            }}  />
             
         </Stack.Navigator>
     )
@@ -57,13 +87,14 @@ export default function App() {
                                 <Ionicons name={"alert-circle"} size={size} color={color}/>
                             );
                         },
-                        tabBarActiveTintColor: "#f76c6c",
+                        tabBarActiveTintColor: "#A9B18F",
                         tabBarInactiveTintColor: "gray",
                         tabBarStyle: {height: 60, paddingBottom: 10},
                     })}
                 >
+                    {/* nom de la page reliée à chaque composant */}
                     <Tab.Screen name="Cities" component={Cities}/>
-                    <Tab.Screen name="Login" component={LoginScreen}/>
+                    <Tab.Screen name="Login"  component={LoginScreen}/>
                 </Tab.Navigator>
             </NavigationContainer>
         </ApolloProvider>
