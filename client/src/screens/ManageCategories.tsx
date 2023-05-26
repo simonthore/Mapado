@@ -1,6 +1,6 @@
-import {useState} from "react";
+import {MouseEventHandler, useState} from "react";
 import {
-    useCategoriesQuery, useCreateCategoryMutation
+    useCategoriesQuery, useCreateCategoryMutation, useDeleteCategoryMutation
 } from "../gql/generated/schema";
 import Card from "../components/Card";
 import {useNavigate} from "react-router";
@@ -24,7 +24,10 @@ export default function AddManageCities() {
         // Après avoir effectué la mutation, appel à refetch pour réactualiser les catégories
         onCompleted: () => refetch(),
     });
-    const {loading: loadingCities, data, refetch} = useCategoriesQuery();
+    const [deleteCategory] = useDeleteCategoryMutation({onCompleted: () => refetch()},
+)
+
+        const {loading: loadingCities, data, refetch} = useCategoriesQuery();
 
     const categories = data?.categories ?? [];
 
@@ -35,6 +38,13 @@ export default function AddManageCities() {
     // Au click du bouton, on lance la fonction sendNewCategory for utilisé la mutation gql et créer une nouvelle catégorie
     const onClickSendCategory = () => {
         sendNewCategory({variables: {data: newCategory}});
+    };
+
+    const onClickDeleteCategory: MouseEventHandler<HTMLButtonElement> = (event) => {
+        const categoryId = event.currentTarget.getAttribute("data-category-id");
+        if (categoryId) {
+            deleteCategory({ variables: { deleteCategoryId: parseInt(categoryId) } });
+        }
     };
 
     // Au click navigation à la page précédente
@@ -72,7 +82,7 @@ export default function AddManageCities() {
                 <div className="categories_badges_container">
                     {categories.map((category: ICategory, index: number) => {
                         return (
-                            <Badge text={category.name} key={index}/>
+                            <Badge text={category.name} key={index} functionOnClick={onClickDeleteCategory} categoryId={category.id}/>
                         );
                     })}
                 </div>
