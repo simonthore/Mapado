@@ -16,6 +16,8 @@ import {useEffect, useState} from "react";
 import {useLocation} from "react-router";
 import EditCity from "./screens/EditCity";
 import CitiesList from "./screens/CitiesList";
+import Admin from "./screens/Admin";
+import ManageCategories from "./screens/ManageCategories";
 
 const styles: CSS.Properties = {
     margin: 0,
@@ -52,7 +54,8 @@ function App() {
                     <Route path="/info/:cityName" element={<InfoCity/>}/>
                     <Route path="/manage-cities" element={<ManageCities/>}/>
                     <Route path="/edit-city/:cityName" element={<EditCity/>}/>
-                    {/*<Route path="/map" element={<Map/>} />*/}
+                    <Route path="/admin" element={<Admin/>}/>
+                    <Route path="/manage-categories" element={<ManageCategories/>}/>
                 </Routes>
             </div>
         </>

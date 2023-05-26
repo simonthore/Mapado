@@ -30,7 +30,7 @@ export default function Header() {
                         </p>
                         <div className="demos">
                             <Link to="/cities-list">Accueil</Link>
-                            <Link to="/manage-cities">
+                            <Link to="/admin">
                                 Admin
                             </Link>
                             <Link to="/login">

@@ -78,7 +78,7 @@ export default function Home() {
                                     </p>
                                     <div className="demos">
                                         <Link to="/cities-list">Accueil</Link>
-                                        <Link to="/manage-cities" onClick={() => setHeaderShown(false)}>
+                                        <Link to="/admin" onClick={() => setHeaderShown(false)}>
                                             Admin
                                         </Link>
                                         <Link to="/login">
