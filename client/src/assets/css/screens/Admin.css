@@ -12,3 +12,7 @@
     align-items: center;
     flex-grow: 1;
 }
+
+.admin_wrapper a.country_link {
+    background-color: #EC5D5C;
+}
