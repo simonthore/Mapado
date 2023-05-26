@@ -9,6 +9,13 @@ interface PoiProps {
   cityId: number;
   cityName: string;
 }
+
+interface PoiRequestedInterface {
+  poiNameOrAdress: string;
+  cityId: number;
+  cityName: string;
+}
+
 interface ToastInterface {
   id: number;
   title: string;
@@ -19,7 +26,7 @@ interface ToastInterface {
 
 export default function AddPoi({ cityId, cityName }: PoiProps) {
   // Initialisation de l'objet poiRequested
-  const [poiRequested, setPoiRequested] = useState({
+  const [poiRequested, setPoiRequested] = useState<PoiRequestedInterface>({
     poiNameOrAdress: "",
     cityId: 0,
     cityName: "",
@@ -40,7 +47,7 @@ export default function AddPoi({ cityId, cityName }: PoiProps) {
   const onClickSendNewPoi = () => {
     sendPoiNameOrAdress({ variables: { data: poiRequested } })
       .then((res) => {
-        console.log("log du then", res);
+        /* console.log("log du then", res); */
 
         setToastData({
           id: Math.floor(Math.random() * 100 + 1),
@@ -49,11 +56,10 @@ export default function AddPoi({ cityId, cityName }: PoiProps) {
           backgroundColor: "green",
           icon: checkIcon,
         });
-        console.log("log de toastData au click avant le set", toastData);
+        /*  console.log("log de toastData au click après le set", toastData); */
       })
       .catch((erreur: ApolloError) => {
-        console.log(erreur);
-
+        /* console.log(erreur); */
         setToastData({
           id: Math.floor(Math.random() * 100 + 1),
           description: erreur.message,
@@ -88,7 +94,7 @@ export default function AddPoi({ cityId, cityName }: PoiProps) {
       <Toast
         toast={toastData}
         position={"bottomRight"}
-        autoDelete={false}
+        autoDelete={true}
         autoDeleteTime={5000}
         visible={showToast}
         setVisible={setShowToast}
