@@ -19,20 +19,6 @@
 	animation: toast-in-right .7s;
 }
 
-.topLeft {
-	top: 12px;
-	left: 12px;
-	transition: transform .6s ease-in;
-	animation: toast-in-left .7s;
-}
-
-.bottomLeft {
-	bottom: 12px;
-	left: 12px;
-	transition: transform .6s ease-in;
-	animation: toast-in-left .7s;
-}
-
 .notification {
 	background: #fff;
 	transition: .3s ease;
