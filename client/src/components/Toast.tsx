@@ -40,16 +40,16 @@ export default function Toast({
   // Si on souhaite activer la fonction autoDelete, juste décommenter le useEffect ici
   //
 
-  /* useEffect(() => {
+  useEffect(() => {
     const interval = setInterval(() => {
-      if (autoDelete && toastList.length && list.length) {
-        deleteToast(toastList[0].id);
+      if (autoDelete && list.length && list.length) {
+        deleteToast(list[0].id);
       }
     }, autoDeleteTime);
     return () => {
       clearInterval(interval);
     };
-  }, [toastList, autoDelete, autoDeleteTime, list]); */
+  }, [autoDelete, autoDeleteTime, list]);
 
   const deleteToast = (id: number) => {
     const index = list.findIndex((e) => e.id === id);
