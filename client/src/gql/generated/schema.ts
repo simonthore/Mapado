@@ -368,7 +368,7 @@ export type SendPasswordEmailMutationVariables = Exact<{
 export type SendPasswordEmailMutation = { __typename?: 'Mutation', sendPasswordEmail: { __typename?: 'User', email?: string | null } };
 
 export type UpdateCategoryMutationVariables = Exact<{
-  updateCategoryData2: CategoryInput;
+  updateCategoryData: CategoryInput;
   updateCategoryId: Scalars['Int'];
 }>;
 
@@ -958,8 +958,8 @@ export type SendPasswordEmailMutationHookResult = ReturnType<typeof useSendPassw
 export type SendPasswordEmailMutationResult = Apollo.MutationResult<SendPasswordEmailMutation>;
 export type SendPasswordEmailMutationOptions = Apollo.BaseMutationOptions<SendPasswordEmailMutation, SendPasswordEmailMutationVariables>;
 export const UpdateCategoryDocument = gql`
-    mutation UpdateCategory($updateCategoryData2: CategoryInput!, $updateCategoryId: Int!) {
-  updateCategory(data: $updateCategoryData2, id: $updateCategoryId) {
+    mutation UpdateCategory($updateCategoryData: CategoryInput!, $updateCategoryId: Int!) {
+  updateCategory(data: $updateCategoryData, id: $updateCategoryId) {
     id
     name
   }
@@ -980,7 +980,7 @@ export type UpdateCategoryMutationFn = Apollo.MutationFunction<UpdateCategoryMut
  * @example
  * const [updateCategoryMutation, { data, loading, error }] = useUpdateCategoryMutation({
  *   variables: {
- *      updateCategoryData2: // value for 'updateCategoryData2'
+ *      updateCategoryData: // value for 'updateCategoryData'
  *      updateCategoryId: // value for 'updateCategoryId'
  *   },
  * });

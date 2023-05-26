@@ -1,11 +1,12 @@
 import {MouseEventHandler, useState} from "react";
 import {
-    useCategoriesQuery, useCreateCategoryMutation, useDeleteCategoryMutation
+    useCategoriesQuery, useCreateCategoryMutation, useDeleteCategoryMutation, useUpdateCategoryMutation
 } from "../gql/generated/schema";
 import Card from "../components/Card";
 import {useNavigate} from "react-router";
 import ICategory from "../interfaces/ICategory";
-import Badge from "../components/Badge";
+import BadgeEdit from "../components/BadgeEdit";
+import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from "@mui/material";
 
 export default function AddManageCities() {
     //
@@ -13,21 +14,20 @@ export default function AddManageCities() {
     //
     const navigate = useNavigate();
     const [newCategory, setNewCategory] = useState({name: ""},)
-    console.log(newCategory)
+    const [open, setOpen] = useState(false);
+    const [categoryIdforModal, setCategoryIdForModal] = useState('')
+    const [dataForUpdate, setDataForUpdate] = useState({name: ""},)
+
     //
     // MUTATIONS GRAPHQL
     //
-
-    // fonction gql qui récupère la valeur de l'input
-    //REFETCH POSSIBLE ICI
     const [sendNewCategory] = useCreateCategoryMutation({
         // Après avoir effectué la mutation, appel à refetch pour réactualiser les catégories
         onCompleted: () => refetch(),
     });
-    const [deleteCategory] = useDeleteCategoryMutation({onCompleted: () => refetch()},
-)
-
-        const {loading: loadingCities, data, refetch} = useCategoriesQuery();
+    const [deleteCategory] = useDeleteCategoryMutation({onCompleted: () => refetch()},)
+    const [updateCategory] = useUpdateCategoryMutation({onCompleted: () => refetch()},)
+    const {loading: loadingCities, data, refetch} = useCategoriesQuery();
 
     const categories = data?.categories ?? [];
 
@@ -43,7 +43,7 @@ export default function AddManageCities() {
     const onClickDeleteCategory: MouseEventHandler<HTMLButtonElement> = (event) => {
         const categoryId = event.currentTarget.getAttribute("data-category-id");
         if (categoryId) {
-            deleteCategory({ variables: { deleteCategoryId: parseInt(categoryId) } });
+            deleteCategory({variables: {deleteCategoryId: parseInt(categoryId)}});
         }
     };
 
@@ -52,6 +52,28 @@ export default function AddManageCities() {
         navigate(-1);
     }
 
+    const handleClickOpen: MouseEventHandler<HTMLButtonElement> = (event) => {
+        const catchedCategoryId = event.currentTarget.getAttribute("data-category-id");
+        if (catchedCategoryId) {
+            setCategoryIdForModal(catchedCategoryId)
+        }
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleUpdateCategory = () => {
+        updateCategory({
+            variables: {
+                updateCategoryId: parseInt(categoryIdforModal),
+                updateCategoryData: dataForUpdate
+            }
+        });
+        setCategoryIdForModal('')
+        setOpen(false);
+    }
 
     return (
         <Card>
@@ -82,11 +104,34 @@ export default function AddManageCities() {
                 <div className="categories_badges_container">
                     {categories.map((category: ICategory, index: number) => {
                         return (
-                            <Badge text={category.name} key={index} functionOnClick={onClickDeleteCategory} categoryId={category.id}/>
+                            <BadgeEdit text={category.name} key={index} functionOnClick={onClickDeleteCategory}
+                                       functionOnClick2={handleClickOpen}
+                                       categoryId={category.id}/>
                         );
                     })}
                 </div>
             </div>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Modifier la catégorie</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Veuillez entrer un nouveau nom
+                    </DialogContentText>
+                    <TextField
+                        margin="dense"
+                        id="name"
+                        label="Nom"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        onChange={(e) => setDataForUpdate({name: e.target.value})}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Annuler</Button>
+                    <Button onClick={handleUpdateCategory}>Envoyer</Button>
+                </DialogActions>
+            </Dialog>
         </Card>
     );
 }
