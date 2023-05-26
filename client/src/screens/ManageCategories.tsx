@@ -1,12 +1,8 @@
 import {useEffect, useState} from "react";
 import {
-    useCategoriesQuery
+    useCategoriesQuery, useCreateCategoryMutation
 } from "../gql/generated/schema";
 import Card from "../components/Card";
-import ICity from "../interfaces/ICity";
-import {Link} from "react-router-dom";
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import EditIcon from '@mui/icons-material/Edit';
 import {useNavigate} from "react-router";
 import ICategory from "../interfaces/ICategory";
 import Badge from "../components/Badge";
@@ -16,7 +12,7 @@ export default function AddManageCities() {
     // STATES
     //
     const navigate = useNavigate();
-    const [newCategory, setNewCategory] = useState({categoryName: ""},)
+    const [newCategory, setNewCategory] = useState({name: ""},)
     console.log(newCategory)
     //
     // MUTATIONS GRAPHQL
@@ -24,27 +20,27 @@ export default function AddManageCities() {
 
     // fonction gql qui récupère la valeur de l'input
     //REFETCH POSSIBLE ICI
+    const [sendNewCategory] = useCreateCategoryMutation({
+        // Après avoir effectué la mutation, appel à refetch pour réactualiser les catégories
+        onCompleted: () => refetch(),
+    });
     const {loading: loadingCities, data, refetch} = useCategoriesQuery();
+
     const categories = data?.categories ?? [];
 
     //
     // FONCTIONS ONCLICK
     //
 
+    // Au click du bouton, on lance la fonction sendNewCategory for utilisé la mutation gql et créer une nouvelle catégorie
+    const onClickSendCategory = () => {
+        sendNewCategory({variables: {data: newCategory}});
+    };
+
     // Au click navigation à la page précédente
     const goBack = () => {
         navigate(-1);
     }
-
-    // Au click du bouton on lance la fonction gql
-    // const onClickSendCityName = () => {
-    //     sendCityName({variables: {data: cityRequested}});
-    //     console.log('click')
-    // };
-
-    // const onClickDeleteCity = (cityId: number) => {
-    //     deleteCity({variables: {deleteCityId: cityId}});
-    // };
 
 
     return (
@@ -60,11 +56,11 @@ export default function AddManageCities() {
                     <input
                         type="text"
                         placeholder="Nom de la catégorie"
-                        value={newCategory.categoryName}
-                        onChange={(e) => setNewCategory({categoryName: e.target.value})}
+                        value={newCategory.name}
+                        onChange={(e) => setNewCategory({name: e.target.value})}
                     />
                     <button
-                        // onClick={onClickSendCityName}
+                        onClick={onClickSendCategory}
                         className={"tertiaryButton"}>
                         Ajouter
                     </button>
