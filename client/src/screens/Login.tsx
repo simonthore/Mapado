@@ -1,12 +1,10 @@
 import { useState } from "react";
-import { Navigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useGetProfileQuery, useLoginMutation } from "../gql/generated/schema";
 import Card from "../components/Card";
 import { useNavigate } from "react-router";
-import Header from "../components/Header";
 
 export default function Login() {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
@@ -16,6 +14,10 @@ export default function Login() {
 
   const navigate = useNavigate();
 
+  const goBack = () => {
+    navigate(-1);
+  }
+
   const navigateEmailPassword = () => navigate("/password/email");
 
   const togglePassword = () => setPasswordShown(!passwordShown);
@@ -24,12 +26,15 @@ export default function Login() {
 
   return (
     <>
-      <Link to="/">
-        <Header />
-      </Link>
+
       <div className={"loginStyle"}>
-        {currentUser && <Navigate to="/" replace={false} />}
-        <Card customClass={"registerCard"}>
+        <button className={"backButton"} onClick={goBack}>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25">
+            <path d="M24 12.001H2.914l5.294-5.295-.707-.707L1 12.501l6.5 6.5.707-.707-5.293-5.293H24v-1z"/>
+          </svg>
+        </button>
+        {/*{currentUser && <Navigate to="/" replace={false} />}*/}
+        <Card customClass={" registerCard"}>
           <form
             className={"loginContainer"}
             onSubmit={(e) => {
