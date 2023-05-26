@@ -3,7 +3,6 @@ import {useParams} from "react-router-dom";
 import {useGetCityQuery} from "../gql/generated/schema";
 import {Marker, Popup} from "react-leaflet";
 import markerIconPng from "../assets/images/starred.png";
-import leftArrow from "../assets/images/svg/left-arrow.svg"
 import {Icon} from "leaflet";
 import ICity from "../interfaces/ICity";
 import IPoi from "../interfaces/IPoi";
