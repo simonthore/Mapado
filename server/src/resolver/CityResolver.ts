@@ -85,8 +85,10 @@ export class CityResolver {
     const fetchCity = await fetch(urlCityAPI, optionsCityAPI)
       .then((res) => res.json()) // parse response as JSON
       .then((data) => {
-        console.log(data);
-        return data.shift();
+        if (data.length === 0) {
+          console.log(data);
+          return new ApolloError("Nous n'avons pas trouvé la ville, désolé...");
+        } else return data.shift();
       })
       .catch((err) => {
         console.log(`error while fetching city coordinates ${err}`);
@@ -132,7 +134,9 @@ export class CityResolver {
     // vérifier correspondance entre cityName et cityData.name
 
     if (cityName !== cityData.name) {
-      return new ApolloError("Cette ville n'existe pas ! Essayez autre chose.");
+      return new ApolloError(
+        "Cette ville n'existe pas ou nous ne l'avons pas trouvée. Essayez autre chose."
+      );
     } else if (!cityExists) {
       await datasource.getRepository(City).save(cityData);
       return cityData.name + " a bien été ajoutée. ";
