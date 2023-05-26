@@ -1,10 +1,6 @@
 import {useEffect, useState} from "react";
 import {
-    useCitiesQuery,
-    useFetchCityNameMutation,
-    useDeleteCityMutation,
-    useCreateUserMutation,
-    useFetchPoiCoordinatesMutation,
+    useCategoriesQuery
 } from "../gql/generated/schema";
 import Card from "../components/Card";
 import ICity from "../interfaces/ICity";
@@ -12,45 +8,24 @@ import {Link} from "react-router-dom";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 import {useNavigate} from "react-router";
-import Edit from "../assets/images/edit.gif"
+import ICategory from "../interfaces/ICategory";
+import Badge from "../components/Badge";
 
 export default function AddManageCities() {
     //
     // STATES
     //
     const navigate = useNavigate();
-    const [removeAnimation, setRemoveAnimation] = useState(false)
-    const handleAnimation = () => {
-        if(window.scrollY >= 10){
-            setRemoveAnimation(true)
-        }
-    }
-
-    window.addEventListener('scroll', handleAnimation)
-
-    useEffect(() => {
-        document.body.style.overflowY = "scroll"
-        const timer = setTimeout(() => {
-            setRemoveAnimation(true)
-        }, 5000);
-        return () => clearTimeout(timer);
-    })
-
-    // Initialisation de l'objet cityRequested
-    const [cityRequested, setCityRequested] = useState({
-        cityName: "",
-    });
-
+    const [newCategory, setNewCategory] = useState({categoryName: ""},)
+    console.log(newCategory)
     //
     // MUTATIONS GRAPHQL
     //
 
     // fonction gql qui récupère la valeur de l'input
     //REFETCH POSSIBLE ICI
-    const [sendCityName] = useFetchCityNameMutation();
-    const [deleteCity] = useDeleteCityMutation();
-    const {loading: loadingCities, data, refetch} = useCitiesQuery();
-    const cities = data?.cities ?? [];
+    const {loading: loadingCities, data, refetch} = useCategoriesQuery();
+    const categories = data?.categories ?? [];
 
     //
     // FONCTIONS ONCLICK
@@ -62,14 +37,14 @@ export default function AddManageCities() {
     }
 
     // Au click du bouton on lance la fonction gql
-    const onClickSendCityName = () => {
-        sendCityName({variables: {data: cityRequested}});
-        console.log('click')
-    };
+    // const onClickSendCityName = () => {
+    //     sendCityName({variables: {data: cityRequested}});
+    //     console.log('click')
+    // };
 
-    const onClickDeleteCity = (cityId: number) => {
-        deleteCity({variables: {deleteCityId: cityId}});
-    };
+    // const onClickDeleteCity = (cityId: number) => {
+    //     deleteCity({variables: {deleteCityId: cityId}});
+    // };
 
 
     return (
@@ -80,46 +55,28 @@ export default function AddManageCities() {
                         <path d="M24 12.001H2.914l5.294-5.295-.707-.707L1 12.501l6.5 6.5.707-.707-5.293-5.293H24v-1z"/>
                     </svg>
                 </button>
-                <h2 className={"title"}>Ajouter une ville</h2>
+                <h2 className={"title"}>Ajouter une catégorie</h2>
                 <div>
                     <input
                         type="text"
-                        placeholder="Nom de la ville"
-                        value={cityRequested.cityName}
-                        onChange={(e) => setCityRequested({cityName: e.target.value})}
+                        placeholder="Nom de la catégorie"
+                        value={newCategory.categoryName}
+                        onChange={(e) => setNewCategory({categoryName: e.target.value})}
                     />
-                    <button onClick={onClickSendCityName} className={"tertiaryButton"}>
+                    <button
+                        // onClick={onClickSendCityName}
+                        className={"tertiaryButton"}>
                         Ajouter
                     </button>
                 </div>
             </div>
 
             <div className={"manageCitiesContainer"}>
-                <h2 className={"title"}>Gérer les villes</h2>
-                <img src={Edit} alt="hand writting" className={`edit_animation${removeAnimation ? ' edit_animation--removed' : ''}`}/>
-                <div className="max-w-screen-xl mx-auto px-5 min-h-screen w-full cities_card_container">
-                    {cities.map((city: ICity, index: number) => {
+                <h2 className={"title"}>Gérer les catégories</h2>
+                <div className="categories_badges_container">
+                    {categories.map((category: ICategory, index: number) => {
                         return (
-                            <Card customClass={" manageCities-card"}>
-                                <div key={index} className="py-5 divide-y divide-neutral-200 h-fit">
-                                    <p className={"cityLabel"}>{city.name}</p>
-                                    <div className="p-5 manageCities_buttonContainer">
-                                        <button
-                                            className={"primaryButton"}
-                                            onClick={(e) => onClickDeleteCity(city.id)}
-                                        >
-                                            <DeleteForeverIcon/>
-                                        </button>
-                                        <Link to={`/edit-city/${city.name}`}>
-                                            <button
-                                                className={"primaryButton"}
-                                            >
-                                                <EditIcon/>
-                                            </button>
-                                        </Link>
-                                    </div>
-                                </div>
-                            </Card>
+                            <Badge text={category.name} key={index}/>
                         );
                     })}
                 </div>

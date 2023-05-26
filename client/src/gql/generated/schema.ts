@@ -15,6 +15,17 @@ export type Scalars = {
   Float: number;
 };
 
+export type Category = {
+  __typename?: 'Category';
+  id: Scalars['Float'];
+  name: Scalars['String'];
+  poi?: Maybe<Array<Poi>>;
+};
+
+export type CategoryInput = {
+  name: Scalars['String'];
+};
+
 export type City = {
   __typename?: 'City';
   id: Scalars['Float'];
@@ -44,9 +55,11 @@ export type CityRequested = {
 export type Mutation = {
   __typename?: 'Mutation';
   changePassword: User;
+  createCategory: Category;
   createCity: City;
   createPoi: Poi;
   createUser: User;
+  deleteCategory: Scalars['Boolean'];
   deleteCity: Scalars['Boolean'];
   deletePoi: Scalars['Boolean'];
   deleteUser: Scalars['Boolean'];
@@ -55,8 +68,9 @@ export type Mutation = {
   login: Scalars['String'];
   logout: Scalars['String'];
   sendPasswordEmail: User;
+  updateCategory: Category;
   updateCity: City;
-  updatePoi: Scalars['String'];
+  updatePoi: Poi;
   updateUser: Scalars['String'];
 };
 
@@ -64,6 +78,11 @@ export type Mutation = {
 export type MutationChangePasswordArgs = {
   id: Scalars['Int'];
   newPassword: Scalars['String'];
+};
+
+
+export type MutationCreateCategoryArgs = {
+  data: CategoryInput;
 };
 
 
@@ -79,6 +98,11 @@ export type MutationCreatePoiArgs = {
 
 export type MutationCreateUserArgs = {
   data: UserInput;
+};
+
+
+export type MutationDeleteCategoryArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -117,6 +141,12 @@ export type MutationSendPasswordEmailArgs = {
 };
 
 
+export type MutationUpdateCategoryArgs = {
+  data: CategoryInput;
+  id: Scalars['Int'];
+};
+
+
 export type MutationUpdateCityArgs = {
   data: CityInput;
   id: Scalars['Int'];
@@ -138,7 +168,7 @@ export type Poi = {
   __typename?: 'Poi';
   address: Scalars['String'];
   audio?: Maybe<Scalars['String']>;
-  categoryId?: Maybe<Scalars['Float']>;
+  category?: Maybe<Category>;
   city?: Maybe<City>;
   comments?: Maybe<Scalars['String']>;
   customize_gps_marker?: Maybe<Scalars['String']>;
@@ -155,6 +185,7 @@ export type Poi = {
 
 export type PoiInput = {
   address: Scalars['String'];
+  categoryId: Scalars['Float'];
   cityId: Scalars['Float'];
   description?: InputMaybe<Scalars['String']>;
   latitude?: InputMaybe<Scalars['Float']>;
@@ -166,6 +197,7 @@ export type PoiInput = {
 export type Query = {
   __typename?: 'Query';
   Pois: Array<Poi>;
+  categories: Array<Category>;
   cities: Array<City>;
   city: City;
   fetchToken: User;
@@ -184,7 +216,7 @@ export type QueryFetchTokenArgs = {
 };
 
 export type UpdatePoiInput = {
-  address: Scalars['String'];
+  address?: InputMaybe<Scalars['String']>;
   description?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   rating?: InputMaybe<Scalars['Float']>;
@@ -267,6 +299,11 @@ export type FetchPoiCoordinatesMutationVariables = Exact<{
 
 
 export type FetchPoiCoordinatesMutation = { __typename?: 'Mutation', fetchPoiCoordinates: string };
+
+export type CategoriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CategoriesQuery = { __typename?: 'Query', categories: Array<{ __typename?: 'Category', id: number, name: string }> };
 
 export type CitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -516,6 +553,41 @@ export function useFetchPoiCoordinatesMutation(baseOptions?: Apollo.MutationHook
 export type FetchPoiCoordinatesMutationHookResult = ReturnType<typeof useFetchPoiCoordinatesMutation>;
 export type FetchPoiCoordinatesMutationResult = Apollo.MutationResult<FetchPoiCoordinatesMutation>;
 export type FetchPoiCoordinatesMutationOptions = Apollo.BaseMutationOptions<FetchPoiCoordinatesMutation, FetchPoiCoordinatesMutationVariables>;
+export const CategoriesDocument = gql`
+    query Categories {
+  categories {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useCategoriesQuery__
+ *
+ * To run a query within a React component, call `useCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCategoriesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCategoriesQuery(baseOptions?: Apollo.QueryHookOptions<CategoriesQuery, CategoriesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CategoriesQuery, CategoriesQueryVariables>(CategoriesDocument, options);
+      }
+export function useCategoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CategoriesQuery, CategoriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CategoriesQuery, CategoriesQueryVariables>(CategoriesDocument, options);
+        }
+export type CategoriesQueryHookResult = ReturnType<typeof useCategoriesQuery>;
+export type CategoriesLazyQueryHookResult = ReturnType<typeof useCategoriesLazyQuery>;
+export type CategoriesQueryResult = Apollo.QueryResult<CategoriesQuery, CategoriesQueryVariables>;
 export const CitiesDocument = gql`
     query Cities {
   cities {
