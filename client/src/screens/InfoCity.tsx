@@ -47,9 +47,6 @@ export default function InfoCity() {
 
     console.log("Log de l'objet FRONT", city);
 
-    //   const city: ICity = data?.city ? data?.city : null;
-    //   const pois = city.poi;
-
     return (
         <div className="infoCity_container">
             <button className={"backButton"} onClick={goBack}>
