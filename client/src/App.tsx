@@ -31,7 +31,7 @@ function App() {
 
     useEffect(() => {
         const path = window.location.pathname;
-        setShowHeader(path !== "/login" && path !== "/");
+        setShowHeader(path !== "/");
     }, [location]);
 
     // const cities = data?.cities ?? [];
