@@ -43,17 +43,13 @@ export default function EditCity() {
     // Initialisation de l'objet city à mettre à jout
     const [cityDataToUpdate, setCityDataToUpdate] = useState({
         name: "",
-        longitude: "",
-        latitude: "",
         photo: "",
-        pois: []
     });
 
     //
     // MUTATIONS GRAPHQL
     //
-    const [sendCityName] = useFetchCityNameMutation();
-    const [updateCity] = useUpdateCityMutation()
+    const [updateCity] = useUpdateCityMutation({onCompleted: () => refetch()})
     const [deletePoi] = useDeletePoiMutation({onCompleted: () => refetch()})
     const {loading, data, refetch} = useGetCityQuery({
         variables: {query: cityName!},
@@ -61,9 +57,7 @@ export default function EditCity() {
     const city: ICity = {
         id: data?.city.id!,
         name: data?.city.name!,
-        longitude: data?.city.longitude,
-        latitude: data?.city.latitude,
-        pois: [],
+        photo: data?.city.photo!,
     };
 
     data?.city?.poi?.forEach((e) => {
@@ -87,6 +81,32 @@ export default function EditCity() {
         }
     };
 
+    const handleSubmit = () => {
+        if(cityDataToUpdate.name!=="" && cityDataToUpdate.photo!==""){
+            updateCity({
+                variables: {
+                    updateCityId: city.id,
+                    data: cityDataToUpdate
+                }
+            })
+        }else if(cityDataToUpdate.name!=="" && cityDataToUpdate.photo==="") {
+            updateCity({
+                variables: {
+                    updateCityId: city.id,
+                    data: {name:cityDataToUpdate.name}
+                }
+            })
+        }else if(cityDataToUpdate.name==="" && cityDataToUpdate.photo!=="") {
+            updateCity({
+                variables: {
+                    updateCityId: city.id,
+                    data: {photo:cityDataToUpdate.photo}
+                }
+            })
+        }
+
+    }
+
     return (
         <Card customClass={" editCity_container"}>
             <Link to={`/info/${city.name}`} className="cityInfo_link">
@@ -104,7 +124,7 @@ export default function EditCity() {
             </div>
             <div className={"editCity_InputsContainer"}>
                 <h2 className={"title"}>Modifier la ville</h2>
-                <form className={"editCity_form"}>
+                <form onSubmit={handleSubmit} className={"editCity_form"}>
                     <div className={"editCity_form_inputContainer"}>
                         <label id={"name"}>Nom</label>
                         <input
@@ -132,6 +152,11 @@ export default function EditCity() {
                                 }))
                             }/>
                     </div>
+                    <button type="submit" className={"tertiaryButton"}>
+                        Modifier {city.name}
+                    </button>
+                </form>
+                <div>
                     {city.pois?.length ? (<>
                             <label id={"name"}>Points d'intérêt</label>
                             {city.pois.map((poi, index: number) => (
@@ -141,7 +166,7 @@ export default function EditCity() {
                         </>)
                         : null
                     }
-                </form>
+                </div>
             </div>
         </Card>
     );

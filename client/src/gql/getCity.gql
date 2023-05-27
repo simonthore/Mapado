@@ -4,6 +4,7 @@ query getCity($query: String!) {
     name
     latitude
     longitude
+    photo
     poi {
       id
       name

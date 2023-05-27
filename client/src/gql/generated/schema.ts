@@ -148,7 +148,7 @@ export type MutationUpdateCategoryArgs = {
 
 
 export type MutationUpdateCityArgs = {
-  data: CityInput;
+  data: UpdateCityInput;
   id: Scalars['Int'];
 };
 
@@ -213,6 +213,11 @@ export type QueryCityArgs = {
 
 export type QueryFetchTokenArgs = {
   id: Scalars['Float'];
+};
+
+export type UpdateCityInput = {
+  name?: InputMaybe<Scalars['String']>;
+  photo?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdatePoiInput = {
@@ -329,7 +334,7 @@ export type GetCityQueryVariables = Exact<{
 }>;
 
 
-export type GetCityQuery = { __typename?: 'Query', city: { __typename?: 'City', id: number, name: string, latitude?: number | null, longitude?: number | null, poi?: Array<{ __typename?: 'Poi', id: number, name: string, address: string, latitude?: number | null, longitude?: number | null }> | null } };
+export type GetCityQuery = { __typename?: 'Query', city: { __typename?: 'City', id: number, name: string, latitude?: number | null, longitude?: number | null, photo?: string | null, poi?: Array<{ __typename?: 'Poi', id: number, name: string, address: string, latitude?: number | null, longitude?: number | null }> | null } };
 
 export type FetchTokenQueryVariables = Exact<{
   fetchTokenId: Scalars['Float'];
@@ -376,12 +381,12 @@ export type UpdateCategoryMutationVariables = Exact<{
 export type UpdateCategoryMutation = { __typename?: 'Mutation', updateCategory: { __typename?: 'Category', id: number, name: string } };
 
 export type UpdateCityMutationVariables = Exact<{
-  data: CityInput;
+  data: UpdateCityInput;
   updateCityId: Scalars['Int'];
 }>;
 
 
-export type UpdateCityMutation = { __typename?: 'Mutation', updateCity: { __typename?: 'City', id: number, name: string, latitude?: number | null, longitude?: number | null, users?: Array<{ __typename?: 'User', id: number, email?: string | null }> | null, poi?: Array<{ __typename?: 'Poi', id: number, name: string, address: string }> | null } };
+export type UpdateCityMutation = { __typename?: 'Mutation', updateCity: { __typename?: 'City', id: number, name: string, photo?: string | null } };
 
 
 export const ChangePasswordDocument = gql`
@@ -720,6 +725,7 @@ export const GetCityDocument = gql`
     name
     latitude
     longitude
+    photo
     poi {
       id
       name
@@ -993,21 +999,11 @@ export type UpdateCategoryMutationHookResult = ReturnType<typeof useUpdateCatego
 export type UpdateCategoryMutationResult = Apollo.MutationResult<UpdateCategoryMutation>;
 export type UpdateCategoryMutationOptions = Apollo.BaseMutationOptions<UpdateCategoryMutation, UpdateCategoryMutationVariables>;
 export const UpdateCityDocument = gql`
-    mutation UpdateCity($data: CityInput!, $updateCityId: Int!) {
+    mutation UpdateCity($data: UpdateCityInput!, $updateCityId: Int!) {
   updateCity(data: $data, id: $updateCityId) {
     id
     name
-    latitude
-    longitude
-    users {
-      id
-      email
-    }
-    poi {
-      id
-      name
-      address
-    }
+    photo
   }
 }
     `;

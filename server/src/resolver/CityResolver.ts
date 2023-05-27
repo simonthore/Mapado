@@ -1,121 +1,126 @@
-import { Arg, Int, Mutation, Query, Resolver } from "type-graphql";
+import {Arg, Int, Mutation, Query, Resolver} from "type-graphql";
 import City, {
-  CityInput,
-  CityRequested,
-  UpdateCityInput,
+    CityInput,
+    CityRequested,
+    UpdateCityInput,
 } from "../entity/City";
 import datasource from "../db";
-import { ApolloError } from "apollo-server-errors";
-import { env } from "../environment";
+import {ApolloError} from "apollo-server-errors";
+import {env} from "../environment";
+import Poi from "../entity/Poi";
 
 @Resolver(City)
 export class CityResolver {
-  @Query(() => [City])
-  async cities(): Promise<City[]> {
-    //Pour récupérer les utilisateurs et les poi des villes on ajoute les relations
-    return await datasource
-      .getRepository(City)
-      .find({ relations: { users: true, poi: true } });
-  }
+    @Query(() => [City])
+    async cities(): Promise<City[]> {
+        //Pour récupérer les utilisateurs et les poi des villes on ajoute les relations
+        return await datasource
+            .getRepository(City)
+            .find({relations: {users: true, poi: true}});
+    }
 
-  @Query(() => City)
-  async city(@Arg("name", () => String) name: string): Promise<City> {
-    const city = await datasource
-      .getRepository(City)
-      .findOne({ where: { name }, relations: { users: true, poi: true } });
+    @Query(() => City)
+    async city(@Arg("name", () => String) name: string): Promise<City> {
+        const city = await datasource
+            .getRepository(City)
+            .findOne({where: {name}, relations: {users: true, poi: true}});
 
-    if (city === null) throw new ApolloError("city not found", "NOT_FOUND");
+        if (city === null) throw new ApolloError("city not found", "NOT_FOUND");
 
-    return city;
-  }
+        return city;
+    }
 
-  @Mutation(() => City)
-  async createCity(@Arg("data") data: CityInput): Promise<City> {
-    return await datasource.getRepository(City).save(data);
-  }
-  @Mutation(() => Boolean)
-  async deleteCity(@Arg("id", () => Int) id: number): Promise<boolean> {
-    const { affected } = await datasource.getRepository(City).delete(id);
-    if (affected === 0) throw new ApolloError("City not found", "NOT_FOUND");
-    return true;
-  }
+    @Mutation(() => City)
+    async createCity(@Arg("data") data: CityInput): Promise<City> {
+        return await datasource.getRepository(City).save(data);
+    }
 
-  @Mutation(() => City)
-  async updateCity(
-    @Arg("id", () => Int) id: number,
-    @Arg("data") { name, photo, longitude, latitude }: CityInput
-  ): Promise<City> {
-    const { affected } = await datasource
-      .getRepository(City)
-      .update(id, { name, photo, longitude, latitude });
+    @Mutation(() => Boolean)
+    async deleteCity(@Arg("id", () => Int) id: number): Promise<boolean> {
+        const {affected} = await datasource.getRepository(City).delete(id);
+        if (affected === 0) throw new ApolloError("City not found", "NOT_FOUND");
+        return true;
+    }
 
-    if (affected === 0) throw new ApolloError("City not found", "NOT_FOUND");
+    @Mutation(() => City)
+    async updateCity(
+        @Arg("id", () => Int) id: number,
+        @Arg("data") data: UpdateCityInput
+    ): Promise<City | null> {
+        const cityToUpdate = await datasource.getRepository(City).findOne({
+            where: {id},
+        });
+        const {affected} = await datasource
+            .getRepository(City)
+            .update(id, data);
 
-    return { id, name };
-  }
+        if (affected === 0) throw new ApolloError("City not found", "NOT_FOUND");
 
-  // On récupère le string du front
-  // On fetch l'objet ville de l'API ninja code en fonction du string du front
-  // On fetch ensuite l'url de la photo sur l'API unsplash
-  // On stocke nom, lat, long et photo dans un objet
-  // On enregistre l'objet dans notre bdd
+        return cityToUpdate;
+    }
 
-  @Mutation(() => String)
-  async fetchCityName(@Arg("data") data: CityRequested): Promise<string> {
-    const { cityName } = data;
+    // On récupère le string du front
+    // On fetch l'objet ville de l'API ninja code en fonction du string du front
+    // On fetch ensuite l'url de la photo sur l'API unsplash
+    // On stocke nom, lat, long et photo dans un objet
+    // On enregistre l'objet dans notre bdd
 
-    let optionsCityAPI = {
-      method: "GET",
-      headers: { "x-api-key": env.REACT_APP_CITIES_API_KEY },
-    };
+    @Mutation(() => String)
+    async fetchCityName(@Arg("data") data: CityRequested): Promise<string> {
+        const {cityName} = data;
 
-    // Ajouter des try / catch pour les appels
+        let optionsCityAPI = {
+            method: "GET",
+            headers: {"x-api-key": env.REACT_APP_CITIES_API_KEY},
+        };
 
-    let urlCityAPI =
-      "https://api.api-ninjas.com/v1/geocoding?country=FR&city=" + cityName;
+        // Ajouter des try / catch pour les appels
 
-    const fetchCity = await fetch(urlCityAPI, optionsCityAPI)
-      .then((res) => res.json()) // parse response as JSON
-      .then((data) => {
-        console.log(data);
-        return data.shift();
-      })
-      .catch((err) => {
-        console.log(`error while fetching city coordinates ${err}`);
-      });
+        let urlCityAPI =
+            "https://api.api-ninjas.com/v1/geocoding?country=FR&city=" + cityName;
 
-    let optionsCityPhoto = {
-      method: "GET",
-      headers: { "x-api-key": env.REACT_APP_PHOTOS_API_KEY },
-    };
+        const fetchCity = await fetch(urlCityAPI, optionsCityAPI)
+            .then((res) => res.json()) // parse response as JSON
+            .then((data) => {
+                console.log(data);
+                return data.shift();
+            })
+            .catch((err) => {
+                console.log(`error while fetching city coordinates ${err}`);
+            });
 
-    let urlPhotoAPI =
-      "https://api.unsplash.com/search/photos?query=" +
-      cityName +
-      " downtown street france" +
-      "&client_id=" +
-      optionsCityPhoto.headers["x-api-key"];
+        let optionsCityPhoto = {
+            method: "GET",
+            headers: {"x-api-key": env.REACT_APP_PHOTOS_API_KEY},
+        };
 
-    const fetchPhoto = await fetch(urlPhotoAPI, optionsCityPhoto)
-      .then((res) => res.json())
-      .then((data) => {
-        let urlOfCityPhoto = data["results"][0].urls["regular"];
-        return urlOfCityPhoto;
-      })
-      .catch((err) => {
-        console.log(`error while fetching city photo ${err}`);
-      });
+        let urlPhotoAPI =
+            "https://api.unsplash.com/search/photos?query=" +
+            cityName +
+            " downtown street france" +
+            "&client_id=" +
+            optionsCityPhoto.headers["x-api-key"];
 
-    const cityData = {
-      name: fetchCity.name,
-      latitude: fetchCity.latitude,
-      longitude: fetchCity.longitude,
-      photo: fetchPhoto,
-    };
-    //console.log(fetchCity);
+        const fetchPhoto = await fetch(urlPhotoAPI, optionsCityPhoto)
+            .then((res) => res.json())
+            .then((data) => {
+                let urlOfCityPhoto = data["results"][0].urls["regular"];
+                return urlOfCityPhoto;
+            })
+            .catch((err) => {
+                console.log(`error while fetching city photo ${err}`);
+            });
 
-    await datasource.getRepository(City).save(cityData);
+        const cityData = {
+            name: fetchCity.name,
+            latitude: fetchCity.latitude,
+            longitude: fetchCity.longitude,
+            photo: fetchPhoto,
+        };
+        //console.log(fetchCity);
 
-    return cityName;
-  }
+        await datasource.getRepository(City).save(cityData);
+
+        return cityName;
+    }
 }
