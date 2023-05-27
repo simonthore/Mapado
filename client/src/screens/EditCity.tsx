@@ -1,14 +1,15 @@
 import {MouseEventHandler, useEffect, useState} from "react";
 import {
-    useCitiesQuery,
-    useFetchCityNameMutation, useGetCityQuery, useUpdateCityMutation, useDeletePoiMutation
+    useFetchCityNameMutation,
+    useGetCityQuery,
+    useUpdateCityMutation,
+    useDeletePoiMutation
 } from "../gql/generated/schema";
 import Card from "../components/Card";
 import ICity from "../interfaces/ICity";
 import AddPoi from "../components/AddPoi";
 import {Link, useParams} from "react-router-dom";
 import {useNavigate} from "react-router";
-import Badge from "../components/Badge";
 import IPoi from "../interfaces/IPoi";
 import Rocket from "../assets/images/rocket.gif"
 import BadgeEdit from "../components/BadgeEdit";
@@ -17,6 +18,7 @@ export default function EditCity() {
     //
     // STATES
     //
+    const [animeRocket, setAnimeRocket] = useState(false)
 
     //
     // Navigation
@@ -26,7 +28,6 @@ export default function EditCity() {
     const goBack = () => {
         navigate(-1);
     }
-    const [animeRocket, setAnimeRocket] = useState(false)
 
     //
     // USE EFFECT
@@ -39,20 +40,18 @@ export default function EditCity() {
         return () => clearTimeout(timer);
     })
 
-    // Initialisation de l'objet cityRequested
+    // Initialisation de l'objet city à mettre à jout
     const [cityDataToUpdate, setCityDataToUpdate] = useState({
         name: "",
         longitude: "",
         latitude: "",
+        photo: "",
         pois: []
     });
 
     //
     // MUTATIONS GRAPHQL
     //
-
-    // fonction gql qui récupère la valeur de l'input
-    //REFETCH POSSIBLE ICI
     const [sendCityName] = useFetchCityNameMutation();
     const [updateCity] = useUpdateCityMutation()
     const [deletePoi] = useDeletePoiMutation({onCompleted: () => refetch()})
@@ -78,7 +77,6 @@ export default function EditCity() {
         city?.pois?.push(poi);
     });
 
-    console.log(city)
     //
     // FONCTIONS ONCLICK
     //
@@ -121,42 +119,28 @@ export default function EditCity() {
                             }
                         />
                     </div>
-
                     <div className={"editCity_form_inputContainer"}>
-
-                        <label id={"name"}>Longitude</label>
+                        <label id={"name"}>Photo</label>
                         <input
                             type="text"
-                            placeholder={city.longitude?.toString()}
-                            value={cityDataToUpdate.longitude}
+                            placeholder={city.photo?.toString() || "copier le lien de la photo"}
+                            value={cityDataToUpdate.photo}
                             onChange={(e) =>
                                 setCityDataToUpdate((prevState) => ({
                                     ...prevState,
-                                    longitude: e.target.value
-                                }))
-                            }/>
-                    </div>
-                    <div className={"editCity_form_inputContainer"}>
-                        <label id={"name"}>Latitude</label>
-                        <input
-                            type="text"
-                            placeholder={city.latitude?.toString()}
-                            value={cityDataToUpdate.latitude}
-                            onChange={(e) =>
-                                setCityDataToUpdate((prevState) => ({
-                                    ...prevState,
-                                    latitude: e.target.value,
+                                    photo: e.target.value,
                                 }))
                             }/>
                     </div>
                     {city.pois?.length ? (<>
                             <label id={"name"}>Points d'intérêt</label>
                             {city.pois.map((poi, index: number) => (
-                                <BadgeEdit text={poi.name} key={index} categoryId={poi.id} functionOnClick={onClickDeletePoi}/>
+                                <BadgeEdit text={poi.name} key={index} categoryId={poi.id}
+                                           functionOnClick={onClickDeletePoi}/>
                             ))}
-                        </>
-
-                    ) : null}
+                        </>)
+                        : null
+                    }
                 </form>
             </div>
         </Card>
