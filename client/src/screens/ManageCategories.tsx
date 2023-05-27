@@ -23,10 +23,9 @@ export default function AddManageCities() {
     //
     const [sendNewCategory] = useCreateCategoryMutation({
         // Après avoir effectué la mutation, appel à refetch pour réactualiser les catégories
-        onCompleted: () => refetch(),
-    });
-    const [deleteCategory] = useDeleteCategoryMutation({onCompleted: () => refetch()},)
-    const [updateCategory] = useUpdateCategoryMutation({onCompleted: () => refetch()},)
+        onCompleted: () => refetch()});
+    const [deleteCategory] = useDeleteCategoryMutation({onCompleted: () => refetch()})
+    const [updateCategory] = useUpdateCategoryMutation({onCompleted: () => refetch()})
     const {loading: loadingCities, data, refetch} = useCategoriesQuery();
 
     const categories = data?.categories ?? [];
@@ -41,7 +40,7 @@ export default function AddManageCities() {
     };
 
     const onClickDeleteCategory: MouseEventHandler<HTMLButtonElement> = (event) => {
-        const categoryId = event.currentTarget.getAttribute("data-category-id");
+        const categoryId = event.currentTarget.getAttribute("data-id");
         if (categoryId) {
             deleteCategory({variables: {deleteCategoryId: parseInt(categoryId)}});
         }
@@ -53,7 +52,7 @@ export default function AddManageCities() {
     }
 
     const handleClickOpen: MouseEventHandler<HTMLButtonElement> = (event) => {
-        const catchedCategoryId = event.currentTarget.getAttribute("data-category-id");
+        const catchedCategoryId = event.currentTarget.getAttribute("data-id");
         if (catchedCategoryId) {
             setCategoryIdForModal(catchedCategoryId)
         }
@@ -106,7 +105,8 @@ export default function AddManageCities() {
                         return (
                             <BadgeEdit text={category.name} key={index} functionOnClick={onClickDeleteCategory}
                                        functionOnClick2={handleClickOpen}
-                                       categoryId={category.id}/>
+                                       categoryId={category.id}
+                            />
                         );
                     })}
                 </div>

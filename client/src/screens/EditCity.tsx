@@ -1,8 +1,7 @@
-import {useEffect, useState} from "react";
+import {MouseEventHandler, useEffect, useState} from "react";
 import {
     useCitiesQuery,
-    useFetchCityNameMutation,
-    useDeleteCityMutation, useGetCityQuery, useUpdateCityMutation
+    useFetchCityNameMutation, useGetCityQuery, useUpdateCityMutation, useDeletePoiMutation
 } from "../gql/generated/schema";
 import Card from "../components/Card";
 import ICity from "../interfaces/ICity";
@@ -12,6 +11,7 @@ import {useNavigate} from "react-router";
 import Badge from "../components/Badge";
 import IPoi from "../interfaces/IPoi";
 import Rocket from "../assets/images/rocket.gif"
+import BadgeEdit from "../components/BadgeEdit";
 
 export default function EditCity() {
     //
@@ -54,9 +54,9 @@ export default function EditCity() {
     // fonction gql qui récupère la valeur de l'input
     //REFETCH POSSIBLE ICI
     const [sendCityName] = useFetchCityNameMutation();
-    const [deleteCity] = useDeleteCityMutation();
     const [updateCity] = useUpdateCityMutation()
-    const {loading, data} = useGetCityQuery({
+    const [deletePoi] = useDeletePoiMutation({onCompleted: () => refetch()})
+    const {loading, data, refetch} = useGetCityQuery({
         variables: {query: cityName!},
     });
     const city: ICity = {
@@ -82,26 +82,12 @@ export default function EditCity() {
     //
     // FONCTIONS ONCLICK
     //
-
-    // Au click du bouton on lance la fonction gql
-    // const onClickSendCityName = () => {
-    //     sendCityName({variables: {data: cityRequested}});
-    // };
-
-    const onClickRemovePoi = (cityId: number) => {
-        deleteCity({variables: {deleteCityId: cityId}});
-    };
-
-    const handleRemovePoi = (e:any, id: number) => {
-        e.preventDefault()
-        console.log(city.pois)
-
-        if (city.pois) {
-            const newPoiList = city.pois.filter(e => e.id !==id)
+    const onClickDeletePoi: MouseEventHandler<HTMLButtonElement> = (event) => {
+        const poiId = event.currentTarget.getAttribute("data-id");
+        if (poiId) {
+            deletePoi({variables: {deletePoiId: parseInt(poiId)}});
         }
-    }
-
-
+    };
 
     return (
         <Card customClass={" editCity_container"}>
@@ -165,8 +151,8 @@ export default function EditCity() {
                     </div>
                     {city.pois?.length ? (<>
                             <label id={"name"}>Points d'intérêt</label>
-                            {city.pois.map((poi) => (
-                                <Badge key={poi.id} text={poi.name} functionOnClick={(e)=>handleRemovePoi(e,poi.id)}/>
+                            {city.pois.map((poi, index: number) => (
+                                <BadgeEdit text={poi.name} key={index} categoryId={poi.id} functionOnClick={onClickDeletePoi}/>
                             ))}
                         </>
 

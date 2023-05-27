@@ -17,10 +17,10 @@ export default function BadgeEdit({text, customClass, functionOnClick, functionO
                 {text}
             </span>
             <div className="icons_wrapper">
-                <button className="deletePoiButton" onClick={functionOnClick} data-category-id={categoryId}>
+                <button className="deletePoiButton" onClick={functionOnClick} data-id={categoryId}>
                     <CloseIcon/>
                 </button>
-                <button className="deletePoiButton" onClick={functionOnClick2} data-category-id={categoryId}>
+                <button className="deletePoiButton" onClick={functionOnClick2} data-id={categoryId}>
                     <EditIcon/>
                 </button>
             </div>
