@@ -58,6 +58,7 @@ export default function EditCity() {
         id: data?.city.id!,
         name: data?.city.name!,
         photo: data?.city.photo!,
+        pois: [],
     };
 
     data?.city?.poi?.forEach((e) => {
@@ -140,7 +141,7 @@ export default function EditCity() {
                         />
                     </div>
                     <div className={"editCity_form_inputContainer"}>
-                        <label id={"name"}>Photo</label>
+                        <label id={"photo"}>Photo</label>
                         <input
                             type="text"
                             placeholder={city.photo?.toString() || "copier le lien de la photo"}
@@ -156,17 +157,17 @@ export default function EditCity() {
                         Modifier {city.name}
                     </button>
                 </form>
-                <div>
-                    {city.pois?.length ? (<>
-                            <label id={"name"}>Points d'intérêt</label>
-                            {city.pois.map((poi, index: number) => (
-                                <BadgeEdit text={poi.name} key={index} categoryId={poi.id}
-                                           functionOnClick={onClickDeletePoi}/>
-                            ))}
-                        </>)
-                        : null
-                    }
-                </div>
+            </div>
+            <div className="poi_list">
+                {city.pois?.length ? (<>
+                        <h2 className={"title"}>Liste des points d'intérêt</h2>
+                        {city.pois.map((poi, index: number) => (
+                            <BadgeEdit text={poi.name} key={index} categoryId={poi.id}
+                                       functionOnClick={onClickDeletePoi}/>
+                        ))}
+                    </>)
+                    : null
+                }
             </div>
         </Card>
     );
