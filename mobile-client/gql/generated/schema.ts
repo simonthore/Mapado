@@ -16,7 +16,6 @@ export type Scalars = {
 };
 
 export type City = {
-  image: any;
   __typename?: 'City';
   id: Scalars['Float'];
   latitude?: Maybe<Scalars['Float']>;
@@ -205,14 +204,18 @@ export type User = {
   email?: Maybe<Scalars['String']>;
   hashedPassword?: Maybe<Scalars['String']>;
   id: Scalars['Float'];
+  profilePicture?: Maybe<Scalars['String']>;
   role?: Maybe<Scalars['String']>;
   role_id?: Maybe<Scalars['Float']>;
+  userName?: Maybe<Scalars['String']>;
 };
 
 export type UserInput = {
   cities?: InputMaybe<Array<CityId>>;
   email: Scalars['String'];
   password: Scalars['String'];
+  profilePicture?: InputMaybe<Scalars['String']>;
+  userName?: InputMaybe<Scalars['String']>;
 };
 
 export type UserSendPassword = {
@@ -241,7 +244,7 @@ export type CitiesQuery = { __typename?: 'Query', cities: Array<{ __typename?: '
 export type GetProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetProfileQuery = { __typename?: 'Query', profile: { __typename?: 'User', id: number, email?: string | null, role?: string | null } };
+export type GetProfileQuery = { __typename?: 'Query', profile: { __typename?: 'User', id: number, email?: string | null, role?: string | null, userName?: string | null, profilePicture?: string | null } };
 
 export type LoginMutationVariables = Exact<{
   data: UserInput;
@@ -331,6 +334,8 @@ export const GetProfileDocument = gql`
     id
     email
     role
+    userName
+    profilePicture
   }
 }
     `;

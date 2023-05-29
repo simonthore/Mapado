@@ -21,8 +21,8 @@ import * as SecureStore from "expo-secure-store";
 
 export default function LoginScreen({ navigation }) {
   const [credentials, setCredentials] = useState({
-    email: "toto@gmail.com",
-    password: "Abcd@1234",
+    email: "Simon@gmail.com",
+    password: "Test@33000",
   });
 
   

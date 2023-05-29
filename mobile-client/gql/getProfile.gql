@@ -3,5 +3,7 @@ query getProfile {
         id
         email
         role
+        userName
+        profilePicture
     }
 }

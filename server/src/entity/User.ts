@@ -12,6 +12,13 @@ export class UserInput {
     @IsEmail()
     email: string;
 
+    @Field({nullable: true})
+    userName?: string;
+
+    @Field({nullable: true})
+    profilePicture?: string;
+
+
     @Field()
     @MinLength(8)
     @Matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)
@@ -64,6 +71,14 @@ class User {
   @Field({ nullable: true })
   @Column({ nullable: true, type: "text" })
   email?: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true, type: "text" })
+  userName?: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true, type: "text" })
+  profilePicture?: string;
 
   @Field({ nullable: true })
   @Column({ nullable: true, type: "text" })

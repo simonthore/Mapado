@@ -1,5 +1,5 @@
 import {StatusBar} from 'expo-status-bar';
-import { FlatList, StyleSheet, TextInput, View, Text } from 'react-native';
+import { FlatList, StyleSheet, TextInput, View, Text, ImageBackground } from 'react-native';
 import {useCitiesQuery} from "../gql/generated/schema";
 import CityListItem from "../components/CityListItem";
 import React from "react";
@@ -10,11 +10,11 @@ export default function CitiesScreen({navigation}) {
     const [text, onChangeText] = React.useState('');
     const {data} = useCitiesQuery();
     const cities = data?.cities || [];
-    console.log(cities)
-    
-    
+    const image = require('../assets/images/background-blue.jpg');
+
     return (
         <View style={styles.container}>
+            <ImageBackground source={image} resizeMode="cover" style={styles.image}>
             <StatusBar/>
             <TextInput
                 style={styles.input}
@@ -22,13 +22,14 @@ export default function CitiesScreen({navigation}) {
                 value={text}
                 placeholder={"Recherchez un ville"}>
             </TextInput>
-            <Text>Home Screen</Text>
-    
+
             <FlatList
+            style={styles.list}
                 keyExtractor={(item) => item.id.toString()}
                 data={cities}
                 renderItem={({item}) => <CityListItem navigation={navigation} city={item}/>}
                 />
+                </ImageBackground>
         </View>
     );
 }
@@ -37,9 +38,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#3270F4',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingTop: 10,
+
         paddingBottom: 10
     },
     mapadoTitle: {
@@ -59,5 +58,9 @@ const styles = StyleSheet.create({
         padding: 10,
         marginBottom: 10,
         borderRadius: 10,
-    }
+    },
+    list:{
+        width: "60%",
+        marginLeft: "20%",
+    },
 });

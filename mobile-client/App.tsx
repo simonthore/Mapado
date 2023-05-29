@@ -7,59 +7,76 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import CitiesScreen from "./screens/CitiesScreen";
 import CityInfoScreen from "./screens/CityInfoScreen";
 import LoginScreen from "./screens/LoginScreen";
-import UserProfile from './screens/ProfileView';
+// import UserProfile from './screens/ProfileView';
 import UserRegister from './screens/Register';
 import ForgotPassword from "./screens/ForgotPassword";
+import {Button, Image, Pressable, Text, View} from "react-native";
+import {useState} from "react";
+import { useQuery, gql } from "@apollo/client";
+import { useGetProfileQuery } from "./gql/generated/schema";
+import {useEffect} from "react";
 
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-
 function Cities() {
+const {data: currentUser} = useGetProfileQuery({
+    errorPolicy: "ignore",
+})
+// console.log("info currentuser : ",currentUser)
+    const [profilePicture, setProfilePicture] = useState('https://www.w3schools.com/howto/img_avatar.png');
+    const [userName, setUserName] = useState('John Doe');
+
+    useEffect(() => {
+        if (currentUser) {
+        setProfilePicture(currentUser.profile.profilePicture);
+        setUserName(currentUser.profile.userName);
+        }
+    }, [currentUser]);
     return (
-        <Stack.Navigator screenOptions={{headerShown: false}}>
-            <Stack.Screen name="Home" component={CitiesScreen} 
-            options={{
-                headerTitle: "Simon",
-                headerRight: () => (
-                    <Ionicons name={"person-circle-outline"} size={40} color={"#EC5D5B"} style={{marginRight: 20}}/>
-                ),
-            }}/>
-            <Stack.Screen name="Info" component={CityInfoScreen} 
-                    options={{
-                        headerTitle: "Simon",
-                        headerRight: () => (
-                            <Ionicons name={"person-circle-outline"} size={40} color={"#EC5D5B"} style={{marginRight: 20}}/>
-                        ),
-                    }}/>
-            <Stack.Screen name="Profile" component={UserProfile}
-            options={{
-                headerTitle: "Simon",
-                headerRight: () => (
-                    <Ionicons name={"person-circle-outline"} size={40} color={"#EC5D5B"} style={{marginRight: 20}}/>
-                ),
-            }}
+        <Stack.Navigator
+        screenOptions={{
+    headerShown: true,
+    headerStyle: {
+            backgroundColor: 'black',
+        },
+        headerTintColor: '#fff',
+        headerRight: () => (
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Image
+                source={{ uri: profilePicture }}
+                style={{
+                width: 40,
+                height: 40,
+                borderRadius: 20,
+                }}
             />
-            <Stack.Screen name="Forgot" component={ForgotPassword}
-            options={{
-                headerTitle: "Simon",
-                headerRight: () => (
-                    <Ionicons name={"person-circle-outline"} size={40} color={"#EC5D5B"} style={{marginRight: 20}}/>
-                ),
-            }} />
-            <Stack.Screen name="Register" component={UserRegister} 
-               options={{
-                headerTitle: "Simon",
-                headerRight: () => (
-                    <Ionicons name={"person-circle-outline"} size={40} color={"#EC5D5B"} style={{marginRight: 20}}/>
-                ),
-            }}  />
-            
+            <Text
+            style={{
+                color: 'white',
+                fontSize: 12,
+                fontWeight: 'bold',
+                }}
+            > 
+                {userName}
+            </Text>
+            </View>
+        ),
+        }}
+    >
+            <Stack.Screen name="Home" component={CitiesScreen} 
+            />
+            <Stack.Screen name="Info" component={CityInfoScreen} />
+            {/* <Stack.Screen name="Profile" component={UserProfile}/> */}
+            <Stack.Screen name="Forgot" component={ForgotPassword} />
+            <Stack.Screen name="Register" component={UserRegister} />
+            <Stack.Screen name="Login" component={LoginScreen} />
         </Stack.Navigator>
     )
 }
 export default function App() {
+
     return (
         <ApolloProvider client={client}>
             <NavigationContainer>
@@ -76,6 +93,7 @@ export default function App() {
                                 );
                             } else if (route.name === "Cities") {
                                 return (
+                                    
                                     <Ionicons
                                         name={focused ? "airplane" : "airplane-outline"}
                                         size={size}
@@ -93,8 +111,10 @@ export default function App() {
                     })}
                 >
                     {/* nom de la page reliée à chaque composant */}
-                    <Tab.Screen name="Cities" component={Cities}/>
-                    <Tab.Screen name="Login"  component={LoginScreen}/>
+                    <Tab.Screen name="home" component={Cities}
+                    options={{headerShown:false}}/>
+                    <Tab.Screen name="Login"  component={LoginScreen}
+                    />
                 </Tab.Navigator>
             </NavigationContainer>
         </ApolloProvider>
