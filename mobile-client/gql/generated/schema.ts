@@ -241,6 +241,13 @@ export type CitiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type CitiesQuery = { __typename?: 'Query', cities: Array<{ __typename?: 'City', id: number, name: string, photo?: string | null }> };
 
+export type GetCityQueryVariables = Exact<{
+  query: Scalars['String'];
+}>;
+
+
+export type GetCityQuery = { __typename?: 'Query', city: { __typename?: 'City', id: number, name: string, latitude?: number | null, longitude?: number | null, poi?: Array<{ __typename?: 'Poi', id: number, name: string, address: string, latitude?: number | null, longitude?: number | null }> | null } };
+
 export type GetProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -257,6 +264,14 @@ export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type LogoutMutation = { __typename?: 'Mutation', logout: string };
+
+export type UpdateCityMutationVariables = Exact<{
+  data: CityInput;
+  updateCityId: Scalars['Int'];
+}>;
+
+
+export type UpdateCityMutation = { __typename?: 'Mutation', updateCity: { __typename?: 'City', id: number, name: string, latitude?: number | null, longitude?: number | null, users?: Array<{ __typename?: 'User', id: number, email?: string | null }> | null, poi?: Array<{ __typename?: 'Poi', id: number, name: string, address: string }> | null } };
 
 
 export const CreateUserDocument = gql`
@@ -328,6 +343,51 @@ export function useCitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Cit
 export type CitiesQueryHookResult = ReturnType<typeof useCitiesQuery>;
 export type CitiesLazyQueryHookResult = ReturnType<typeof useCitiesLazyQuery>;
 export type CitiesQueryResult = Apollo.QueryResult<CitiesQuery, CitiesQueryVariables>;
+export const GetCityDocument = gql`
+    query getCity($query: String!) {
+  city(name: $query) {
+    id
+    name
+    latitude
+    longitude
+    poi {
+      id
+      name
+      address
+      latitude
+      longitude
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCityQuery__
+ *
+ * To run a query within a React component, call `useGetCityQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCityQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCityQuery({
+ *   variables: {
+ *      query: // value for 'query'
+ *   },
+ * });
+ */
+export function useGetCityQuery(baseOptions: Apollo.QueryHookOptions<GetCityQuery, GetCityQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCityQuery, GetCityQueryVariables>(GetCityDocument, options);
+      }
+export function useGetCityLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCityQuery, GetCityQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCityQuery, GetCityQueryVariables>(GetCityDocument, options);
+        }
+export type GetCityQueryHookResult = ReturnType<typeof useGetCityQuery>;
+export type GetCityLazyQueryHookResult = ReturnType<typeof useGetCityLazyQuery>;
+export type GetCityQueryResult = Apollo.QueryResult<GetCityQuery, GetCityQueryVariables>;
 export const GetProfileDocument = gql`
     query getProfile {
   profile {
@@ -427,3 +487,49 @@ export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<Logou
 export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
+export const UpdateCityDocument = gql`
+    mutation UpdateCity($data: CityInput!, $updateCityId: Int!) {
+  updateCity(data: $data, id: $updateCityId) {
+    id
+    name
+    latitude
+    longitude
+    users {
+      id
+      email
+    }
+    poi {
+      id
+      name
+      address
+    }
+  }
+}
+    `;
+export type UpdateCityMutationFn = Apollo.MutationFunction<UpdateCityMutation, UpdateCityMutationVariables>;
+
+/**
+ * __useUpdateCityMutation__
+ *
+ * To run a mutation, you first call `useUpdateCityMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCityMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCityMutation, { data, loading, error }] = useUpdateCityMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *      updateCityId: // value for 'updateCityId'
+ *   },
+ * });
+ */
+export function useUpdateCityMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCityMutation, UpdateCityMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateCityMutation, UpdateCityMutationVariables>(UpdateCityDocument, options);
+      }
+export type UpdateCityMutationHookResult = ReturnType<typeof useUpdateCityMutation>;
+export type UpdateCityMutationResult = Apollo.MutationResult<UpdateCityMutation>;
+export type UpdateCityMutationOptions = Apollo.BaseMutationOptions<UpdateCityMutation, UpdateCityMutationVariables>;
