@@ -1,12 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {Link, NavLink, useSearchParams} from "react-router-dom";
 import AnimatedCard from "../components/AnimatedCard";
-import ICity from "../interfaces/ICity";
-import {filterBySearch} from "../utils/helpers";
 import {useCitiesQuery} from "../gql/generated/schema";
 import IState from "../interfaces/IState";
 import directions from "../assets/images/directions.png";
-import {ReactComponent as BottomArrow} from "../assets/images/svg/bottom-arrow.svg";
 
 export default function Home() {
     // gets the params from URL
@@ -24,12 +21,31 @@ export default function Home() {
     const [headerShown, setHeaderShown] = useState(true)
 
     useEffect(() => {
+        const storedHeaderShown = localStorage.getItem("headerShown");
+        if (storedHeaderShown) {
+            // Convertir la valeur en booléen
+            setHeaderShown(storedHeaderShown === "true");
+        }
+        const handleBeforeUnload = () => {
+            // Supprimer la clé du stockage local
+            localStorage.removeItem("headerShown");
+        };
+
+        window.addEventListener("beforeunload", handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener("beforeunload", handleBeforeUnload);
+        };
+    }, []);
+
+    useEffect(() => {
         if (headerShown) {
             document.body.style.overflow = "hidden";
         } else (
             document.body.style.overflow = "auto"
         )
-        console.log(headerShown)
+        // Sauvegarder la valeur dans le stockage local
+        localStorage.setItem("headerShown", String(headerShown));
 
     }, [headerShown])
 
@@ -53,14 +69,17 @@ export default function Home() {
         const container = document.getElementById('container'),
             trigger = container?.querySelector('button.trigger');
 
-        container?.classList.toggle('container--open')
+        // container?.classList.toggle('container--open')
         trigger?.classList.toggle('trigger--active')
         setHeaderShown(!headerShown)
     }
 
+    console.log(headerShown)
+
+
     return (
         <>
-            <div id="container">
+            <div id="container" className={!headerShown ? "container--open" : ""}>
                 <header className="intro">
                     <div className="intro__image" style={{display: "flex", alignItems: "center"}}>
                         <img src={directions} alt="character-with-map"/>
