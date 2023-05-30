@@ -24,6 +24,8 @@ export default function Login() {
 
   const navigateCreateAccount = () => navigate("/register");
 
+  const navigateHome = () => navigate("/");
+
   return (
     <>
 
@@ -33,7 +35,6 @@ export default function Login() {
             <path d="M24 12.001H2.914l5.294-5.295-.707-.707L1 12.501l6.5 6.5.707-.707-5.293-5.293H24v-1z"/>
           </svg>
         </button>
-        {/*{currentUser && <Navigate to="/" replace={false} />}*/}
         <Card customClass={" registerCard"}>
           <form
             className={"loginContainer"}
@@ -42,6 +43,7 @@ export default function Login() {
               login({ variables: { data: credentials } })
                 .then(() => {
                   client.resetStore();
+                  navigateHome();
                 })
                 .catch((error) => {
                   console.log(error);
