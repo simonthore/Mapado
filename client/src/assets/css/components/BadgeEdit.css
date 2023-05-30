@@ -1,0 +1,32 @@
+.badgeEditStyle {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    padding: 18px;
+    border-radius: 48px;
+    background-color: #EC5D5C;
+    color: white;
+    gap: 6px;
+    align-items: center;
+    justify-content: center;
+}
+
+.badgeEditStyle .deletePoiButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #173472;
+    border-radius: 50%;
+    padding: 0;
+}
+
+.badgeEditStyle .deletePoiButton svg {
+    fill: #173472;
+    width: 24px;
+    height: 24px;
+}
+
+.icons_wrapper {
+    display: flex;
+    gap: 6px;
+}

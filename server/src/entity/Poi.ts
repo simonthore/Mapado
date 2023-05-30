@@ -7,17 +7,18 @@ import {
 } from "typeorm";
 import { Field, Float, InputType, ObjectType } from "type-graphql";
 import City from "./City";
+import Category from "./Category";
 
 @InputType()
 export class PoiInput {
   @Field()
-  name: string;
+  name?: string;
 
   @Field({ nullable: true })
   description?: string;
 
   @Field({})
-  address: string;
+  address?: string;
 
   @Field({ nullable: true })
   latitude?: number;
@@ -30,6 +31,9 @@ export class PoiInput {
 
   @Field()
   cityId: number;
+
+  @Field()
+  categoryId: number;
 }
 
 @InputType()
@@ -40,8 +44,8 @@ export class UpdatePoiInput {
   @Field({ nullable: true })
   description?: string;
 
-  @Field({})
-  address: string;
+  @Field({ nullable: true })
+  address?: string;
 
   @Field({ nullable: true })
   rating?: number;
@@ -103,7 +107,11 @@ class Poi {
   @Column({ nullable: true, type: "int" })
   phone?: number;
 
-  @Field({ nullable: true })
+  @Field(() => Category, { nullable: true })
+  @ManyToOne(() => Category, (c) => c.poi, { cascade: true, onDelete: "CASCADE" })
+  @JoinTable()
+  category?: Category;
+
   @Column({ nullable: true, type: "int" })
   categoryId?: number;
 

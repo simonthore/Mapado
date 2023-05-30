@@ -1,19 +1,26 @@
 import { useState } from "react";
-import Header from "../components/Header";
 import { useCreateUserMutation } from "../gql/generated/schema";
 import Card from "../components/Card";
+import {useNavigate} from "react-router";
 
 export default function Register() {
   const [userInfo, setUserInfo] = useState({ email: "", password: "" });
   const [passwordShown, setPasswordShown] = useState(false);
-
+  const navigate = useNavigate();
+  const goBack = () => {
+    navigate(-1);
+  }
   const [createUser] = useCreateUserMutation();
 
   const togglePassword = () => setPasswordShown(!passwordShown);
   return (
     <>
-      <Header />
-      <Card customClass={"registerCard"}>
+      <Card customClass={" registerCard"}>
+        <button className={"backButton"} onClick={goBack}>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25">
+            <path d="M24 12.001H2.914l5.294-5.295-.707-.707L1 12.501l6.5 6.5.707-.707-5.293-5.293H24v-1z"/>
+          </svg>
+        </button>
         <form
           className={"registerContainer"}
           onSubmit={(e) => {
