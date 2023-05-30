@@ -1,0 +1,7 @@
+mutation UpdateCity($data: UpdateCityInput!, $updateCityId: Int!) {
+  updateCity(data: $data, id: $updateCityId) {
+    id
+    name
+    photo
+  }
+}
