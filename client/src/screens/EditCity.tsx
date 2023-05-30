@@ -1,22 +1,24 @@
-import {useEffect, useState} from "react";
+import {MouseEventHandler, useEffect, useState} from "react";
 import {
-    useCitiesQuery,
     useFetchCityNameMutation,
-    useDeleteCityMutation, useGetCityQuery, useUpdateCityMutation
+    useGetCityQuery,
+    useUpdateCityMutation,
+    useDeletePoiMutation
 } from "../gql/generated/schema";
 import Card from "../components/Card";
 import ICity from "../interfaces/ICity";
 import AddPoi from "../components/AddPoi";
 import {Link, useParams} from "react-router-dom";
 import {useNavigate} from "react-router";
-import Badge from "../components/Badge";
 import IPoi from "../interfaces/IPoi";
 import Rocket from "../assets/images/rocket.gif"
+import BadgeEdit from "../components/BadgeEdit";
 
 export default function EditCity() {
     //
     // STATES
     //
+    const [animeRocket, setAnimeRocket] = useState(false)
 
     //
     // Navigation
@@ -26,7 +28,6 @@ export default function EditCity() {
     const goBack = () => {
         navigate(-1);
     }
-    const [animeRocket, setAnimeRocket] = useState(false)
 
     //
     // USE EFFECT
@@ -39,31 +40,24 @@ export default function EditCity() {
         return () => clearTimeout(timer);
     })
 
-    // Initialisation de l'objet cityRequested
+    // Initialisation de l'objet city à mettre à jout
     const [cityDataToUpdate, setCityDataToUpdate] = useState({
         name: "",
-        longitude: "",
-        latitude: "",
-        pois: []
+        photo: "",
     });
 
     //
     // MUTATIONS GRAPHQL
     //
-
-    // fonction gql qui récupère la valeur de l'input
-    //REFETCH POSSIBLE ICI
-    const [sendCityName] = useFetchCityNameMutation();
-    const [deleteCity] = useDeleteCityMutation();
-    const [updateCity] = useUpdateCityMutation()
-    const {loading, data} = useGetCityQuery({
+    const [updateCity] = useUpdateCityMutation({onCompleted: () => refetch()})
+    const [deletePoi] = useDeletePoiMutation({onCompleted: () => refetch()})
+    const {loading, data, refetch} = useGetCityQuery({
         variables: {query: cityName!},
     });
     const city: ICity = {
         id: data?.city.id!,
         name: data?.city.name!,
-        longitude: data?.city.longitude,
-        latitude: data?.city.latitude,
+        photo: data?.city.photo!,
         pois: [],
     };
 
@@ -78,30 +72,41 @@ export default function EditCity() {
         city?.pois?.push(poi);
     });
 
-    console.log(city)
     //
     // FONCTIONS ONCLICK
     //
-
-    // Au click du bouton on lance la fonction gql
-    // const onClickSendCityName = () => {
-    //     sendCityName({variables: {data: cityRequested}});
-    // };
-
-    const onClickRemovePoi = (cityId: number) => {
-        deleteCity({variables: {deleteCityId: cityId}});
+    const onClickDeletePoi: MouseEventHandler<HTMLButtonElement> = (event) => {
+        const poiId = event.currentTarget.getAttribute("data-id");
+        if (poiId) {
+            deletePoi({variables: {deletePoiId: parseInt(poiId)}});
+        }
     };
 
-    const handleRemovePoi = (e:any, id: number) => {
-        e.preventDefault()
-        console.log(city.pois)
-
-        if (city.pois) {
-            const newPoiList = city.pois.filter(e => e.id !==id)
+    const handleSubmit = () => {
+        if(cityDataToUpdate.name!=="" && cityDataToUpdate.photo!==""){
+            updateCity({
+                variables: {
+                    updateCityId: city.id,
+                    data: cityDataToUpdate
+                }
+            })
+        }else if(cityDataToUpdate.name!=="" && cityDataToUpdate.photo==="") {
+            updateCity({
+                variables: {
+                    updateCityId: city.id,
+                    data: {name:cityDataToUpdate.name}
+                }
+            })
+        }else if(cityDataToUpdate.name==="" && cityDataToUpdate.photo!=="") {
+            updateCity({
+                variables: {
+                    updateCityId: city.id,
+                    data: {photo:cityDataToUpdate.photo}
+                }
+            })
         }
+
     }
-
-
 
     return (
         <Card customClass={" editCity_container"}>
@@ -120,7 +125,7 @@ export default function EditCity() {
             </div>
             <div className={"editCity_InputsContainer"}>
                 <h2 className={"title"}>Modifier la ville</h2>
-                <form className={"editCity_form"}>
+                <form onSubmit={handleSubmit} className={"editCity_form"}>
                     <div className={"editCity_form_inputContainer"}>
                         <label id={"name"}>Nom</label>
                         <input
@@ -135,43 +140,34 @@ export default function EditCity() {
                             }
                         />
                     </div>
-
                     <div className={"editCity_form_inputContainer"}>
-
-                        <label id={"name"}>Longitude</label>
+                        <label id={"photo"}>Photo</label>
                         <input
                             type="text"
-                            placeholder={city.longitude?.toString()}
-                            value={cityDataToUpdate.longitude}
+                            placeholder={city.photo?.toString() || "copier le lien de la photo"}
+                            value={cityDataToUpdate.photo}
                             onChange={(e) =>
                                 setCityDataToUpdate((prevState) => ({
                                     ...prevState,
-                                    longitude: e.target.value
+                                    photo: e.target.value,
                                 }))
                             }/>
                     </div>
-                    <div className={"editCity_form_inputContainer"}>
-                        <label id={"name"}>Latitude</label>
-                        <input
-                            type="text"
-                            placeholder={city.latitude?.toString()}
-                            value={cityDataToUpdate.latitude}
-                            onChange={(e) =>
-                                setCityDataToUpdate((prevState) => ({
-                                    ...prevState,
-                                    latitude: e.target.value,
-                                }))
-                            }/>
-                    </div>
-                    {city.pois?.length ? (<>
-                            <label id={"name"}>Points d'intérêt</label>
-                            {city.pois.map((poi) => (
-                                <Badge key={poi.id} text={poi.name} functionOnClick={(e)=>handleRemovePoi(e,poi.id)}/>
-                            ))}
-                        </>
-
-                    ) : null}
+                    <button type="submit" className={"tertiaryButton"}>
+                        Modifier {city.name}
+                    </button>
                 </form>
+            </div>
+            <div className="poi_list">
+                {city.pois?.length ? (<>
+                        <h2 className={"title"}>Liste des points d'intérêt</h2>
+                        {city.pois.map((poi, index: number) => (
+                            <BadgeEdit text={poi.name} key={index} categoryId={poi.id}
+                                       functionOnClick={onClickDeletePoi}/>
+                        ))}
+                    </>)
+                    : null
+                }
             </div>
         </Card>
     );

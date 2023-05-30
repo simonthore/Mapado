@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useFetchPoiCoordinatesMutation } from "../gql/generated/schema";
+import {useFetchPoiCoordinatesMutation, useGetCityQuery} from "../gql/generated/schema";
 
 interface PoiProps {
   cityId: number;
@@ -14,11 +14,16 @@ export default function AddPoi({ cityId, cityName }: PoiProps) {
     cityName: "",
   });
 
-  const [sendPoiNameOrAdress] = useFetchPoiCoordinatesMutation();
+  const [sendPoiNameOrAddress] = useFetchPoiCoordinatesMutation({onCompleted: () => refetch()});
+
+    const {loading, data, refetch} = useGetCityQuery({
+        variables: {query: cityName!},
+    });
 
   const onClickSendNewPoi = () => {
-    sendPoiNameOrAdress({ variables: { data: poiRequested } });
+      sendPoiNameOrAddress({ variables: { data: poiRequested } });
     console.log("data envoyée au back", poiRequested);
+      refetch(); // Rafraîchir les données après la mutation
   };
 
   return (
