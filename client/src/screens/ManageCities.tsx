@@ -13,6 +13,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router";
 import Edit from "../assets/images/edit.gif";
+import AddCity from "../components/AddCity";
 
 export default function AddManageCities() {
   //
@@ -36,11 +37,6 @@ export default function AddManageCities() {
     return () => clearTimeout(timer);
   });
 
-  // Initialisation de l'objet cityRequested
-  const [cityRequested, setCityRequested] = useState({
-    cityName: "",
-  });
-
   //
   // MUTATIONS GRAPHQL
   //
@@ -61,12 +57,6 @@ export default function AddManageCities() {
     navigate(-1);
   };
 
-  // Au click du bouton on lance la fonction gql
-  const onClickSendCityName = () => {
-    sendCityName({ variables: { data: cityRequested } });
-    console.log("click");
-  };
-
   const onClickDeleteCity = (cityId: number) => {
     deleteCity({ variables: { deleteCityId: cityId } });
   };
@@ -80,17 +70,7 @@ export default function AddManageCities() {
           </svg>
         </button>
         <h2 className={"title"}>Ajouter une ville</h2>
-        <div>
-          <input
-            type="text"
-            placeholder="Nom de la ville"
-            value={cityRequested.cityName}
-            onChange={(e) => setCityRequested({ cityName: e.target.value })}
-          />
-          <button onClick={onClickSendCityName} className={"tertiaryButton"}>
-            Ajouter
-          </button>
-        </div>
+        <AddCity />
       </div>
 
       <div className={"manageCitiesContainer"}>
