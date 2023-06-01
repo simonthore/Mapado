@@ -1,0 +1,18 @@
+.country_link {
+    border-radius: 40px;
+    position: relative;
+    max-width: 100px;
+    text-align: center;
+    justify-content: center;
+    color: #fff;
+    background-color: #1976d2;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.admin_wrapper a.country_link {
+    background-color: #EC5D5C;
+}

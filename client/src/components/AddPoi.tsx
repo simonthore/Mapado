@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { useFetchPoiCoordinatesMutation } from "../gql/generated/schema";
+import {
+  useFetchPoiCoordinatesMutation,
+  useGetCityQuery,
+} from "../gql/generated/schema";
 import { ApolloError } from "@apollo/client";
 import checkIcon from "../assets/svg/check.svg";
 import errorIcon from "../assets/svg/error.svg";
@@ -43,6 +46,13 @@ export default function AddPoi({ cityId, cityName }: PoiProps) {
   const [showToast, setShowToast] = useState(false);
 
   const [sendPoiNameOrAdress] = useFetchPoiCoordinatesMutation();
+  const [sendPoiNameOrAddress] = useFetchPoiCoordinatesMutation({
+    onCompleted: () => refetch(),
+  });
+
+  const { loading, data, refetch } = useGetCityQuery({
+    variables: { query: cityName! },
+  });
 
   const onClickSendNewPoi = () => {
     sendPoiNameOrAdress({ variables: { data: poiRequested } })
@@ -70,6 +80,7 @@ export default function AddPoi({ cityId, cityName }: PoiProps) {
       })
       .finally(() => {
         setShowToast(true);
+        refetch();
       });
   };
 

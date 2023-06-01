@@ -7,6 +7,7 @@ import City, {
 import datasource from "../db";
 import { ApolloError } from "apollo-server-errors";
 import { env } from "../environment";
+import Poi from "../entity/Poi";
 
 @Resolver(City)
 export class CityResolver {
@@ -33,6 +34,7 @@ export class CityResolver {
   async createCity(@Arg("data") data: CityInput): Promise<City> {
     return await datasource.getRepository(City).save(data);
   }
+
   @Mutation(() => Boolean)
   async deleteCity(@Arg("id", () => Int) id: number): Promise<boolean> {
     const { affected } = await datasource.getRepository(City).delete(id);
@@ -43,15 +45,16 @@ export class CityResolver {
   @Mutation(() => City)
   async updateCity(
     @Arg("id", () => Int) id: number,
-    @Arg("data") { name, photo, longitude, latitude }: CityInput
-  ): Promise<City> {
-    const { affected } = await datasource
-      .getRepository(City)
-      .update(id, { name, photo, longitude, latitude });
+    @Arg("data") data: UpdateCityInput
+  ): Promise<City | null> {
+    const cityToUpdate = await datasource.getRepository(City).findOne({
+      where: { id },
+    });
+    const { affected } = await datasource.getRepository(City).update(id, data);
 
     if (affected === 0) throw new ApolloError("City not found", "NOT_FOUND");
 
-    return { id, name };
+    return cityToUpdate;
   }
 
   // On récupère le string du front

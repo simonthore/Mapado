@@ -28,7 +28,11 @@ input {
     box-sizing: content-box;
 }
 
-.primaryButton {
+.passwordInput {
+    width: 18rem;
+}
+
+.primaryButtonEmailPassword {
     height: 2.5rem;
     width: 15rem;
     background-color: #FFFFFF;

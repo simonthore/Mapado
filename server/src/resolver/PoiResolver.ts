@@ -10,7 +10,7 @@ export class PoiResolver {
   async Pois(): Promise<Poi[]> {
     return await datasource
       .getRepository(Poi)
-      .find({ relations: { city: true } });
+      .find({ relations: { city: true, category: true } });
   }
 
   @Mutation(() => Poi)
@@ -25,16 +25,22 @@ export class PoiResolver {
     return true;
   }
 
-  @Mutation(() => String)
+  @Mutation(() => Poi)
   async updatePoi(
     @Arg("id", () => Int) id: number,
-    @Arg("data") data: UpdatePoiInput
-  ): Promise<string> {
-    const { affected } = await datasource.getRepository(Poi).update(id, data);
+    @Arg("data") { name, address, description }: UpdatePoiInput
+  ): Promise<Poi | null> {
+    const poiToUpdate = await datasource.getRepository(Poi).findOne({
+      where: { id },
+      relations: { category: true, city: true },
+    });
+    const { affected } = await datasource
+      .getRepository(Poi)
+      .update(id, { name, address, description });
 
     if (affected === 0) throw new ApolloError("Poi not found", "NOT_FOUND");
 
-    return "Poi updated";
+    return poiToUpdate;
   }
 
   // On récupère le string du front

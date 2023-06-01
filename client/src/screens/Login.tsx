@@ -1,6 +1,9 @@
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useGetProfileQuery, useLoginMutation } from "../gql/generated/schema";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useGetProfileQuery, useLoginMutation } from "../gql/generated/schema";
 import Card from "../components/Card";
 import { useNavigate } from "react-router";
@@ -14,6 +17,11 @@ export default function Login() {
   const navigate = useNavigate();
 
   const navigateEmailPassword = () => navigate("/password/email");
+  const goBack = () => {
+    navigate(-1);
+  };
+
+  const navigateEmailPassword = () => navigate("/password/email");
 
   const togglePassword = () => setPasswordShown(!passwordShown);
 
@@ -21,6 +29,9 @@ export default function Login() {
 
   return (
     <>
+      <Link to="/">
+        <Header />
+      </Link>
       <div className={"loginStyle"}>
         {currentUser && <Navigate to="/" replace={false} />}
         <Card customClass={"registerCard"}>
