@@ -1,8 +1,8 @@
-import { Arg, Int, Mutation, Query, Resolver } from "type-graphql";
-import Poi, { PoiInput, UpdatePoiInput, findPOI } from "../entity/Poi";
+import {Arg, Int, Mutation, Query, Resolver} from "type-graphql";
+import Poi, {PoiInput, UpdatePoiInput, findPOI} from "../entity/Poi";
 import datasource from "../db";
-import { ApolloError } from "apollo-server-errors";
-import { env } from "../env";
+import {ApolloError} from "apollo-server-errors";
+import {env} from "../env";
 
 @Resolver(Poi)
 export class PoiResolver {
@@ -13,17 +13,17 @@ export class PoiResolver {
       .find({ relations: { city: true, category: true } });
   }
 
-  @Mutation(() => Poi)
-  async createPoi(@Arg("data") data: PoiInput): Promise<Poi> {
-    return await datasource.getRepository(Poi).save(data);
-  }
+    @Mutation(() => Poi)
+    async createPoi(@Arg("data") data: PoiInput): Promise<Poi> {
+        return await datasource.getRepository(Poi).save(data);
+    }
 
-  @Mutation(() => Boolean)
-  async deletePoi(@Arg("id", () => Int) id: number): Promise<boolean> {
-    const { affected } = await datasource.getRepository(Poi).delete(id);
-    if (affected === 0) throw new ApolloError("Poi not found", "NOT_FOUND");
-    return true;
-  }
+    @Mutation(() => Boolean)
+    async deletePoi(@Arg("id", () => Int) id: number): Promise<boolean> {
+        const {affected} = await datasource.getRepository(Poi).delete(id);
+        if (affected === 0) throw new ApolloError("Poi not found", "NOT_FOUND");
+        return true;
+    }
 
   @Mutation(() => Poi)
   async updatePoi(
@@ -38,15 +38,15 @@ export class PoiResolver {
       .getRepository(Poi)
       .update(id, { name, address, description });
 
-    if (affected === 0) throw new ApolloError("Poi not found", "NOT_FOUND");
+        if (affected === 0) throw new ApolloError("Poi not found", "NOT_FOUND");
 
     return poiToUpdate;
   }
 
-  // On récupère le string du front
-  // On fetch l'objet POI de l'API OpenCage en fonction du string du front
-  // On stocke nom, lat, long et l'adresse dans un objet
-  // On enregistre l'objet dans notre bdd
+    // On récupère le string du front
+    // On fetch l'objet POI de l'API OpenCage en fonction du string du front
+    // On stocke nom, lat, long et l'adresse dans un objet
+    // On enregistre l'objet dans notre bdd
 
   @Mutation(() => String)
   async fetchPoiCoordinates(
@@ -64,23 +64,23 @@ export class PoiResolver {
       method: "GET",
     };
 
-    let urlPoiAPI =
-      "https://api.opencagedata.com/geocode/v1/json?q=" +
-      poiNameOrAdress +
-      " " +
-      cityName +
-      "&key=" +
-      env.REACT_APP_POI_API_KEY +
-      "&language=fr&pretty=1&countrycode=fr";
+        let urlPoiAPI =
+            "https://api.opencagedata.com/geocode/v1/json?q=" +
+            poiNameOrAdress +
+            " " +
+            cityName +
+            "&key=" +
+            env.REACT_APP_POI_API_KEY +
+            "&language=fr&pretty=1&countrycode=fr";
 
-    const fetchPoi = await fetch(urlPoiAPI, optionsPoiAPI)
-      .then((res) => res.json())
-      .then((data) => {
-        return data.results.shift();
-      })
-      .catch((err) => {
-        console.log(`error while fetching Poi object ${err}`);
-      });
+        const fetchPoi = await fetch(urlPoiAPI, optionsPoiAPI)
+            .then((res) => res.json())
+            .then((data) => {
+                return data.results.shift();
+            })
+            .catch((err) => {
+                console.log(`error while fetching Poi object ${err}`);
+            });
 
     const poiData = {
       name: fetchPoi.formatted.split(", ").shift(),

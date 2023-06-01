@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import {
-  useCitiesQuery,
-  useFetchCityNameMutation,
-  useDeleteCityMutation,
-  useCreateUserMutation,
-  useFetchPoiCoordinatesMutation,
+    useCitiesQuery,
+    useFetchCityNameMutation,
+    useDeleteCityMutation,
+    useCreateUserMutation,
 } from "../gql/generated/schema";
 import Card from "../components/Card";
 import ICity from "../interfaces/ICity";
