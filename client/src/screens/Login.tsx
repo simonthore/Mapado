@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { Navigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
-import { useGetProfileQuery, useLoginMutation } from "../gql/generated/schema";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useGetProfileQuery, useLoginMutation } from "../gql/generated/schema";
@@ -16,7 +14,6 @@ export default function Login() {
 
   const navigate = useNavigate();
 
-  const navigateEmailPassword = () => navigate("/password/email");
   const goBack = () => {
     navigate(-1);
   };
@@ -29,12 +26,14 @@ export default function Login() {
 
   return (
     <>
-      <Link to="/">
-        <Header />
-      </Link>
       <div className={"loginStyle"}>
-        {currentUser && <Navigate to="/" replace={false} />}
-        <Card customClass={"registerCard"}>
+        <button className={"backButton"} onClick={goBack}>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25">
+            <path d="M24 12.001H2.914l5.294-5.295-.707-.707L1 12.501l6.5 6.5.707-.707-5.293-5.293H24v-1z" />
+          </svg>
+        </button>
+        {/*{currentUser && <Navigate to="/" replace={false} />}*/}
+        <Card customClass={" registerCard"}>
           <form
             className={"loginContainer"}
             onSubmit={(e) => {
@@ -75,6 +74,7 @@ export default function Login() {
             {/*  */}
             <label htmlFor="password">
               <input
+                className={"passwordInput"}
                 id="password"
                 type={passwordShown ? "text" : "password"}
                 placeholder="Mot de passe"
@@ -82,22 +82,19 @@ export default function Login() {
                 onChange={(e) =>
                   setCredentials({ ...credentials, password: e.target.value })
                 }
-              ></input>
-              <div>
-                <button
-                  type="button"
-                  onClick={togglePassword}
-                  style={{ color: "#EC5D5C" }}
-                >
-                  Afficher le mot de passe
-                </button>
-              </div>
-              {/*  */}
+              ></input>{" "}
+              <button
+                type="button"
+                onClick={togglePassword}
+                style={{ color: "#EC5D5C" }}
+              >
+                {passwordShown ? <VisibilityOffIcon /> : <VisibilityIcon />}
+              </button>
             </label>
             <div className={"loginButtonsContainer"}>
               <button
                 type="button"
-                className={"primaryButton"}
+                className={"primaryButtonEmailPassword"}
                 onClick={navigateEmailPassword}
               >
                 Mot de passe oublié ?
