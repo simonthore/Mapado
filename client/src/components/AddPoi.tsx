@@ -45,17 +45,14 @@ export default function AddPoi({ cityId, cityName }: PoiProps) {
   });
   const [showToast, setShowToast] = useState(false);
 
-  const [sendPoiNameOrAdress] = useFetchPoiCoordinatesMutation();
-  const [sendPoiNameOrAddress] = useFetchPoiCoordinatesMutation({
-    onCompleted: () => refetch(),
-  });
+  const [sendPoiNameOrAddress] = useFetchPoiCoordinatesMutation();
 
-  const { loading, data, refetch } = useGetCityQuery({
+  const { refetch } = useGetCityQuery({
     variables: { query: cityName! },
   });
 
   const onClickSendNewPoi = () => {
-    sendPoiNameOrAdress({ variables: { data: poiRequested } })
+    sendPoiNameOrAddress({ variables: { data: poiRequested } })
       .then((res) => {
         /* console.log("log du then", res); */
 
