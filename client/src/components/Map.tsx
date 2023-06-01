@@ -1,7 +1,6 @@
 import { MapContainer, TileLayer, ZoomControl } from "react-leaflet";
 import "../App.css";
 import "leaflet/dist/leaflet.css";
-import Card from "./Card";
 
 interface MapProps {
   longitude: number | null | undefined;
