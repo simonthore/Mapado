@@ -1,19 +1,21 @@
 .infoCity_container {
-    margin-top: 11rem;
+    margin-top: 8rem;
 }
 
 .backButton {
     height: 2.5rem;
     display: flex;
     align-items: center;
-    padding: 5px;
-    color: white;
+    padding: 10px 20px;
+    background-color: #173472;
+    border-radius: 20px;
+    z-index: 999;
     position: absolute;
-    top: 8rem;
-    left: 4rem;
+    top: 9.2rem;
+    left: 2rem;
 }
 
 .backButton svg {
-    width: 50px;
+    width: 30px;
     fill: #EC5D5C;
 }
