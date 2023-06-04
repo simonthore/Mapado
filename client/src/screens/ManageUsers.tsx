@@ -2,21 +2,10 @@ import React, { useEffect, useState } from "react";
 import "../assets/css/screens/ManagerUsers.css";
 import {
   useGetProfileQuery,
+  useLogoutMutation,
   useUpdateUserRoleMutation,
   useUsersQuery,
 } from "../gql/generated/schema";
-
-// const users = [
-//     {
-//         email: "titi@test.com"
-//     },
-//     {
-//         email: "tata@test.com"
-//     },
-//     {
-//         email: "toto@test.com"
-//     }
-// ]
 
 const roles = ["visitor", "cityAdmin", "superAdmin"];
 
@@ -30,8 +19,10 @@ export default function ManageUsers() {
 
   const [updateUser] = useUpdateUserRoleMutation();
 
-  const currentUser = useGetProfileQuery();
-  console.log("currentUser", currentUser.data?.profile);
+  const [logout] = useLogoutMutation();
+
+  const { data: currentUser, client } = useGetProfileQuery();
+  console.log("currentUser", currentUser?.profile);
 
   const onClickRoleChange = (email: string, role: string): void => {
     setEmail(email);
@@ -42,11 +33,10 @@ export default function ManageUsers() {
 
   return (
     <div className={"manageCitiesContainer"}>
-      <h2 className={"title"}>Gérer les utilisateurs</h2>
       <div className="max-w-screen-xl mx-auto px-5 min-h-screen">
         <div className="grid divide-y divide-neutral-200 max-w-xl mx-auto mt-8">
           {users.map((user) => {
-            console.log(user)
+            console.log(user);
             return (
               <div className="py-5" key={user.email}>
                 <details className="group">

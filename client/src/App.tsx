@@ -5,7 +5,7 @@ import Login from "./screens/Login";
 import Home from "./screens/Home";
 import Header from "./components/Header";
 import ManageCities from "./screens/ManageCities";
-// import ManageUsers from "./screens/ManageUsers";
+import ManageUsers from "./screens/ManageUsers";
 import Map from "./components/Map";
 import "./App.css";
 import {useCitiesQuery} from "./gql/generated/schema";
@@ -57,6 +57,7 @@ function App() {
                     <Route path="/edit-city/:cityName" element={<EditCity/>}/>
                     <Route path="/admin" element={<Admin/>}/>
                     <Route path="/manage-categories" element={<ManageCategories/>}/>
+                    <Route path="/manage-users" element={<ManageUsers/>}/>
                 </Routes>
             </div>
         </>

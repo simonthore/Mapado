@@ -132,6 +132,9 @@ form {
 .demos a {
     color: #EC5D5C;
 }
+.demos button {
+    color: #EC5D5C;
+}
 
 .trigger {
     position: relative;

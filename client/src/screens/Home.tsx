@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link, NavLink, useSearchParams } from "react-router-dom";
+import { Link, NavLink, redirect, useSearchParams } from "react-router-dom";
 import AnimatedCard from "../components/AnimatedCard";
-import { useCitiesQuery, useGetProfileQuery } from "../gql/generated/schema";
+import {
+  useCitiesQuery,
+  useGetProfileQuery,
+  useLogoutMutation,
+} from "../gql/generated/schema";
 import IState from "../interfaces/IState";
 import directions from "../assets/images/directions.png";
 
@@ -12,6 +16,8 @@ export default function Home() {
 
   const { loading: loadingCities, data, refetch } = useCitiesQuery();
 
+  const [logout] = useLogoutMutation();
+
   const cities = data?.cities ?? [];
   // State to manage both URL query & cities to display
   const [state, setState] = useState<IState>({
@@ -19,7 +25,7 @@ export default function Home() {
     list: [],
   });
 
-  const { data: currentUser } = useGetProfileQuery({
+  const { data: currentUser, client } = useGetProfileQuery({
     errorPolicy: "ignore",
   });
   const currentUserRole = currentUser?.profile?.role;
@@ -104,7 +110,19 @@ export default function Home() {
                         Admin
                       </Link>
                     )}
-                    <Link to="/login">Connexion</Link>
+                    {currentUser ? (
+                      <button
+                        onClick={async () => {
+                          await logout();
+                          await client.resetStore();
+                        }}
+                      >
+                        {" "}
+                        Se déconnecter
+                      </button>
+                    ) : (
+                      <Link to="/login">Connexion</Link>
+                    )}
                   </div>
                   <div className="search-input">
                     <form>
