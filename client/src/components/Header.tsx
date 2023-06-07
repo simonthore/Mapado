@@ -12,6 +12,7 @@ export default function Header() {
   const { data: currentUser, client } = useGetProfileQuery({
     errorPolicy: "ignore",
   });
+  const currentUserRole = currentUser?.profile?.role;
 
   const changeNavStyle = () => {
     if (window.scrollY >= 10) {
@@ -32,12 +33,17 @@ export default function Header() {
       </Link>
 
       <div className="intro__subtitle">
-        <div className="codrops-links">
+      <div className="codrops-links">
           <div className="intro__description">
             <p>Locate, discover & share !</p>
             <div className="demos">
               <Link to="/cities-list">Accueil</Link>
-              <Link to="/admin">Admin</Link>
+              {(currentUserRole === "SuperAdmin" ||
+                      currentUserRole === "cityAdmin") && (
+                      <Link to="/admin">
+                        Admin
+                      </Link>
+                      )}
               {currentUser ? (
                 <button
                   onClick={async () => {

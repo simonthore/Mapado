@@ -35,7 +35,7 @@ export default function Login() {
             <path d="M24 12.001H2.914l5.294-5.295-.707-.707L1 12.501l6.5 6.5.707-.707-5.293-5.293H24v-1z"/>
           </svg>
         </button>
-        <Card customClass={" registerCard"}>
+        <Card customClass={"registerCard"}>
           <form
             className={"loginContainer"}
             onSubmit={(e) => {
@@ -43,10 +43,10 @@ export default function Login() {
               login({ variables: { data: credentials } })
                 .then(() => {
                   client.resetStore();
-                  navigateHome();
+                  console.log(currentUser?.profile.role)
                 })
                 .catch((error) => {
-                  console.log(error);
+                  console.error(error);
                   toast.error("Invalid credentials", {
                     style: {
                       border: "3px solid #EC5D5C",
