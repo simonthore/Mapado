@@ -6,12 +6,12 @@ import {env} from "../env";
 
 @Resolver(Poi)
 export class PoiResolver {
-    @Query(() => [Poi])
-    async Pois(): Promise<Poi[]> {
-        return await datasource
-            .getRepository(Poi)
-            .find({relations: {city: true, category: true}});
-    }
+  @Query(() => [Poi])
+  async Pois(): Promise<Poi[]> {
+    return await datasource
+      .getRepository(Poi)
+      .find({ relations: { city: true, category: true } });
+  }
 
     @Mutation(() => Poi)
     async createPoi(@Arg("data") data: PoiInput): Promise<Poi> {
@@ -25,34 +25,44 @@ export class PoiResolver {
         return true;
     }
 
-    @Mutation(() => Poi)
-    async updatePoi(
-        @Arg("id", () => Int) id: number,
-        @Arg("data") {name, address, description}: UpdatePoiInput
-    ): Promise<Poi | null> {
-        const poiToUpdate = await datasource.getRepository(Poi).findOne({
-            where: {id},
-            relations: {category: true, city: true},
-        });
-        const {affected} = await datasource.getRepository(Poi).update(id, {name, address, description});
+  @Mutation(() => Poi)
+  async updatePoi(
+    @Arg("id", () => Int) id: number,
+    @Arg("data") { name, address, description }: UpdatePoiInput
+  ): Promise<Poi | null> {
+    const poiToUpdate = await datasource.getRepository(Poi).findOne({
+      where: { id },
+      relations: { category: true, city: true },
+    });
+    const { affected } = await datasource
+      .getRepository(Poi)
+      .update(id, { name, address, description });
 
         if (affected === 0) throw new ApolloError("Poi not found", "NOT_FOUND");
 
-        return poiToUpdate;
-    }
+    return poiToUpdate;
+  }
 
     // On récupère le string du front
     // On fetch l'objet POI de l'API OpenCage en fonction du string du front
     // On stocke nom, lat, long et l'adresse dans un objet
     // On enregistre l'objet dans notre bdd
 
-    @Mutation(() => String)
-    async fetchPoiCoordinates(@Arg("data") data: findPOI): Promise<string> {
-        const {poiNameOrAdress, cityName, cityId} = data;
+  @Mutation(() => String)
+  async fetchPoiCoordinates(
+    @Arg("data") data: findPOI
+  ): Promise<string | ApolloError> {
+    const { poiNameOrAdress, cityName, cityId } = data;
 
-        let optionsPoiAPI = {
-            method: "GET",
-        };
+    if (poiNameOrAdress === "") {
+      return new ApolloError("Entrez un point d'intêret svp !");
+    } else if (poiNameOrAdress.length <= 2) {
+      return new ApolloError("Entrez un point d'intérêt correct svp !");
+    }
+
+    let optionsPoiAPI = {
+      method: "GET",
+    };
 
         let urlPoiAPI =
             "https://api.opencagedata.com/geocode/v1/json?q=" +
@@ -72,22 +82,29 @@ export class PoiResolver {
                 console.log(`error while fetching Poi object ${err}`);
             });
 
-        const poiData = {
-            name: fetchPoi.formatted.split(", ").shift(),
-            latitude: fetchPoi.geometry.lat,
-            longitude: fetchPoi.geometry.lng,
-            address: fetchPoi.formatted.split(",").slice(1, 3).join(","),
-            // refacto possible de la façon dont on récupère l'adresse
-            // address: getPoiAddress(street, postalcode, city),
-            cityId: cityId,
-        };
-        console.log("Log de l'adresse complete du poi", fetchPoi.formatted);
+    const poiData = {
+      name: fetchPoi.formatted.split(", ").shift(),
+      latitude: fetchPoi.geometry.lat,
+      longitude: fetchPoi.geometry.lng,
+      address: fetchPoi.formatted.split(",").slice(1, 3).join(","),
+      // refacto possible de la façon dont on récupère l'adresse
+      // address: getPoiAddress(street, postalcode, city),
+      cityId: cityId,
+    };
 
-        if (poiData.name !== cityName) {
-            await datasource.getRepository(Poi).save(poiData);
-        } else {
-            console.error("Ce POI n'existe pas, tenter une autre addresse !");
-        }
-        return poiNameOrAdress;
+    const PoiExists = await datasource
+      .getRepository(Poi)
+      .findOne({ where: { name: poiData.name } });
+
+    // console.log("Log de l'adresse complete du poi", fetchPoi.formatted);
+
+    if (!PoiExists && poiData.name !== cityName) {
+      await datasource.getRepository(Poi).save(poiData);
+      return "Le point d'intérêt a bien été ajouté.";
+    } else {
+      return new ApolloError(
+        "Ce point d'intérêt existe déjà ou n'est pas conforme."
+      );
     }
+  }
 }

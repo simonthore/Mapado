@@ -5,15 +5,14 @@ import Login from "./screens/Login";
 import Home from "./screens/Home";
 import Header from "./components/Header";
 import ManageCities from "./screens/ManageCities";
-import Map from "./components/Map";
 import "./App.css";
 import {useCitiesQuery} from "./gql/generated/schema";
 import Register from "./screens/Register";
 import PasswordReset from "./screens/PasswordReset";
 import EmailPassword from "./screens/EmailPassword";
 import InfoCity from "./screens/InfoCity";
-import {useEffect, useState} from "react";
-import {useLocation} from "react-router";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router";
 import EditCity from "./screens/EditCity";
 import CitiesList from "./screens/CitiesList";
 import Admin from "./screens/Admin";
@@ -25,41 +24,42 @@ const styles: CSS.Properties = {
 };
 
 function App() {
-    const {loading: loadingCities, data} = useCitiesQuery();
-    const [showHeader, setShowHeader] = useState(false);
-    const location = useLocation();
+  const { loading: loadingCities, data } = useCitiesQuery();
+  const [showHeader, setShowHeader] = useState(false);
+  const location = useLocation();
 
-    useEffect(() => {
-        const path = window.location.pathname;
-        setShowHeader(path !== "/");
-    }, [location]);
+  useEffect(() => {
+    const path = window.location.pathname;
+    setShowHeader(path !== "/");
+  }, [location]);
 
-    // const cities = data?.cities ?? [];
+  // const cities = data?.cities ?? [];
 
-    return (
-        <>
-            {/*<Toaster position="top-center"/>*/}
-            <div style={styles}>
-                {showHeader && <Header/>}
-                <Routes>
-                    <Route path="/" element={<Home/>}/>
-                    <Route path="/login" element={<Login/>}/>
-                    <Route path="/register" element={<Register/>}/>
-                    <Route path="/password/email" element={<EmailPassword/>}/>
-                    <Route
-                        path="/password/reset/:id/:token"
-                        element={<PasswordReset/>}
-                    />
-                    <Route path="/cities-list" element={<CitiesList/>}/>
-                    <Route path="/info/:cityName" element={<InfoCity/>}/>
-                    <Route path="/manage-cities" element={<ManageCities/>}/>
-                    <Route path="/edit-city/:cityName" element={<EditCity/>}/>
-                    <Route path="/admin" element={<Admin/>}/>
-                    <Route path="/manage-categories" element={<ManageCategories/>}/>
-                </Routes>
-            </div>
-        </>
-    );
+  return (
+    <>
+      {/*<Toaster position="top-center"/>*/}
+      <div style={styles}>
+        {showHeader && <Header />}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/password/email" element={<EmailPassword />} />
+          <Route
+            path="/password/reset/:id/:token"
+            element={<PasswordReset />}
+          />
+          <Route path="/cities-list" element={<CitiesList />} />
+          <Route path="/info/:cityName" element={<InfoCity />} />
+          <Route path="/manage-cities" element={<ManageCities />} />
+          <Route path="/edit-city/:cityName" element={<EditCity />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/manage-categories" element={<ManageCategories />} />
+        </Routes>
+      </div>
+    </>
+  );
+
 }
 
 export default App;

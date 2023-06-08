@@ -38,5 +38,4 @@
     height: calc(100vh - 138px - 4rem);
     width: fit-content;
     padding: 0;
-    overflow: hidden;
 }
