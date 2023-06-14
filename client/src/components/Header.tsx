@@ -41,8 +41,8 @@ export default function Header() {
             <p>Locate, discover & share !</p>
             <div className="demos">
               <Link to="/cities-list">Accueil</Link>
-              {(currentUserRole === "SuperAdmin" ||
-                      currentUserRole === "cityAdmin") && (
+              {(currentUserRole === "Super Administrator" ||
+                      currentUserRole === "City Administrator") && (
                       <Link to="/admin">
                         Admin
                       </Link>

@@ -11,10 +11,10 @@ import { IsEmail, Matches, MinLength } from "class-validator";
 import { argon2id, hash, verify } from "argon2";
 
 export enum UserRole {
-  SUPERADMIN = "superAdmin",
-  CITYADMIN = "cityAdmin",
-  POICREATOR = "POICreator",
-  VISITOR = "visitor",
+  SUPERADMIN = "Super Administrator",
+  CITYADMIN = "City Administrator",
+  POICREATOR = "POI Creator",
+  VISITOR = "Visitor",
 }
 
 @InputType()
@@ -77,10 +77,6 @@ class User {
   @Field({ nullable: true })
   @Column({ nullable: true, type: "date" })
   created_at: number;
-
-  // @Field({ nullable: true })
-  // @Column({ nullable: true, type: "int" })
-  // role_id?: number;
 
   @Field({ nullable: true })
   @Column({ nullable: true, type: "text" })

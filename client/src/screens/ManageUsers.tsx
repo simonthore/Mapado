@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "../assets/css/screens/ManagerUsers.css";
 import {
   useGetProfileQuery,
   useLogoutMutation,
@@ -7,23 +6,23 @@ import {
   useUsersQuery,
 } from "../gql/generated/schema";
 
-const roles = ["visitor", "cityAdmin", "superAdmin"];
+const roles = ["Visitor", "City Administrator", "Super Administrator"];
 
 export default function ManageUsers() {
   const [email, setEmail] = useState("");
   const [userRole, setUserRole] = useState("");
-  const [role, setRole] = useState("");
-
+  
   const { loading: loadingUsers, data, refetch } = useUsersQuery();
   const users = data?.users ?? [];
-
+  
   const [updateUser] = useUpdateUserRoleMutation();
-
+  
   const [logout] = useLogoutMutation();
-
+  
   const { data: currentUser, client } = useGetProfileQuery();
-  console.log("currentUser", currentUser?.profile);
-
+  const currentUserRole = currentUser?.profile?.role;
+  const [role, setRole] = useState(currentUserRole);
+  
   const onClickRoleChange = (email: string, role: string): void => {
     setEmail(email);
     setUserRole(role);
@@ -32,7 +31,7 @@ export default function ManageUsers() {
   };
 
   return (
-    <div className={"manageCitiesContainer"}>
+    <div className={"manageUsersContainer"}>
       <div className="max-w-screen-xl mx-auto px-5 min-h-screen">
         <div className="grid divide-y divide-neutral-200 max-w-xl mx-auto mt-8">
           {users.map((user) => {
@@ -41,8 +40,8 @@ export default function ManageUsers() {
               <div className="py-5" key={user.email}>
                 <details className="group">
                   <summary className="flex justify-between items-center font-medium cursor-pointer list-none">
-                    <div className={"manageOneCityContainer"}>
-                      <p className={"cityLabel"}>
+                    <div className={"manageOneUserContainer"}>
+                      <p className={"userLabel"}>
                         {user.email} is a {user.role}
                       </p>
                     </div>
@@ -63,11 +62,14 @@ export default function ManageUsers() {
                     </span>
                   </summary>
                   <h2 className={"title"}>Assigner un rôle à un utilisateur</h2>
-
                   {roles.map((role, index) => {
                     return (
-                      <div key={index}>
-                        <option key={index} value={role}>
+                      <div key={index} className={"editUser_container"}>
+                        <option
+                          className={"editUser_label"}
+                          key={index}
+                          value={role}
+                        >
                           {role}
                         </option>
                         <button
@@ -77,7 +79,7 @@ export default function ManageUsers() {
                               onClickRoleChange(user.email, role);
                           }}
                         >
-                          Submit
+                          Select
                         </button>
                       </div>
                     );

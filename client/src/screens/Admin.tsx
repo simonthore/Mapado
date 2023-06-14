@@ -25,18 +25,18 @@ export default function Admin() {
           </svg>
         </button>
         <h1 className={"title"}>Admin</h1>
-        {currentUserRole === "superAdmin" && (
+        {currentUserRole === "Super Administrator" && (
           <NavLink to={`/manage-cities`} className="country_link">
             Ville
           </NavLink>
         )}
-        {currentUserRole === "superAdmin" && (
+        {currentUserRole === "Super Administrator" && (
           <NavLink to={`/manage-categories`} className="country_link">
             Catégorie
           </NavLink>
         )}
-        {(currentUserRole === "superAdmin" ||
-          currentUserRole === "cityAdmin") && (
+        {(currentUserRole === "Super Administrator" ||
+          currentUserRole === "city Administrator") && (
           <NavLink to={`/manage-users`} className="country_link">
             Utilisateurs
           </NavLink>

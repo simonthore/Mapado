@@ -43,10 +43,11 @@ export default function Login() {
               login({ variables: { data: credentials } })
                 .then(() => {
                   client.resetStore();
+                  navigateHome();
                   console.log(currentUser?.profile.role)
                 })
                 .catch((error) => {
-                  console.error(error);
+                  console.log(error);
                   toast.error("Invalid credentials", {
                     style: {
                       border: "3px solid #EC5D5C",

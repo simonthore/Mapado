@@ -104,8 +104,8 @@ export default function Home() {
                   </p>
                   <div className="demos">
                     <Link to="/cities-list">Accueil</Link>
-                    {(currentUserRole === "SuperAdmin" ||
-                      currentUserRole === "cityAdmin") && (
+                    {(currentUserRole === "Super Administrator" ||
+                      currentUserRole === "City Administrator") && (
                       <Link to="/admin" onClick={() => setHeaderShown(false)}>
                         Admin
                       </Link>
