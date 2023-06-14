@@ -1,11 +1,8 @@
-import {Link} from "react-router-dom";
-
 interface CityProps {
   id?: number;
   cityName?: string;
   cityPhoto?: string | null;
 }
-
 
 export default function AnimatedCard({ cityName, cityPhoto }: CityProps) {
   return (

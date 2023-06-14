@@ -6,12 +6,11 @@ import markerIconPng from "../assets/images/starred.png";
 import {Icon} from "leaflet";
 import ICity from "../interfaces/ICity";
 import IPoi from "../interfaces/IPoi";
-import {useNavigate} from "react-router";
-import {useEffect} from "react";
+import { useNavigate } from "react-router";
+import { useEffect } from "react";
 
 export default function InfoCity() {
     const {cityName} = useParams();
-
     const navigate = useNavigate();
     const goBack = () => {
         navigate(-1);

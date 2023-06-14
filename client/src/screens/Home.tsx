@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, NavLink, redirect, useSearchParams } from "react-router-dom";
+import { Link, NavLink, useSearchParams } from "react-router-dom";
 import AnimatedCard from "../components/AnimatedCard";
 import {
   useCitiesQuery,

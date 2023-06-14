@@ -13,8 +13,8 @@ import Register from "./screens/Register";
 import PasswordReset from "./screens/PasswordReset";
 import EmailPassword from "./screens/EmailPassword";
 import InfoCity from "./screens/InfoCity";
-import {useEffect, useState} from "react";
-import {useLocation} from "react-router";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router";
 import EditCity from "./screens/EditCity";
 import CitiesList from "./screens/CitiesList";
 import Admin from "./screens/Admin";
@@ -26,16 +26,16 @@ const styles: CSS.Properties = {
 };
 
 function App() {
-    const {loading: loadingCities, data} = useCitiesQuery();
-    const [showHeader, setShowHeader] = useState(false);
-    const location = useLocation();
+  const { loading: loadingCities, data } = useCitiesQuery();
+  const [showHeader, setShowHeader] = useState(false);
+  const location = useLocation();
 
-    useEffect(() => {
-        const path = window.location.pathname;
-        setShowHeader(path !== "/");
-    }, [location]);
+  useEffect(() => {
+    const path = window.location.pathname;
+    setShowHeader(path !== "/");
+  }, [location]);
 
-    // const cities = data?.cities ?? [];
+  // const cities = data?.cities ?? [];
 
     return (
         <>

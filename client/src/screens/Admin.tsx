@@ -27,18 +27,18 @@ export default function Admin() {
         <h1 className={"title"}>Admin</h1>
         {currentUserRole === "Super Administrator" && (
           <NavLink to={`/manage-cities`} className="country_link">
-            Ville
+            Paramétrer les villes
           </NavLink>
         )}
         {currentUserRole === "Super Administrator" && (
           <NavLink to={`/manage-categories`} className="country_link">
-            Catégorie
+            Paramétrer les catégories
           </NavLink>
         )}
         {(currentUserRole === "Super Administrator" ||
           currentUserRole === "city Administrator") && (
           <NavLink to={`/manage-users`} className="country_link">
-            Utilisateurs
+            Paramétrer les utilisateurs
           </NavLink>
         )}
       </div>
