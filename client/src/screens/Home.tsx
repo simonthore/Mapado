@@ -16,9 +16,10 @@ export default function Home() {
                 Bienvenue sur Mapado
               </h1>
               <h2 className="intro__description main-color">
-                Nous avons construit une application qui vous permet d'ajouter
-                vos coins préférés à vos villes préférées. Ou futures villes
-                préférées. Même si c'est notre appli que vous allez préférer.
+                Nous avons créé une application qui vous permet d'ajouter vos
+                coins préférés à vos villes préférées. Ou futures villes
+                préférées. Même si c'est notre application que vous allez
+                préférer.
               </h2>
               <Link className="intro__go-to-app main-color" to="/cities-list">
                 Essayer Mapado

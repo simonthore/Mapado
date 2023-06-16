@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Logout from "./Logout";
 import { Link } from "react-router-dom";
 import Mapado from "../assets/images/mapado_logo.png";
 import SearchBar from "./SearchBar";
@@ -20,7 +19,7 @@ export default function Header({ currentUrl, handleChange, state }) {
     <nav
       className={`headerStyle${headerWithShadow ? " headerWithShadow" : ""}`}
     >
-      <Link to="/">
+      <Link to="/cities-list">
         <img src={Mapado} alt="logo" />
       </Link>
 
