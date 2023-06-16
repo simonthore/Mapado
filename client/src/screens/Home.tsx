@@ -121,7 +121,7 @@ export default function Home() {
                         Se déconnecter
                       </button>
                     ) : (
-                      <Link to="/login">Connexion</Link>
+                      <Link to="/login" onClick={() => setHeaderShown(false)}>Connexion</Link>
                     )}
                   </div>
                   <div className="search-input">

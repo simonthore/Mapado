@@ -32,7 +32,6 @@ export default function Login() {
         <button className={"backButton"} onClick={goBack}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25">
             <path d="M24 12.001H2.914l5.294-5.295-.707-.707L1 12.501l6.5 6.5.707-.707-5.293-5.293H24v-1z" />
-
           </svg>
         </button>
         <Card customClass={"registerCard"}>
@@ -41,28 +40,29 @@ export default function Login() {
             onSubmit={(e) => {
               e.preventDefault();
               login({ variables: { data: credentials } })
-                .then(() => {
-                  client.resetStore();
-                  navigateHome();
-                  console.log(currentUser?.profile.role)
-                })
-                .catch((error) => {
-                  console.log(error);
-                  toast.error("Invalid credentials", {
-                    style: {
-                      border: "3px solid #EC5D5C",
-                      padding: "4rem",
-                      color: "#EC5D5C",
-                    },
-                    iconTheme: {
-                      primary: "#EC5D5C",
-                      secondary: "#FFFFFF",
-                    },
-                  });
+              .then(() => {
+                client.resetStore();
+                navigateHome();
+                console.log(currentUser?.profile.role);
+              })
+              .catch((error) => {
+                console.log(error);
+                toast.error("Invalid credentials", {
+                  style: {
+                    border: "3px solid #EC5D5C",
+                    padding: "4rem",
+                    color: "#EC5D5C",
+                  },
+                  iconTheme: {
+                    primary: "#EC5D5C",
+                    secondary: "#FFFFFF",
+                  },
+                });
                 });
             }}
           >
             {/* <img src={login} alt="" style={iconStyles} /> */}
+            <h1 className={"title"}>Se connecter</h1>
             <label htmlFor="email">
               <input
                 type="email"
@@ -96,15 +96,16 @@ export default function Login() {
               </button>
             </label>
             <div className={"loginButtonsContainer"}>
+             
+              <button type="submit" className={"tertiaryButton"}>
+                Se connecter
+              </button>
               <button
                 type="button"
                 className={"primaryButtonEmailPassword"}
                 onClick={navigateEmailPassword}
               >
                 Mot de passe oublié ?
-              </button>
-              <button type="submit" className={"tertiaryButton"}>
-                Se connecter
               </button>
               <button
                 type="button"

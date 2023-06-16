@@ -10,6 +10,8 @@
 }
 .manageOneUserContainer {
   display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .editUser_container {
@@ -33,6 +35,17 @@
   font-family: Rubik;
   font-weight: 600;
   font-size: 1.5rem;
+  margin-top: 10rem;
+  text-align: center;
+}
+
+.editUser_title {
+  color: #ec5d5c;
+  font-family: Rubik;
+  font-weight: 600;
+  font-size: 1.25rem;
+  padding: 1rem;
+  text-align: center;
 }
 
 .addCityContainer {
@@ -49,16 +62,6 @@
   justify-content: center;
   align-items: center;
   width: 50rem;
-}
-
-.manageUsersContainer {
-  position: relative;
-  width: 100%;
-  gap: 20px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .cities_card_container {
@@ -86,15 +89,6 @@
   text-align: center;
 }
 
-/* input {
-    text-align: center;
-    border-radius: 20px;
-    width: 20rem;
-    height: 2.5rem;
-    border: 3px solid #173472;
-    box-sizing: content-box;
-} */
-
 .primaryButton {
   grid-column-start: 2;
   height: 2.5rem;
@@ -103,3 +97,22 @@
   border-radius: 15px;
   border: 3px solid #173472;
 }
+
+.backButton {
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #173472;
+  border-radius: 20px;
+  z-index: 999;
+  position: absolute;
+  top: 10rem;
+  left: 2rem;
+}
+
+.backButton svg {
+  width: 30px;
+  fill: #ec5d5c;
+}
+

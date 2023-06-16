@@ -3,7 +3,6 @@ import {
     useCitiesQuery,
     useFetchCityNameMutation,
     useDeleteCityMutation,
-    useCreateUserMutation,
 } from "../gql/generated/schema";
 import Card from "../components/Card";
 import ICity from "../interfaces/ICity";

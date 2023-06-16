@@ -81,8 +81,6 @@ export class UserResolver {
             .getRepository(User)
             .save(userToUpdate);
 
-        console.log("from server updated user", updatedUser)
-
         return `${updatedUser.email} been assigned ${updatedUser.role} role`;
     }
 
