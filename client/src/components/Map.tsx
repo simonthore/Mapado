@@ -27,6 +27,7 @@ function Map({ longitude, latitude, children }: MapProps) {
         />
         {children}
       </MapContainer>
+
     ) : (
       //     //Si on a pas de longitude et latitude on affiche un loader 'tailwind loader'
       <div className={"mapLoader"}>
