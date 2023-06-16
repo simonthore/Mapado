@@ -1,6 +1,5 @@
 import { MouseEventHandler, useEffect, useState } from "react";
 import {
-  useFetchCityNameMutation,
   useGetCityQuery,
   useUpdateCityMutation,
   useDeletePoiMutation,
@@ -51,7 +50,7 @@ export default function EditCity() {
   //
   const [updateCity] = useUpdateCityMutation({ onCompleted: () => refetch() });
   const [deletePoi] = useDeletePoiMutation({ onCompleted: () => refetch() });
-  const { loading, data, refetch } = useGetCityQuery({
+  const { data, refetch } = useGetCityQuery({
     variables: { query: cityName! },
   });
   const city: ICity = {
