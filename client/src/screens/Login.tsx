@@ -46,7 +46,6 @@ export default function Login() {
                 console.log(currentUser?.profile.role);
               })
               .catch((error) => {
-                console.log(error);
                 toast.error("Invalid credentials", {
                   style: {
                     border: "3px solid #EC5D5C",

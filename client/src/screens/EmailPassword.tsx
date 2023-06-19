@@ -44,7 +44,17 @@ export default function PasswordReset() {
             <button
               type="submit"
               className={"tertiaryButton"}
-              onClick={() => toast("please check your email")}
+              onClick={() =>
+                toast(
+                  "Veuillez vérifier votre compte email pour créer un nouveau mot de passe",
+                  {
+                    style: {
+                      border: "3px solid",
+                      padding: "4rem",
+                    },
+                  }
+                )
+              }
             >
               Valider
             </button>

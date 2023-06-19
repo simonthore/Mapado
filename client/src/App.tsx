@@ -41,6 +41,7 @@ function App() {
         <>
             {/*<Toaster position="top-center"/>*/}
             <div style={styles}>
+            <Toaster />
                 {showHeader && <Header/>}
                 <Routes>
                     <Route path="/" element={<Home/>}/>
