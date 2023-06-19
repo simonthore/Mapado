@@ -82,7 +82,7 @@ export default function AddPoi({ cityId, cityName }: PoiProps) {
   };
 
   return (
-    <div>
+    <>
       <input
         type="text"
         placeholder="Nom ou Adresse du POI"
