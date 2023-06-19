@@ -22,7 +22,7 @@ export default function CitiesList({ state }: CitiesListProps) {
   return (
     <>
       <div className="citiesList_container">
-        <section className={"citiesList_wrapper"}>
+        <section className="citiesList_wrapper">
           {state.query === ""
             ? // if there is no search, display all cities
               cities.map((city: ICity) => (
@@ -40,7 +40,11 @@ export default function CitiesList({ state }: CitiesListProps) {
               ))
             : state.list.map((city: ICity) => (
                 // if there is a search display the cities corresponding
-                <NavLink key={city.id} to={`/info/${city.name}`}>
+                <NavLink
+                  className="cardLink"
+                  key={city.id}
+                  to={`/info/${city.name}`}
+                >
                   <AnimatedCard
                     key={city.id}
                     cityName={city.name}
