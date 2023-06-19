@@ -1,7 +1,17 @@
-import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import IState from "../interfaces/IState";
 
-export default function SearchBar({ currentUrl, handleChange, state }) {
+interface SearchbarProps {
+  currentUrl: string;
+  handleChange: any;
+  state: IState;
+}
+
+export default function SearchBar({
+  currentUrl,
+  handleChange,
+  state,
+}: SearchbarProps) {
   useEffect(() => {
     document.body.style.overflow = "auto";
   });

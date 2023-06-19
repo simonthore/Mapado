@@ -2,9 +2,14 @@ import { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import AnimatedCard from "../components/AnimatedCard";
 import ICity from "../interfaces/ICity";
+import IState from "../interfaces/IState";
 import { useCitiesQuery } from "../gql/generated/schema";
 
-export default function CitiesList({ state }) {
+interface CitiesListProps {
+  state: IState;
+}
+
+export default function CitiesList({ state }: CitiesListProps) {
   // gets the params from URL
   const { data } = useCitiesQuery();
 

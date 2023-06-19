@@ -2,8 +2,19 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Mapado from "../assets/images/mapado_logo.png";
 import SearchBar from "./SearchBar";
+import IState from "../interfaces/IState";
 
-export default function Header({ currentUrl, handleChange, state }) {
+interface HeaderProps {
+  currentUrl: string;
+  state: IState;
+  handleChange(e: React.ChangeEvent<HTMLInputElement>): void;
+}
+
+export default function Header({
+  currentUrl,
+  handleChange,
+  state,
+}: HeaderProps) {
   const [headerWithShadow, setHeaderWithShadow] = useState(false);
   const changeNavStyle = () => {
     if (window.scrollY >= 10) {
