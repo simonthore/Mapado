@@ -1,11 +1,11 @@
-import { Route, Routes, useSearchParams } from "react-router-dom";
+import { Route, Routes, useSearchParams } from "react-router-dom"
 import CSS from "csstype";
 import Login from "./screens/Login";
 import Home from "./screens/Home";
 import Header from "./components/Header";
 import ManageCities from "./screens/ManageCities";
 import "./App.css";
-import { useCitiesQuery } from "./gql/generated/schema";
+import {useCitiesQuery} from "./gql/generated/schema";
 import Register from "./screens/Register";
 import PasswordReset from "./screens/PasswordReset";
 import EmailPassword from "./screens/EmailPassword";
@@ -19,8 +19,8 @@ import ManageCategories from "./screens/ManageCategories";
 import IState from "./interfaces/IState";
 
 const styles: CSS.Properties = {
-  margin: 0,
-  backgroundSize: "100vw",
+    margin: 0,
+    backgroundSize: "100vw",
 };
 
 function App() {
@@ -84,6 +84,7 @@ function App() {
       </div>
     </>
   );
+
 }
 
 export default App;
