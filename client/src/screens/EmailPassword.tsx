@@ -12,7 +12,6 @@ export default function PasswordReset() {
   const [sendEmail] = useSendPasswordEmailMutation();
   return (
     <>
-      <Header />
       <Card customClass={"emailPasswordCard"}>
         <form
           className={"emailPasswordContainer"}
