@@ -1,4 +1,6 @@
+import { RectangleSharp } from "@mui/icons-material";
 import React, { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
 import {
   useGetProfileQuery,
@@ -7,34 +9,48 @@ import {
   useUsersQuery,
 } from "../gql/generated/schema";
 
-const roles = ["Visitor", "POI Creator", "City Administrator", "Super Administrator"];
+const roles = [
+  "Visitor",
+  "POI Creator",
+  "City Administrator",
+  "Super Administrator",
+];
 // correct vue for limited access rights of city admin
+// create custom hook to display user role at componentdidmount
 
 export default function ManageUsers() {
-  const [email, setEmail] = useState("");
-  const [userRole, setUserRole] = useState("");
+  const [userDetails, setUserDetails] = useState({
+    email: "",
+    role: "",
+  });
 
   const navigate = useNavigate();
 
   const { loading: loadingUsers, data, refetch } = useUsersQuery();
   const users = data?.users ?? [];
 
-
   const [updateUser] = useUpdateUserRoleMutation();
 
   const [logout] = useLogoutMutation();
 
-  const { data: currentUser, client } = useGetProfileQuery();
-  const currentUserRole = currentUser?.profile?.role;
-
+  const { data: currentUser } = useGetProfileQuery();
+  // const currentUserRole = currentUser?.profile?.role;
 
   const onClickRoleChange = async (
     email: string,
     role: string
   ): Promise<void> => {
-    setEmail(email);
-    setUserRole(role);
-    updateUser({ variables: { data: { email, role } } });
+    try {
+      setUserDetails({
+        email,
+        role,
+      });
+      updateUser({ variables: { data: { email, role } } });
+      refetch();
+      toast.success(`Role successfully updated, ${email} is now a ${role}`);
+    } catch (e) {
+      toast.error(`Could not update role : ${e}`);
+    }
   };
 
   const goBack = () => {
@@ -56,13 +72,9 @@ export default function ManageUsers() {
             <div className="py-5" key={user.email}>
               <details className="group">
                 <summary className="flex justify-between items-center font-medium cursor-pointer list-none">
-                  <div className={"manageOneUserContainer"}>
-                    <span className={"userLabel"}>
-                      <p>
-                        {user.email} is a {userRole}
-                      </p>
-                    </span>
-                  </div>
+                  <h2 className={"editUser_title"}>
+                    Assigner un nouveau rôle à {user.email}
+                  </h2>
                   <span className="transition group-open:rotate-180">
                     <svg
                       fill="none"
@@ -79,21 +91,24 @@ export default function ManageUsers() {
                     </svg>
                   </span>
                 </summary>
-                <h2 className={"editUser_title"}>
-                  Assigner un nouveau rôle à {user.email}
-                </h2>
+
                 {roles.map((role, index) => {
                   return (
                     <div key={index} className={"editUser_container"}>
                       <option
-                        className={"editUser_label"}
+                        className={
+                          role === user.role
+                            ? "editUser_labelCurrent"
+                            : "editUser_label"
+                        }
                         key={index}
                         value={role}
                       >
                         {role}
                       </option>
                       <button
-                        className={"primaryButton"}
+                        disabled={role === user.role ? true : false}
+                        className={role === user.role ? "primaryButtonDisabled" : "primaryButton"}
                         onClick={(): void => {
                           if (user.email && role)
                             onClickRoleChange(user.email, role);
