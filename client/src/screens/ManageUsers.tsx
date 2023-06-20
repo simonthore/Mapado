@@ -7,7 +7,8 @@ import {
   useUsersQuery,
 } from "../gql/generated/schema";
 
-const roles = ["Visitor", "City Administrator", "Super Administrator"];
+const roles = ["Visitor", "POI Creator", "City Administrator", "Super Administrator"];
+// correct vue for limited access rights of city admin
 
 export default function ManageUsers() {
   const [email, setEmail] = useState("");

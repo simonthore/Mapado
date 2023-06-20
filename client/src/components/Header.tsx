@@ -1,10 +1,21 @@
-import React, { useState } from "react";
-import toast from "react-hot-toast";
-import { Link, redirect, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Mapado from "../assets/images/mapado_logo.png";
+import SearchBar from "./SearchBar";
+import IState from "../interfaces/IState";
 import { useGetProfileQuery, useLogoutMutation } from "../gql/generated/schema";
 
-export default function Header() {
+interface HeaderProps {
+  currentUrl: string;
+  state: IState;
+  handleChange(e: React.ChangeEvent<HTMLInputElement>): void;
+}
+
+export default function Header({
+  currentUrl,
+  handleChange,
+  state,
+}: HeaderProps) {
   const [headerWithShadow, setHeaderWithShadow] = useState(false);
 
   const [logout] = useLogoutMutation();
@@ -16,7 +27,7 @@ export default function Header() {
     errorPolicy: "ignore",
   });
   const currentUserRole = currentUser?.profile?.role;
-
+  
   const changeNavStyle = () => {
     if (window.scrollY >= 10) {
       setHeaderWithShadow(true);
@@ -27,18 +38,24 @@ export default function Header() {
 
   window.addEventListener("scroll", changeNavStyle);
 
-  return (
+  return currentUrl !== "/" ? (
     <nav
       className={`headerStyle${headerWithShadow ? " headerWithShadow" : ""}`}
     >
-      <Link to="/">
-        <img src={Mapado} />
+      <Link to="/cities-list">
+        <img src={Mapado} alt="logo" />
       </Link>
 
+      <SearchBar
+        currentUrl={currentUrl}
+        state={state}
+        handleChange={handleChange}
+      />
+
       <div className="intro__subtitle">
-      <div className="codrops-links">
+        <div className="codrops-links">
           <div className="intro__description">
-            <p>Locate, discover & share !</p>
+            <p>Locate, discover &#38; share !</p>
             <div className="demos">
               <Link to="/cities-list">Accueil</Link>
               {(currentUserRole === "Super Administrator" ||
@@ -66,5 +83,7 @@ export default function Header() {
         </div>
       </div>
     </nav>
+  ) : (
+    <></>
   );
 }

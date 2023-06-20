@@ -38,90 +38,50 @@ form {
 
 .intro {
     position: fixed;
-    z-index: 10;
-    overflow: hidden;
-    width: 100%;
-    height: 100%;
-    /*background: #122757;*/
-    transition: transform 0.6s;
-    transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
-}
-
-.container--open .intro {
-    transform: translate3d(0, -100%, 0) translate3d(0, 250px, 0);
-}
-
-.container--open .intro__content {
-    background-color: #173472;
-    transition: background-color 1s;
-}
-
-.intro__image {
-    position: absolute;
-    bottom: 0;
-    min-width: 100vw;
-    min-height: 100vh;
-    width: auto;
-    height: auto;
-    opacity: 0.8;
-    transition: transform 0.6s, opacity 0.6s;
-    transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
-    object-fit: cover;
-    background: rgb(2, 0, 36);
+    width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
     background: linear-gradient(152deg, rgba(2, 0, 36, 1) 0%, rgba(23, 52, 114, 1) 59%, rgba(236, 93, 92, 1) 100%);
+
 }
 
-.search-input {
-    transition: transform 2s, opacity 0.6s;
+.intro__container {
+    display: flex;
+    flex-wrap: nowrap;
 }
 
-#container .search-input {
-    opacity: 0;
+.intro__logo {
+    max-width: 200px;
+    padding: 1em 0 0 1.8em;
 }
 
-#container.container--open .search-input {
-    opacity: 1;
-}
-
-#container.container--open .intro__description p {
-    opacity: 0;
-}
-
-.container--open .intro__image {
-    opacity: 0;
-    transform: translate3d(0, 20%, 0);
-}
-
-.intro__content {
-    position: absolute;
-    bottom: 35px;
-    padding: 1.8em;
-    width: 100%;
-    font-size: 1.15em;
-}
-
-.intro__title, .intro__main__title {
-    margin: 0 0 20px;
-    font-weight: 900;
-    font-size: 4em;
-    font-family: "Playfair Display", Georgia, serif;
-    line-height: 1;
-    color: #EC5D5C;
+.intro__text {
+    min-width: 50%;
+    padding-left: 1.8em;
+    margin-top: 15em;
 }
 
 .intro__main__title {
-    color: white;
-}
-
-.intro__subtitle {
-    display: flex;
-    align-items: center;
+    margin: 0 0 2rem;
+    font-weight: 500;
+    font-size: 4.75em;
+    font-family: 'Hanken Grotesk', sans-serif;
+    line-height: 1;
+    max-width: 600px;
 }
 
 .intro__description {
-    margin: 0 auto 0 1em;
     line-height: 1.2;
-    color: white;
+    font-size: 1.75em;
+    margin-bottom: 2em;
+    max-width: 650px;
+    
+}
+
+
+.intro__image {
+    width: 80em;
+    transform: translate(-5em, -13em);
 }
 
 .demos {
@@ -134,6 +94,22 @@ form {
 }
 .demos button {
     color: #EC5D5C;
+}
+
+.intro__go-to-app{
+    color: #EC5D5C;
+    width: fit-content;
+    padding: 5px 10px;
+    border: 2px solid #EC5D5C;
+    border-radius: 20px;
+    background-color: transparent;
+    transition: .3s;
+}
+
+.intro__go-to-app:hover{
+    color: #173472;
+    transition: .3s;
+    background-color: #EC5D5C;
 }
 
 .trigger {
@@ -156,9 +132,7 @@ form {
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 100000;
-    opacity: 0.5;
     cursor: pointer;
-    transition: opacity 600ms;
     rotate: 180deg;
 }
 
@@ -175,11 +149,6 @@ form {
 
 .hero-section-trigger svg:hover {
     cursor: pointer;
-}
-
-.container--open .hero-section-trigger {
-    opacity: 0;
-    pointer-events: none;
 }
 
 .trigger span {
@@ -199,16 +168,6 @@ form {
     transform-origin: 50% 50%;
 }
 
-.icon--cross,
-.trigger--active .icon--grid {
-    opacity: 0;
-    transform: scale3d(0.5, 0.5, 1);
-}
-
-.trigger--active .icon--cross {
-    opacity: 1;
-    transform: scale3d(1, 1, 1);
-}
 
 .items-wrap {
     position: relative;
@@ -264,14 +223,9 @@ form {
     width: 100%;
 }
 
-.intro__image img {
-    position: absolute;
-    top: 20px;
-    width: 500px;
-}
 
 /*Arrow Bottom*/
-div.arrow {
+.arrow {
     width: 4vmin;
     height: 4vmin;
     box-sizing: border-box;
@@ -280,7 +234,7 @@ div.arrow {
     transform: rotate(-45deg);
 }
 
-div.arrow::before {
+.arrow::before {
     content: '';
     width: 100%;
     height: 100%;
@@ -293,7 +247,7 @@ div.arrow::before {
 }
 
 
-div.arrow:after {
+.arrow:after {
     content: '';
     float: left;
     position: relative;
@@ -307,13 +261,13 @@ div.arrow:after {
     transition: .2s ease;
 }
 
-button:hover div.arrow::after {
+button:hover .arrow::after {
     transform: rotate(45deg);
     border-color: #EC5D5C;
     height: 120%;
 }
 
-button:hover div.arrow::before {
+button:hover .arrow::before {
     border-color: #EC5D5C;
     transform: scale(.8);
 

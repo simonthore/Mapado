@@ -88,7 +88,11 @@ export default function AddPoi({ cityId, cityName }: PoiProps) {
   const currentUserRole = currentUser?.profile?.role;
   console.log(currentUserRole);
 
-  if (currentUserRole === "superAdmin" || currentUserRole === "cityAdmin" || currentUserRole === "POICreator") {
+  if (
+    currentUserRole === "Super Administrator" ||
+    currentUserRole === "City Administrator" ||
+    currentUserRole === "POI Creator"
+  ) {
     return (
       <>
         <input
@@ -108,13 +112,13 @@ export default function AddPoi({ cityId, cityName }: PoiProps) {
           Ajouter
         </button>
         <Toast
-        toast={toastData}
-        position={"bottomRight"}
-        autoDelete={true}
-        autoDeleteTime={5000}
-        visible={showToast}
-        setVisible={setShowToast}
-      />
+          toast={toastData}
+          position={"bottomRight"}
+          autoDelete={true}
+          autoDeleteTime={5000}
+          visible={showToast}
+          setVisible={setShowToast}
+        />
       </>
     );
   }

@@ -71,6 +71,7 @@ export class UserResolver {
 
     //Update User Role
     @Authorized<UserRole>([UserRole.SUPERADMIN, UserRole.CITYADMIN]) @Mutation(() => String)
+    // specify access for cityAdmin who can only change to poi creator
     async updateUserRole(@Arg("data", () => UserRoleInput) {email, role}: UserRoleInput): Promise<String> {
         let userToUpdate = await datasource.getRepository(User).findOne({where: {email}})
         if (!userToUpdate) throw new ApolloError("User not found", "NOT_FOUND")
