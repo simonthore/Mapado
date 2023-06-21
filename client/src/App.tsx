@@ -83,7 +83,7 @@ function App() {
           <Route path="/edit-city/:cityName" element={<EditCity />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/manage-categories" element={<ManageCategories />} />
-          <Route path="/manage-users" element={<ManageUsers/>} />
+          <Route path="/manage-users" element={<ManageUsers />} />
         </Routes>
       </div>
     </>
