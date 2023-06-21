@@ -34,7 +34,7 @@ export default function ManageUsers() {
   const [logout] = useLogoutMutation();
 
   const { data: currentUser } = useGetProfileQuery();
-  // const currentUserRole = currentUser?.profile?.role;
+  const currentUserRole = currentUser?.profile?.role;
 
   const onClickRoleChange = async (
     email: string,
@@ -61,7 +61,7 @@ export default function ManageUsers() {
     navigate(-1);
   };
 
-  return (
+  if (currentUserRole === "Super Administrator" || currentUserRole === "City Administrator") {return (
     <div className="max-w-screen-xl mx-auto px-5 min-h-screen">
       <button className={"backButton"} onClick={goBack}>
         {" "}
@@ -129,5 +129,5 @@ export default function ManageUsers() {
         })}
       </div>
     </div>
-  );
+  );}
 }
