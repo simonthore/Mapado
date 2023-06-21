@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {Link, NavLink} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import Mapado from "../assets/images/mapado_logo.png";
 import SearchBar from "./SearchBar";
 import IState from "../interfaces/IState";
@@ -12,11 +12,7 @@ interface HeaderProps {
     handleChange(e: React.ChangeEvent<HTMLInputElement>): void;
 }
 
-export default function Header({
-                                   currentUrl,
-                                   handleChange,
-                                   state,
-                               }: HeaderProps) {
+export default function Header({currentUrl, handleChange, state}: HeaderProps) {
     const [headerWithShadow, setHeaderWithShadow] = useState(false);
     const [shouldAnimate, setShouldAnimate] = useState(true);
 
@@ -40,8 +36,6 @@ export default function Header({
             setShouldAnimate(true);
         }
     }, [currentUrl]);
-
-    console.log(shouldAnimate);
 
     const header =
         <nav className={`headerStyle${headerWithShadow ? " headerWithShadow" : ""}`}>

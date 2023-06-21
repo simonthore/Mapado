@@ -10,7 +10,7 @@ import Register from "./screens/Register";
 import PasswordReset from "./screens/PasswordReset";
 import EmailPassword from "./screens/EmailPassword";
 import InfoCity from "./screens/InfoCity";
-import {useState} from "react";
+import React, {useState} from "react";
 import EditCity from "./screens/EditCity";
 import CitiesList from "./screens/CitiesList";
 import Admin from "./screens/Admin";
