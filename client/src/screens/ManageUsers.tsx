@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
+import ErrorPage from "../components/ErrorPage";
 import {
   useGetProfileQuery,
   useLogoutMutation,
   useUpdateUserRoleMutation,
   useUsersQuery,
 } from "../gql/generated/schema";
-import ErrorPa
+
 
 const roles = [
   "Visitor",

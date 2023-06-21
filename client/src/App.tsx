@@ -13,13 +13,14 @@ import PasswordReset from "./screens/PasswordReset";
 import EmailPassword from "./screens/EmailPassword";
 import InfoCity from "./screens/InfoCity";
 import { useState } from "react";
-import { useLocation } from "react-router";
+import { Navigate, useLocation } from "react-router";
 import EditCity from "./screens/EditCity";
 import CitiesList from "./screens/CitiesList";
 import Admin from "./screens/Admin";
 import ManageCategories from "./screens/ManageCategories";
 import IState from "./interfaces/IState";
 import { Toaster } from "react-hot-toast";
+import ErrorPage from "./components/ErrorPage";
 
 const styles: CSS.Properties = {
   margin: 0,
@@ -69,7 +70,6 @@ function App() {
         />
 
         <Routes>
-          <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/password/email" element={<EmailPassword />} />
@@ -84,6 +84,9 @@ function App() {
           <Route path="/admin" element={<Admin />} />
           <Route path="/manage-categories" element={<ManageCategories />} />
           <Route path="/manage-users" element={<ManageUsers />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/404" element={<ErrorPage />} />
+          <Route path="*" element={<Navigate to="/404" replace />}/>
         </Routes>
       </div>
     </>
