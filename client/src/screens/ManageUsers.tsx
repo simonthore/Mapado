@@ -16,8 +16,6 @@ const SuperAdminRoles = [
   "Super Administrator",
 ];
 const CityAdminRoles = ["Visitor", "POI Creator"];
-// correct vue for limited access rights of city admin
-// create custom hook to display user role at componentdidmount
 
 export default function ManageUsers() {
   const [userDetails, setUserDetails] = useState({
