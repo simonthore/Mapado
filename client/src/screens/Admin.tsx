@@ -36,7 +36,7 @@ export default function Admin() {
           </NavLink>
         )}
         {(currentUserRole === "Super Administrator" ||
-          currentUserRole === "city Administrator") && (
+          currentUserRole === "City Administrator") && (
           <NavLink to={`/manage-users`} className="country_link">
             Paramétrer les utilisateurs
           </NavLink>
