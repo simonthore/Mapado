@@ -24,7 +24,7 @@ export default function Login() {
 
   const navigateCreateAccount = () => navigate("/register");
 
-  const navigateHome = () => navigate("/");
+  const navigateHome = () => navigate("/cities-list");
 
   return (
     <>

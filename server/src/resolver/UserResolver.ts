@@ -29,10 +29,9 @@ export class UserResolver {
     @Mutation(() => User)
     async createUser(@Arg("data") data: UserInput): Promise<User> {
         const hashedPassword = await hashPassword(data.password);
-        const createdAt = await Date.now();
         const user = await datasource
             .getRepository(User)
-            .save({...data, createdAt, hashedPassword});
+            .save({...data, hashedPassword});
         return user;
     }
 
@@ -135,8 +134,8 @@ export class UserResolver {
 
         const userId = userToEmail.id;
         const hashedPassword = userToEmail.hashedPassword;
-        const createdAt = userToEmail.created_at;
-        const secret = hashedPassword + "-" + createdAt;
+
+        const secret = hashedPassword!
 
         const emailToken = jwt.sign({userId}, secret, {expiresIn: 36000});
 

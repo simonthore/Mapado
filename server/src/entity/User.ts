@@ -63,8 +63,6 @@ export class UpdateUserInput {
   @Field(() => [CityId], { nullable: true })
   cities?: CityId[];
 
-  // @Field(() => [Role], {nullable: true})
-  // role?: Role[];
 }
 
 @Entity()
@@ -73,10 +71,6 @@ class User {
   @Field()
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Field({ nullable: true })
-  @Column({ nullable: true, type: "date" })
-  created_at: number;
 
   @Field({ nullable: true })
   @Column({ nullable: true, type: "text" })

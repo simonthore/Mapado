@@ -47,11 +47,15 @@ export default function ManageUsers() {
       });
       updateUser({ variables: { data: { email, role } } });
       refetch();
-      toast.success(`Role successfully updated, ${email} is now a ${role}`);
+      toast.success(`Role mis à jour : ${email} est désormais ${role}`);
     } catch (e) {
       toast.error(`Could not update role : ${e}`);
     }
   };
+
+  useEffect(() => {
+    refetch()
+  }, [userDetails, refetch()])
 
   const goBack = () => {
     navigate(-1);
@@ -73,7 +77,7 @@ export default function ManageUsers() {
               <details className="group">
                 <summary className="flex justify-between items-center font-medium cursor-pointer list-none">
                   <h2 className={"editUser_title"}>
-                    Assigner un nouveau rôle à {user.email}
+                    {user.email} est actuellement un {user.role}
                   </h2>
                   <span className="transition group-open:rotate-180">
                     <svg
