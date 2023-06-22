@@ -2,20 +2,9 @@ import {Link} from "react-router-dom";
 import Mapado from "../assets/images/mapado_logo.png";
 import directions from "../assets/images/directions.png";
 import {motion} from "framer-motion";
+import {buttonAnimation} from "../utils/animation";
 
 export default function Home() {
-    const buttonAnimation = {
-        hidden: {
-            opacity: 0
-        },
-        visible: {
-            opacity: 1,
-            transition: {
-                delay: 1,
-                duration: 3
-            }
-        }
-    }
 
     return (
         <>
@@ -48,7 +37,7 @@ export default function Home() {
                                 >
                                     Nous avons créé une application qui vous permet d'ajouter vos
                                     coins préférés à vos villes préférées. Ou futures villes
-                                    préférées. Même si c'est notre application que vous allez
+                                    préférées.<br/>Même si c'est notre application que vous allez
                                     préférer.
                                 </motion.h2>
                             </div>
