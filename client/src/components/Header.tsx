@@ -44,17 +44,12 @@ export default function Header({currentUrl, handleChange, state}: HeaderProps) {
             </NavLink>
 
             <SearchBar currentUrl={currentUrl} state={state} handleChange={handleChange}/>
-
-            <div className="intro__subtitle">
-                <div className="codrops-links">
-                    <div className="intro__description">
-                        <p>Locate, discover & share !</p>
-                        <div className="demos">
-                            <NavLink to="/cities-list">Accueil</NavLink>
-                            <NavLink to="/admin">Admin</NavLink>
-                            <NavLink to="/login">Connexion</NavLink>
-                        </div>
-                    </div>
+            <div className="nav__description">
+                <p>Locate, discover & share !</p>
+                <div className="demos">
+                    <NavLink to="/cities-list">Accueil</NavLink>
+                    <NavLink to="/admin">Admin</NavLink>
+                    <NavLink to="/login">Connexion</NavLink>
                 </div>
             </div>
         </nav>
@@ -81,16 +76,12 @@ export default function Header({currentUrl, handleChange, state}: HeaderProps) {
 
             <SearchBar currentUrl={currentUrl} state={state} handleChange={handleChange}/>
 
-            <div className="intro__subtitle">
-                <div className="codrops-links">
-                    <div className="intro__description">
-                        <p>Locate, discover & share !</p>
-                        <div className="demos">
-                            <NavLink to="/cities-list">Accueil</NavLink>
-                            <NavLink to="/admin">Admin</NavLink>
-                            <NavLink to="/login">Connexion</NavLink>
-                        </div>
-                    </div>
+            <div className="nav__description">
+                <p>Locate, discover & share !</p>
+                <div className="demos">
+                    <NavLink to="/cities-list">Accueil</NavLink>
+                    <NavLink to="/admin">Admin</NavLink>
+                    <NavLink to="/login">Connexion</NavLink>
                 </div>
             </div>
         </motion.nav>
