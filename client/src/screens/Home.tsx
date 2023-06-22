@@ -11,6 +11,7 @@ export default function Home() {
         visible: {
             opacity: 1,
             transition: {
+                delay: 1,
                 duration: 3
             }
         }
@@ -20,9 +21,14 @@ export default function Home() {
         <>
             <motion.div exit={{opacity: 0, top: "-100vh"}}>
                 <header className="intro">
-                    <Link to="/">
-                        <img className="intro__logo" src={Mapado} alt="logo"/>
-                    </Link>
+                    <motion.div
+                        initial={{x: "-200px"}}
+                        animate={{x: 0}}
+                    >
+                        <Link to="/">
+                            <img className="intro__logo" src={Mapado} alt="logo"/>
+                        </Link>
+                    </motion.div>
                     <div className="intro__container">
                         <div className="intro__text">
                             <div className="intro__main__title main-color">
@@ -62,7 +68,7 @@ export default function Home() {
                         <motion.img
                             initial={{opacity: 0}}
                             animate={{opacity: 1}}
-                            transition={{delay: 0.2, duration: 0.4}}
+                            transition={{delay: 1.5, duration: 2}}
                             className="intro__image"
                             src={directions}
                             alt="character-with-map"
