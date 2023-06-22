@@ -68,6 +68,7 @@ form {
     font-family: 'Hanken Grotesk', sans-serif;
     line-height: 1;
     max-width: 600px;
+    overflow: hidden;
 }
 
 .intro__description {
@@ -75,9 +76,9 @@ form {
     font-size: 1.75em;
     margin-bottom: 2em;
     max-width: 650px;
-    
+    overflow: hidden;
+    color: white;
 }
-
 
 .intro__image {
     width: 80em;
@@ -103,12 +104,10 @@ form {
     border: 2px solid #EC5D5C;
     border-radius: 20px;
     background-color: transparent;
-    transition: .3s;
 }
 
 .intro__go-to-app:hover{
     color: #173472;
-    transition: .3s;
     background-color: #EC5D5C;
 }
 

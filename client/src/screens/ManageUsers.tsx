@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
 import {
+  useCitiesQuery,
   useGetProfileQuery,
   useUpdateUserRoleMutation,
   useUsersQuery,
@@ -23,12 +24,14 @@ export default function ManageUsers() {
 
   const navigate = useNavigate();
 
-  const { loading: loadingUsers, data, refetch } = useUsersQuery();
-  const users = data?.users ?? [];
+  const { loading: loadingUsers, data: usersData, refetch } = useUsersQuery();
+  const users = usersData?.users ?? [];
 
   const [updateUser] = useUpdateUserRoleMutation();
 
-  // const [logout] = useLogoutMutation();
+  const { data: citiesData } = useCitiesQuery();
+
+  const cities = citiesData?.cities ?? [];
 
   const { data: currentUser } = useGetProfileQuery();
   const currentUserRole = currentUser?.profile?.role;
@@ -49,6 +52,10 @@ export default function ManageUsers() {
       toast.error(`Could not update role : ${e}`);
     }
   };
+
+  const onClickOpenModal = () => {
+    
+  }
 
   useEffect(() => {
     refetch();
@@ -182,8 +189,13 @@ export default function ManageUsers() {
                                   : "primaryButton"
                               }
                               onClick={(): void => {
-                                if (user.email && role)
+                                if ((user.email) && (role === "Super Administrator" || role === "Visitor")) {
                                   onClickRoleChange(user.email, role);
+                                }
+                                if ((user.email) && (role === "City Administrator" || role === "POI Creator")) {
+                                  onClickOpenModal()
+                                }
+                                  
                               }}
                             >
                               Select
