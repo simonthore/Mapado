@@ -1,10 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
-import ErrorPage from "../components/ErrorPage";
 import {
   useGetProfileQuery,
-  useLogoutMutation,
   useUpdateUserRoleMutation,
   useUsersQuery,
 } from "../gql/generated/schema";
@@ -30,7 +28,7 @@ export default function ManageUsers() {
 
   const [updateUser] = useUpdateUserRoleMutation();
 
-  const [logout] = useLogoutMutation();
+  // const [logout] = useLogoutMutation();
 
   const { data: currentUser } = useGetProfileQuery();
   const currentUserRole = currentUser?.profile?.role;
@@ -59,8 +57,6 @@ export default function ManageUsers() {
   const goBack = () => {
     navigate(-1);
   };
-
-  const goError = () => navigate("/404");
 
   return (
     <>

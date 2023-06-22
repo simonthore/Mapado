@@ -51,7 +51,14 @@ async function seed(): Promise<void> {
         {
             email: "gg@test.com",
             id: 7,
-            hashedPassword: "$argon2id$v=19$m=65536,t=5,p=4$to+4ziOVZQe7ypnIs36mjg$3F6fWRb6FWRbd/U0XAEaleJnF+N86Dx1lp7Kk8sNEWk"
+            hashedPassword: "$argon2id$v=19$m=65536,t=5,p=4$to+4ziOVZQe7ypnIs36mjg$3F6fWRb6FWRbd/U0XAEaleJnF+N86Dx1lp7Kk8sNEWk",
+            role: "Super Administrator"
+        },
+        {
+            email: "ap_levy@hotmail.com",
+            id: 10,
+            hashedPassword: "$argon2id$v=19$m=65536,t=5,p=4$AmSivMWMhsjlzHWuLgcd3A$Jeedbbq8lqVxmW24",
+            role: "City Administrator"
         },
         {
             email: "leila@test.com",

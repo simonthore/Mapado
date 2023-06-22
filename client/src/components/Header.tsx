@@ -21,13 +21,19 @@ export default function Header({
   const [logout] = useLogoutMutation();
 
   const navigate = useNavigate();
-  const navigateHome = () => navigate("/");
+
+  const navigateHome = () => {
+    logout();
+    client.resetStore();
+    console.log("navigate");
+    navigate("/");
+  };
 
   const { data: currentUser, client } = useGetProfileQuery({
     errorPolicy: "ignore",
   });
   const currentUserRole = currentUser?.profile?.role;
-  
+
   const changeNavStyle = () => {
     if (window.scrollY >= 10) {
       setHeaderWithShadow(true);
@@ -59,16 +65,12 @@ export default function Header({
             <div className="demos">
               <Link to="/cities-list">Accueil</Link>
               {(currentUserRole === "Super Administrator" ||
-                      currentUserRole === "City Administrator") && (
-                      <Link to="/admin">
-                        Admin
-                      </Link>
-                      )}
+                currentUserRole === "City Administrator") && (
+                <Link to="/admin">Admin</Link>
+              )}
               {currentUser ? (
                 <button
-                  onClick={async () => {
-                    await logout();
-                    await client.resetStore();
+                  onClick={() => {
                     navigateHome();
                   }}
                 >

@@ -45,7 +45,7 @@ export default function PasswordReset() {
               className={"tertiaryButton"}
               onClick={() =>
                 toast(
-                  "Veuillez vérifier votre compte email pour créer un nouveau mot de passe",
+                  "Si vous avez un compte Mapado, vous recevrez un email pour réinitialiser votre mot de passe",
                   {
                     style: {
                       border: "3px solid",

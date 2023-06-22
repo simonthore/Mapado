@@ -97,6 +97,7 @@ export default function PasswordReset() {
   const cleanServerToken = JSON.stringify(serverToken)
     .replace(/[\\]/g, "")
     .replace(/['"]+/g, "");
+    
   const cleanToken = token?.replace(/[:]+/g, "");
 
   if (!token || cleanToken !== cleanServerToken)

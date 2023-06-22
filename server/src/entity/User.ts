@@ -114,11 +114,11 @@ export class UserChangePassword {
   newPassword: string;
 }
 
-@InputType()
-export class UserChangePasswordId {
-  @Field()
-  id: number;
-}
+// @InputType()
+// export class UserChangePasswordId {
+//   @Field()
+//   id: number;
+// }
 
 const hashingOptions = {
   memoryCost: 2 ** 16,
