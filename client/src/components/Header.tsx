@@ -14,6 +14,7 @@ interface HeaderProps {
 
 export default function Header({currentUrl, handleChange, state}: HeaderProps) {
     const [headerWithShadow, setHeaderWithShadow] = useState(false);
+    // State qui permet de contrôler si le header doit être affiché ou nom
     const [shouldAnimate, setShouldAnimate] = useState(true);
 
     const changeNavStyle = () => {
@@ -54,9 +55,9 @@ export default function Header({currentUrl, handleChange, state}: HeaderProps) {
             </div>
         </nav>
 
-    return currentUrl !== "/" && currentUrl !== "/cities-list" ? (
+    return currentUrl !== "/" && currentUrl !== "/cities-list" ? ( // Si la route est '/' ou '/cities-list' on n'affiche pas le header sans animation
         header
-    ) : currentUrl === "/cities-list" && shouldAnimate ? (
+    ) : currentUrl === "/cities-list" && shouldAnimate ? ( // Si la route est '/cities-list' et que shouldAnimate est à true, on affiche le header avec une animation. Par défaut shouldAnimate est à true et passe à false avec le useEffect.
         <motion.nav
             initial={{
                 opacity: 0,
@@ -85,7 +86,7 @@ export default function Header({currentUrl, handleChange, state}: HeaderProps) {
                 </div>
             </div>
         </motion.nav>
-    ) : currentUrl === "/cities-list" && !shouldAnimate ? (
+    ) : currentUrl === "/cities-list" && !shouldAnimate ? ( // Si souldAnimate est à false, on affiche un header sans animation. C'est pour prévenir l'animation à chaque fois qu'on retourne sur la route 'cities-list'
         header
     ) : (
         <></>

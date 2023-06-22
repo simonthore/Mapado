@@ -67,6 +67,7 @@ function App() {
                     state={state}
                     handleChange={handleChange}
                 />
+                {/*<AnimatedPresence permet de gérer les transitions entre les pages>*/}
                 <AnimatePresence mode='wait'>
                     <Routes location={location} key={location.pathname}>
                         <Route path="/" element={<Home/>}/>

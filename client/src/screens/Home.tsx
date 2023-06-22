@@ -8,7 +8,10 @@ export default function Home() {
 
     return (
         <>
-            <motion.div exit={{opacity: 0, top: "-100vh"}}>
+            {/*Le préfixe motion permet d'animer un élément HTML avec Framer Motion*/}
+            <motion.div
+                // On indique ici qu'à la sortie de la page, on joue l'animation
+                exit={{opacity: 0, top: "-100vh"}}>
                 <header className="intro">
                     <motion.div
                         initial={{x: "-200px"}}
