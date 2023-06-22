@@ -27,3 +27,28 @@
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
 }
 
+.nav__description {
+    line-height: 1.2;
+    font-size: 1.75em;
+    max-width: 650px;
+    overflow: hidden;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.demos a::after {
+    display: block;
+    content: '';
+    height: 2px;
+    background-color: #EC5D5C;
+    transition: transform 0.2s;
+    transform-origin: center;
+    transform: scaleX(0);
+}
+
+.demos a:hover::after {
+    transform: scaleX(1);
+}
