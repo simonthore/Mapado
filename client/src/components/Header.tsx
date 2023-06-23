@@ -8,14 +8,14 @@ import {motion} from "framer-motion";
 interface HeaderProps {
     currentUrl: string;
     state: IState;
+    shouldAnimate: boolean;
 
     handleChange(e: React.ChangeEvent<HTMLInputElement>): void;
 }
 
-export default function Header({currentUrl, handleChange, state}: HeaderProps) {
+export default function Header({currentUrl, handleChange, state, shouldAnimate}: HeaderProps) {
     const [headerWithShadow, setHeaderWithShadow] = useState(false);
     // State qui permet de contrôler si le header doit être affiché ou nom
-    const [shouldAnimate, setShouldAnimate] = useState(true);
 
     const changeNavStyle = () => {
         if (window.scrollY >= 10) {
@@ -26,18 +26,6 @@ export default function Header({currentUrl, handleChange, state}: HeaderProps) {
     };
 
     window.addEventListener("scroll", changeNavStyle);
-
-    // UseEffect qui annuler l'animation
-    useEffect(() => {
-        if (shouldAnimate && currentUrl === "/cities-list") {
-            setTimeout(() => {
-                setShouldAnimate(false);
-            }, 3000);
-        }
-        if (currentUrl === "/") {
-            setShouldAnimate(true);
-        }
-    }, [currentUrl]);
 
     const header =
         <nav className={`headerStyle${headerWithShadow ? " headerWithShadow" : ""}`}>
@@ -56,7 +44,7 @@ export default function Header({currentUrl, handleChange, state}: HeaderProps) {
             </div>
         </nav>
 
-    if (!shouldAnimate) {
+    if (currentUrl === "/cities-list" && shouldAnimate) {
         return (<motion.nav
                 initial={{
                     opacity: 0,
@@ -86,7 +74,7 @@ export default function Header({currentUrl, handleChange, state}: HeaderProps) {
                 </div>
             </motion.nav>
         )
-    } else if (currentUrl === "/cities-list" && shouldAnimate) {
+    } else if (!shouldAnimate && currentUrl !== '/') {
         return (header)
     } else {
         return (<></>)

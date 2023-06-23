@@ -2,7 +2,7 @@ import {Link} from "react-router-dom";
 import Mapado from "../assets/images/mapado_logo.png";
 import directions from "../assets/images/directions.png";
 import {motion} from "framer-motion";
-import {buttonAnimation} from "../utils/animation";
+import {buttonAnimation} from "../utils/homeButtonAnimation";
 
 export default function Home() {
 

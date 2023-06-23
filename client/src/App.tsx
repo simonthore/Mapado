@@ -10,7 +10,7 @@ import Register from "./screens/Register";
 import PasswordReset from "./screens/PasswordReset";
 import EmailPassword from "./screens/EmailPassword";
 import InfoCity from "./screens/InfoCity";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import EditCity from "./screens/EditCity";
 import CitiesList from "./screens/CitiesList";
 import Admin from "./screens/Admin";
@@ -36,6 +36,16 @@ function App() {
         query: searchParams.get("query") ?? "",
         list: [],
     });
+
+    const [shouldAnimate, setShouldAnimate] = useState(true);
+
+    useEffect(() => {
+        if (currentUrl === "/") {
+            setShouldAnimate(true)
+        } else if (currentUrl !== "/" && currentUrl !== "/cities-list") {
+            setShouldAnimate(false)
+        }
+    }, [currentUrl])
 
     // takes in value from the search bar and returns a filtered list of the cities to display
     //(filter improves with each letter)
@@ -66,6 +76,7 @@ function App() {
                     currentUrl={currentUrl}
                     state={state}
                     handleChange={handleChange}
+                    shouldAnimate={shouldAnimate}
                 />
                 {/*<AnimatedPresence permet de gérer les transitions entre les pages>*/}
                 <AnimatePresence mode='wait'>
