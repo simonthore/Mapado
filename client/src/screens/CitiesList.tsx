@@ -21,7 +21,8 @@ export default function CitiesList({state}: CitiesListProps) {
 
     return (
         <>
-            <div className="citiesList_container">
+            <div
+                className="citiesList_container">
                 <section className="citiesList_wrapper">
                     {state.query === ""
                         ? // if there is no search, display all cities

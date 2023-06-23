@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {NavLink} from "react-router-dom";
 import Mapado from "../assets/images/mapado_logo.png";
 import SearchBar from "./SearchBar";
