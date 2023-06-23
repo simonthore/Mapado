@@ -63,4 +63,9 @@ const styles = StyleSheet.create({
         width: "60%",
         marginLeft: "20%",
     },
-});
+    image: {
+        flex: 1,
+        justifyContent: "center"
+    }        
+}
+);

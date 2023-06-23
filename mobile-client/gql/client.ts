@@ -21,7 +21,6 @@ const authLink = setContext(async (_, { headers }) => {
     };
 });
 
-
 //https://www.apollographql.com/docs/react/networking/authentication/#cookie
 export default new ApolloClient({
     cache: new InMemoryCache(),

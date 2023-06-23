@@ -1,31 +1,29 @@
-import React from 'react';
-import {View, Text, StyleSheet, Image} from "react-native";
-import {City} from "../gql/generated/schema";
-import MapView from 'react-native-maps';
-
-
+import React from "react";
+import { View, Text, StyleSheet, Image } from "react-native";
+import { City } from "../gql/generated/schema";
+import MapView from "react-native-maps";
 
 interface WilderListItemProps {
     city: City;
     route: any;
 }
 
-export default function CityInfoScreen({route}: WilderListItemProps) {
-    const {
-        name,
-        image
-    } = route.params;
+export default function CityInfoScreen({ route }: WilderListItemProps) {
+    const { name, image } = route.params;
 
     return (
         <View style={styles.container}>
-            <Image source={{uri: image}} style={styles.cityImage}/>
+            <Image source={{ uri: image }} style={styles.cityImage} />
             <Text style={styles.cityTitle}>{name}</Text>
-            <Text style={{padding: 20}}>Bordeaux, au cœur de la région viticole, est une ville portuaire située sur la Garonne, dans le
-                sud-ouest de la France. Elle est réputée pour la cathédrale gothique de Saint-André, ses manoirs
-                construits aux XVIIIe et XIXe siècles, ainsi que ses musées d'art comme le musée des Beaux-Arts de
-                Bordeaux. Les jardins publics suivent les courbes des quais qui longent le fleuve. La place de la
-                Bourse, au centre de laquelle trône la fontaine des Trois Grâces, se reflète dans le miroir
-                d'eau.
+            <Text style={{ padding: 20 }}>
+                Bordeaux, au cœur de la région viticole, est une ville portuaire
+                située sur la Garonne, dans le sud-ouest de la France. Elle est
+                réputée pour la cathédrale gothique de Saint-André, ses manoirs
+                construits aux XVIIIe et XIXe siècles, ainsi que ses musées
+                d'art comme le musée des Beaux-Arts de Bordeaux. Les jardins
+                publics suivent les courbes des quais qui longent le fleuve. La
+                place de la Bourse, au centre de laquelle trône la fontaine des
+                Trois Grâces, se reflète dans le miroir d'eau.
             </Text>
             <MapView
                 style={styles.cityMap}
@@ -47,7 +45,7 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         alignItems: "center",
         width: "100%",
-        backgroundColor: "white"
+        backgroundColor: "white",
     },
     cityTitle: {
         fontSize: 25,
@@ -61,9 +59,9 @@ const styles = StyleSheet.create({
         width: "100%",
         height: 200,
     },
-    cityMap:{
+    cityMap: {
         flex: 1,
-        width: '100%',
-        height: '100%',
-    }
+        width: "100%",
+        height: "100%",
+    },
 });
