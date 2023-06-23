@@ -6,8 +6,9 @@ import markerIconPng from "../assets/images/starred.png";
 import {Icon} from "leaflet";
 import ICity from "../interfaces/ICity";
 import IPoi from "../interfaces/IPoi";
-import { useNavigate } from "react-router";
-import { useEffect } from "react";
+import {useNavigate} from "react-router";
+import {useEffect} from "react";
+import {motion} from "framer-motion";
 
 export default function InfoCity() {
     const {cityName} = useParams();
@@ -16,7 +17,7 @@ export default function InfoCity() {
         navigate(-1);
     }
 
-    const {loading: loadingCities, data} = useGetCityQuery({
+    const { data} = useGetCityQuery({
         variables: {query: cityName!},
     });
     console.log("Log de la data BACK", data?.city);
@@ -47,7 +48,11 @@ export default function InfoCity() {
     console.log("Log de l'objet FRONT", city);
 
     return (
-        <div className="infoCity_container">
+        <motion.div
+            initial={{opacity: 0}}
+            animate={{opacity: 1}}
+            transition={{duration: 3}}
+            className="infoCity_container">
             <button className={"backButton"} onClick={goBack}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25">
                     <path d="M24 12.001H2.914l5.294-5.295-.707-.707L1 12.501l6.5 6.5.707-.707-5.293-5.293H24v-1z"/>
@@ -76,6 +81,6 @@ export default function InfoCity() {
                     ))
                     : null}
             </Map>
-        </div>
+        </motion.div>
     );
 }
