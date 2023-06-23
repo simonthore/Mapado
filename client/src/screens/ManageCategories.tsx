@@ -103,7 +103,7 @@ export default function AddManageCities() {
                 <div className="categories_badges_container">
                     {categories.map((category: ICategory, index: number) => {
                         return (
-                            <BadgeEdit text={category.name} key={index} functionOnClick={onClickDeleteCategory}
+                            <BadgeEdit contentA={category.name} key={index} functionOnClick={onClickDeleteCategory}
                                        functionOnClick2={handleClickOpen}
                                        categoryId={category.id}
                             />
