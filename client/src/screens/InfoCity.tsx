@@ -17,7 +17,7 @@ export default function InfoCity() {
         navigate(-1);
     }
 
-    const { data} = useGetCityQuery({
+    const {data} = useGetCityQuery({
         variables: {query: cityName!},
     });
     console.log("Log de la data BACK", data?.city);
@@ -37,6 +37,7 @@ export default function InfoCity() {
             longitude: e.longitude!,
             latitude: e.latitude!,
             address: e.address,
+            category: e.category?.name,
         };
         city?.pois?.push(poi);
     });
@@ -76,6 +77,9 @@ export default function InfoCity() {
                             <Popup>
                                 {e.name}
                                 <br/> {e.address}.
+                                {e.category &&
+                                    (<span>{e.category}</span>)
+                                }
                             </Popup>
                         </Marker>
                     ))

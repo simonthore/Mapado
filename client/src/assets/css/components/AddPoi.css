@@ -1,0 +1,16 @@
+.selectCategoryLabel {
+    display: none;
+}
+
+.categorySelect {
+    border-radius: 20px;
+    text-align: center;
+    padding: 0 6px;
+    height: 2.5rem;
+    border: 3px solid #173472;
+    box-sizing: content-box;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #000000;
+    width: 20rem;
+}

@@ -104,28 +104,35 @@ export default function AddPoi({cityId, cityName}: PoiProps) {
                     }))
                 }
             ></input>
-            {categories ? categories.map((category, index) => {
-                return (
-                    <div key={index} className={"editUser_container"}>
+
+            <label htmlFor="categories" className={"selectCategoryLabel"}>Catégorie</label>
+
+            <select
+                className="categorySelect"
+                name="categories"
+                id="categories"
+                defaultValue=""
+                onChange={(e) => {
+                    console.log(e.target.value);
+                    setPoiRequested((prevState) => ({
+                        ...prevState,
+                        categoryId: parseInt(e.target.value, 10),
+                    }));
+                }}
+            >
+                <option value="" disabled className="defaultValue">Catégorie du POI</option>
+                {categories ? categories.map((category, index) => {
+                    return (
                         <option
                             key={index}
-                            value={category.name}
+                            value={category.id}
                         >
                             {category.name}
                         </option>
-                        <button
-                            onClick={() =>
-                                setPoiRequested((prevState) => ({
-                                    ...prevState,
-                                    categoryId: category.id
-                                }))
-                            }
-                        >
-                            Select
-                        </button>
-                    </div>
-                );
-            }) : null}
+                    );
+                }) : null}
+            </select>
+
             <button onClick={onClickSendNewPoi} className={"tertiaryButton"}>
                 Ajouter
             </button>
