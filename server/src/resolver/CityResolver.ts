@@ -1,12 +1,13 @@
-import { Arg, Int, Mutation, Query, Resolver } from "type-graphql";
+import {Arg, Int, Mutation, Query, Resolver} from "type-graphql";
 import City, {
-  CityInput,
-  CityRequested,
-  UpdateCityInput,
+    CityInput,
+    CityRequested,
+    UpdateCityInput,
 } from "../entity/City";
 import datasource from "../db";
 import { ApolloError } from "apollo-server-errors";
 import { env } from "../environment";
+import Poi from "../entity/Poi";
 
 @Resolver(City)
 export class CityResolver {
@@ -33,6 +34,7 @@ export class CityResolver {
   async createCity(@Arg("data") data: CityInput): Promise<City> {
     return await datasource.getRepository(City).save(data);
   }
+
   @Mutation(() => Boolean)
   async deleteCity(@Arg("id", () => Int) id: number): Promise<boolean> {
     const { affected } = await datasource.getRepository(City).delete(id);
@@ -43,15 +45,16 @@ export class CityResolver {
   @Mutation(() => City)
   async updateCity(
     @Arg("id", () => Int) id: number,
-    @Arg("data") { name, photo, longitude, latitude }: CityInput
-  ): Promise<City> {
-    const { affected } = await datasource
-      .getRepository(City)
-      .update(id, { name, photo, longitude, latitude });
+    @Arg("data") data: UpdateCityInput
+  ): Promise<City | null> {
+    const cityToUpdate = await datasource.getRepository(City).findOne({
+      where: { id },
+    });
+    const { affected } = await datasource.getRepository(City).update(id, data);
 
     if (affected === 0) throw new ApolloError("City not found", "NOT_FOUND");
 
-    return { id, name };
+    return cityToUpdate;
   }
 
   // On récupère le string du front
@@ -61,8 +64,16 @@ export class CityResolver {
   // On enregistre l'objet dans notre bdd
 
   @Mutation(() => String)
-  async fetchCityName(@Arg("data") data: CityRequested): Promise<string> {
+  async fetchCityName(
+    @Arg("data") data: CityRequested
+  ): Promise<string | ApolloError> {
     const { cityName } = data;
+
+    if (cityName === "") {
+      return new ApolloError("Entrez un nom de ville svp ! 🙏");
+    } else if (cityName.length <= 2) {
+      return new ApolloError("Entrez un nom de ville correct svp ! 🙏");
+    }
 
     let optionsCityAPI = {
       method: "GET",
@@ -77,8 +88,10 @@ export class CityResolver {
     const fetchCity = await fetch(urlCityAPI, optionsCityAPI)
       .then((res) => res.json()) // parse response as JSON
       .then((data) => {
-        console.log(data);
-        return data.shift();
+        if (data.length === 0) {
+          console.log(data);
+          return new ApolloError("Nous n'avons pas trouvé la ville, désolé...");
+        } else return data.shift();
       })
       .catch((err) => {
         console.log(`error while fetching city coordinates ${err}`);
@@ -100,6 +113,9 @@ export class CityResolver {
       .then((res) => res.json())
       .then((data) => {
         let urlOfCityPhoto = data["results"][0].urls["regular"];
+        // Récupérer le nom du photographe pour passer à la version VIP de l'API Unsplash
+        // let photographer = data["results"][0].user["name"];
+
         return urlOfCityPhoto;
       })
       .catch((err) => {
@@ -113,9 +129,27 @@ export class CityResolver {
       photo: fetchPhoto,
     };
     //console.log(fetchCity);
+    const cityExists = await datasource
+      .getRepository(City)
+      .findOne({ where: { name: cityData.name } });
+    console.log(cityExists);
 
-    await datasource.getRepository(City).save(cityData);
+    // vérifier correspondance entre cityName et cityData.name
 
-    return cityName;
+    if (cityName !== cityData.name) {
+      return new ApolloError(
+        "Cette ville n'existe pas ou nous ne l'avons pas trouvée. Essayez autre chose."
+      );
+    } else if (!cityExists) {
+      await datasource.getRepository(City).save(cityData);
+      return cityData.name + " a bien été ajoutée. ";
+    } else {
+      return new ApolloError(
+        "Il semblerait que " +
+          cityData.name +
+          " existe déjà, essayez d'ajouter une autre ville !"
+      );
+    }
   }
+
 }

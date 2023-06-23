@@ -19,6 +19,7 @@
     "@types/react-dom": "^18.0.8",
     "@types/react-router-dom": "^5.3.3",
     "csstype": "^3.1.1",
+    "framer-motion": "^10.12.16",
     "graphql": "^16.6.0",
     "i": "^0.3.7",
     "jwt-decode": "^3.1.2",

@@ -3,6 +3,7 @@
 @import "./components/Header.css";
 @import "./components/AddPoi.css";
 @import "./components/Badge.css";
+@import "./components/BadgeEdit.css";
 @import "screens/Home.css";
 @import "screens/Login.css";
 @import "screens/EmailPassword.css";
@@ -12,3 +13,5 @@
 @import "screens/InfoCIty.css";
 @import "screens/EditCity.css";
 @import "screens/CitiesList.css";
+@import "screens/Admin.css";
+@import "screens/ManageCategories.css";

@@ -3,11 +3,11 @@ import express, { Express, Request, Response } from "express";
 import { ApolloServer } from "apollo-server-express";
 import cors from "cors";
 import datasource from "./db";
-import {buildSchema} from "type-graphql";
-import {CityResolver} from "./resolver/CityResolver";
-import {UserResolver} from "./resolver/UserResolver";
-import {PoiResolver} from "./resolver/PoiResolver";
-import {env} from "./environment";
+import { buildSchema } from "type-graphql";
+import { CityResolver } from "./resolver/CityResolver";
+import { UserResolver } from "./resolver/UserResolver";
+import { PoiResolver } from "./resolver/PoiResolver";
+import { env } from "./environment";
 import {
   ApolloServerPluginDrainHttpServer,
   ApolloServerPluginLandingPageLocalDefault,
@@ -16,6 +16,7 @@ import * as http from "http";
 import jwt from "jsonwebtoken";
 import User from "./entity/User";
 import cookieParser from "cookie-parser";
+import {CategoryResolver} from "./resolver/CategoryResolver";
 
 export interface ContextType {
   req: express.Request;
@@ -30,7 +31,7 @@ const start = async () => {
   const httpServer = http.createServer(app);
 
   const schema = await buildSchema({
-    resolvers: [CityResolver, UserResolver, PoiResolver],
+    resolvers: [CityResolver, UserResolver, PoiResolver, CategoryResolver],
     authChecker: async ({ context }: { context: ContextType }, roles) => {
       const tokenInHeaders = context.req.headers.authorization?.split(" ")[1];
       const tokenInCookie = context.req.cookies?.["token"];
@@ -70,7 +71,7 @@ const start = async () => {
     },
   });
 
-  console.log("Hello World");
+  console.log("Server starting");
   const allowedOrigins = env.CORS_ALLOWED_ORIGINS.split(",");
 
   app.use(express.json());
@@ -90,7 +91,12 @@ const start = async () => {
     res.send("<h1>Mapado</h1>");
   });
 
-  await apolloServer.start();
+  try {
+    await apolloServer.start();
+  } catch (erreur) {
+    console.log(erreur);
+  }
+
   apolloServer.applyMiddleware({ app, cors: false, path: "/" });
   const port = process.env.PORT || 4000;
 

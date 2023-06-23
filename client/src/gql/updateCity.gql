@@ -1,17 +1,7 @@
-mutation UpdateCity($data: CityInput!, $updateCityId: Int!) {
+mutation UpdateCity($data: UpdateCityInput!, $updateCityId: Int!) {
   updateCity(data: $data, id: $updateCityId) {
     id
     name
-    latitude
-    longitude
-    users {
-      id
-      email
-    }
-    poi {
-      id
-      name
-      address
-    }
+    photo
   }
 }

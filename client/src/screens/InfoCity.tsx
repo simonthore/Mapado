@@ -3,16 +3,14 @@ import {useParams} from "react-router-dom";
 import {useGetCityQuery} from "../gql/generated/schema";
 import {Marker, Popup} from "react-leaflet";
 import markerIconPng from "../assets/images/starred.png";
-import leftArrow from "../assets/images/svg/left-arrow.svg"
 import {Icon} from "leaflet";
 import ICity from "../interfaces/ICity";
 import IPoi from "../interfaces/IPoi";
-import {useNavigate} from "react-router";
-import {useEffect} from "react";
+import { useNavigate } from "react-router";
+import { useEffect } from "react";
 
 export default function InfoCity() {
     const {cityName} = useParams();
-
     const navigate = useNavigate();
     const goBack = () => {
         navigate(-1);
@@ -47,9 +45,6 @@ export default function InfoCity() {
     })
 
     console.log("Log de l'objet FRONT", city);
-
-    //   const city: ICity = data?.city ? data?.city : null;
-    //   const pois = city.poi;
 
     return (
         <div className="infoCity_container">
