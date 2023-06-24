@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import Mapado from "../assets/images/mapado_logo.png";
 import SearchBar from "./SearchBar";
 import IState from "../interfaces/IState";
 import { motion } from "framer-motion";
-import { useGetProfileQuery, useGetCityQuery } from "../gql/generated/schema";
+import { useGetProfileQuery, useLogoutMutation } from "../gql/generated/schema";
 
 interface HeaderProps {
   currentUrl: string;
@@ -22,6 +22,16 @@ export default function Header({
 }: HeaderProps) {
   const [headerWithShadow, setHeaderWithShadow] = useState(false);
   // State qui permet de contrôler si le header doit être affiché ou nom
+
+  const [logout] = useLogoutMutation();
+
+  const navigate = useNavigate();
+  const navigateHome = () => {
+    logout();
+    client.resetStore();
+    console.log("navigate");
+    navigate("/");
+  };
 
   const { data: currentUser, client } = useGetProfileQuery({
     errorPolicy: "ignore",
@@ -58,7 +68,18 @@ export default function Header({
             currentUserRole === "City Administrator") && (
             <NavLink to="/admin">Admin</NavLink>
           )}
-          <NavLink to="/login">Connexion</NavLink>
+          {currentUser ? (
+            <button
+              onClick={() => {
+                navigateHome();
+              }}
+            >
+              {" "}
+              Se déconnecter
+            </button>
+          ) : (
+            <NavLink to="/login">Connexion</NavLink>
+          )}
         </div>
       </div>
     </nav>
@@ -97,7 +118,20 @@ export default function Header({
               currentUserRole === "City Administrator") && (
               <NavLink to="/admin">Admin</NavLink>
             )}
-            <NavLink to="/login">Connexion</NavLink>
+            {currentUser ? (
+              <button
+                onClick={async () => {
+                  await logout();
+                  await client.resetStore();
+                  navigateHome();
+                }}
+              >
+                {" "}
+                Se déconnecter
+              </button>
+            ) : (
+              <NavLink to="/login">Connexion</NavLink>
+            )}
           </div>
         </div>
       </motion.nav>
