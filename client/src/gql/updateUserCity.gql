@@ -1,0 +1,3 @@
+mutation updateUserCity($data: UpdateUserInput!, $updateUserId: Int!) {
+  updateUser(data: $data, id: $updateUserId)
+}

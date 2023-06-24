@@ -1,9 +1,11 @@
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
 import {
   useCitiesQuery,
   useGetProfileQuery,
+  useUpdateUserCityMutation,
   useUpdateUserRoleMutation,
   useUsersQuery,
 } from "../gql/generated/schema";
@@ -17,10 +19,12 @@ const SuperAdminRoles = [
 const CityAdminRoles = ["Visitor", "POI Creator"];
 
 export default function ManageUsers() {
+  const [open, setOpen] = useState(false);
   const [userDetails, setUserDetails] = useState({
     email: "",
     role: "",
   });
+  const [dataForUpdate, setDataForUpdate] = useState({cityName: ""},)
 
   const navigate = useNavigate();
 
@@ -35,6 +39,8 @@ export default function ManageUsers() {
 
   const { data: currentUser } = useGetProfileQuery();
   const currentUserRole = currentUser?.profile?.role;
+
+  const [updateCity] = useUpdateUserCityMutation({onCompleted: () => refetch()})
 
   const onClickRoleChange = async (
     email: string,
@@ -52,9 +58,47 @@ export default function ManageUsers() {
       toast.error(`Could not update role : ${e}`);
     }
   };
+  const handleClose = () => {
+    setOpen(false);
+};
+// const handleUpdateCity = () => {
+//   updateCity({
+//       variables: {
+//            updateCityId: parseInt(cityIdforModal),
+//           updateCityData: dataForUpdate
+//       }
+//   });
+//   setCityIdForModal('')
+//   setOpen(false);
+// }
 
   const onClickOpenModal = () => {
-    
+
+    return (
+      cities.map((city) => {
+        return ( <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Modifier la catégorie</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Veuillez entrer un nouveau nom
+                    </DialogContentText>
+                    <TextField
+                        margin="dense"
+                        id="name"
+                        label="Nom"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                        onChange={(e) => setDataForUpdate({cityName: e.target.value})}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Annuler</Button>
+                    {/* <Button onClick={handleUpdateCity}>Envoyer</Button> */}
+                </DialogActions>
+            </Dialog>)
+      })
+    )
   }
 
   useEffect(() => {
