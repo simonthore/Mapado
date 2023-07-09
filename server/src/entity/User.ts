@@ -72,9 +72,9 @@ class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Field({ nullable: true })
-  @Column({ nullable: true, type: "text" })
-  email?: string;
+  @Field()
+  @Column({ type: "text" })
+  email: string;
 
   @Field({ nullable: true })
   @Column({ nullable: true, type: "text" })

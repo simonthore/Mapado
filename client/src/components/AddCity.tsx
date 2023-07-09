@@ -16,7 +16,7 @@ interface ToastInterface {
   backgroundColor: string;
 }
 
-export default function AddCity() {
+export default function AddCity(props: any) {
   // Initialisation de l'objet cityRequested
   const [cityRequested, setCityRequested] = useState({
     cityName: "",

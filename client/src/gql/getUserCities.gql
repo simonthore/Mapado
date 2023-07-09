@@ -1,0 +1,8 @@
+query getUserCities {
+  cities {
+    id
+    users {
+      id
+    }
+  }
+}

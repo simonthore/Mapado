@@ -1,10 +1,12 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
+import AddUserCity from "../components/AddUserCity";
 import {
   useCitiesQuery,
   useGetProfileQuery,
+  useGetUserCitiesQuery,
   useUpdateUserCityMutation,
   useUpdateUserRoleMutation,
   useUsersQuery,
@@ -19,87 +21,146 @@ const SuperAdminRoles = [
 const CityAdminRoles = ["Visitor", "POI Creator"];
 
 export default function ManageUsers() {
-  const [open, setOpen] = useState(false);
   const [userDetails, setUserDetails] = useState({
     email: "",
     role: "",
   });
-  const [dataForUpdate, setDataForUpdate] = useState({cityName: ""},)
+  const [selectedUserForCity, setSelectedUserForCity] = useState({
+    email: "",
+    id: 0,
+  });
+  const [userId, setUserId] = useState<number>();
+  const [openModal, setOpenModal] = useState(false);
+
+  const [cityAdded, setCityAdded] = useState({
+    cityId: 0,
+    userId: 0,
+  });
 
   const navigate = useNavigate();
 
-  const { loading: loadingUsers, data: usersData, refetch } = useUsersQuery();
+  const { data: usersData, refetch } = useUsersQuery({
+    onCompleted: () => refetch(),
+  });
+
   const users = usersData?.users ?? [];
 
   const [updateUser] = useUpdateUserRoleMutation();
 
-  const { data: citiesData } = useCitiesQuery();
-
-  const cities = citiesData?.cities ?? [];
-
   const { data: currentUser } = useGetProfileQuery();
   const currentUserRole = currentUser?.profile?.role;
+  const currentUserId = currentUser?.profile.id;
+  const currentUserCities = currentUser?.profile.cities;
 
-  const [updateCity] = useUpdateUserCityMutation({onCompleted: () => refetch()})
+  const [updateCity] = useUpdateUserCityMutation({
+    onCompleted: () => refetch(),
+  });
+
+  const getCities = useGetUserCitiesQuery({
+    onCompleted: () => refetch(),
+  });
+
+  // console.log(getCities, "---------");
+  const cities = getCities?.data?.cities;
+  //console.log(getCities?.data?.cities.map((city) => city?.users?.map((user) => user.id.includes(userId))))
+
+  //cityId
+  //console.log(getCities?.data?.cities.map((city) => city.id));
+
+  //console.log(cities?.map((city) => city.users?.map((user) => user.id)));
+
+  //I have cities
+  // I want cities with matching userId
+  // I input userId
+
+  let userCities: any = [];
+  const displayUserCities = (userId: any) => {
+    const cityUserIds = getCities?.data?.cities.map((city) =>
+      city?.users?.map((user) => user.id)
+    );
+    if (cityUserIds?.map((user) => user?.includes(userId)))
+      userCities.push(getCities?.data?.cities.map((city) => city.id));
+    return userCities.flat();
+  };
+
+displayUserCities(3);
+
+  async function handleSelectedUserForCity(
+    selectedUserId: any,
+    selectedUserEmail: any,
+    newRole: any
+  ) {
+    await onClickRoleChange(selectedUserId, selectedUserEmail, newRole);
+    setSelectedUserForCity(() => ({
+      email: selectedUserEmail,
+      id: selectedUserId,
+    }));
+    setOpenModal(true);
+  }
+
+  const onClickAssignCity = async (
+    selectedCity: number,
+    cityName: string,
+    userId: number,
+    userEmail: string
+  ): Promise<void> => {
+    try {
+      await updateCity({
+        variables: {
+          data: {
+            cities: [
+              {
+                id: selectedCity,
+              },
+            ],
+          },
+          updateUserId: userId,
+        },
+      });
+      await toast.success(
+        `updated ${userEmail} has admin rights over ${cityName}`,
+        {
+          duration: 10000,
+        }
+      );
+      refetch();
+      await setOpenModal(false);
+    } catch (error) {
+      console.log(JSON.stringify(error, null, 2));
+      toast.error(
+        `Could not update city ${userEmail} rights on ${cityName}: ${error}`,
+        {
+          duration: 10000,
+        }
+      );
+    }
+  };
 
   const onClickRoleChange = async (
+    id: number,
     email: string,
     role: string
   ): Promise<void> => {
     try {
-      setUserDetails({
+      setUserDetails(() => ({
         email,
         role,
-      });
+      }));
+      setUserId(() => id);
       updateUser({ variables: { data: { email, role } } });
       refetch();
-      toast.success(`Role mis à jour : ${email} est désormais ${role}`);
-    } catch (e) {
-      toast.error(`Could not update role : ${e}`);
+      toast.success(`Role mis à jour : ${email} est désormais ${role}`, {
+        duration: 10000,
+      });
+    } catch (error) {
+      console.log(JSON.stringify(error, null, 2));
+      toast.error(`Could not update role : ${error}`);
     }
   };
-  const handleClose = () => {
-    setOpen(false);
-};
-// const handleUpdateCity = () => {
-//   updateCity({
-//       variables: {
-//            updateCityId: parseInt(cityIdforModal),
-//           updateCityData: dataForUpdate
-//       }
-//   });
-//   setCityIdForModal('')
-//   setOpen(false);
-// }
 
-  const onClickOpenModal = () => {
-
-    return (
-      cities.map((city) => {
-        return ( <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Modifier la catégorie</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Veuillez entrer un nouveau nom
-                    </DialogContentText>
-                    <TextField
-                        margin="dense"
-                        id="name"
-                        label="Nom"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        onChange={(e) => setDataForUpdate({cityName: e.target.value})}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose}>Annuler</Button>
-                    {/* <Button onClick={handleUpdateCity}>Envoyer</Button> */}
-                </DialogActions>
-            </Dialog>)
-      })
-    )
-  }
+  const handleOpenModal = () => {
+    setOpenModal(() => !openModal);
+  };
 
   useEffect(() => {
     refetch();
@@ -110,7 +171,7 @@ export default function ManageUsers() {
   };
 
   return (
-    <>
+    <div style={{ zIndex: 1 }}>
       <div className="max-w-screen-xl mx-auto px-5 min-h-screen">
         <button className={"backButton"} onClick={goBack}>
           {" "}
@@ -119,67 +180,107 @@ export default function ManageUsers() {
           </svg>
         </button>
         <div className="grid divide-y divide-neutral-200 max-w-xl mx-auto mt-8">
-          <h2 className={"title"}>Gérer les utilisateurs</h2>
+          <h1 className={"title"} style={{ marginTop: "20%" }}>
+            Gérer les utilisateurs
+          </h1>
+          <h2 className={"editUser_title"} style={{ color: "white" }}>
+            {" "}
+            Vous êtes un {currentUserRole}
+          </h2>
           {currentUserRole === "Super Administrator" &&
-            users.map((user) => {
-              return (
-                <div className="py-5" key={user.email}>
-                  <details className="group">
-                    <summary className="flex justify-between items-center font-medium cursor-pointer list-none">
-                      <h2 className={"editUser_title"}>
-                        {user.email} est actuellement un {user.role}
-                      </h2>
-                      <span className="transition group-open:rotate-180">
-                        <svg
-                          fill="none"
-                          height="24"
-                          shapeRendering="geometricPrecision"
-                          stroke="white"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="1.5"
-                          viewBox="0 0 24 24"
-                          width="24"
-                        >
-                          <path d="M6 9l6 6 6-6"></path>
-                        </svg>
-                      </span>
-                    </summary>
-                    {SuperAdminRoles.map((role, index) => {
-                      return (
-                        <div key={index} className={"editUser_container"}>
-                          <option
-                            className={
-                              role === user.role
-                                ? "editUser_labelCurrent"
-                                : "editUser_label"
-                            }
-                            key={index}
-                            value={role}
+            users
+              .filter((currentUser) => currentUser.id !== currentUserId)
+              .map((user) => {
+                return (
+                  <div className="py-5" key={user.email}>
+                    <details className="group">
+                      <summary className="flex justify-between items-center font-medium cursor-pointer list-none">
+                        <h2 className={"editUser_title"}>
+                          {user.email} est actuellement un {user.role}
+                        </h2>
+
+                        <span className="transition group-open:rotate-180">
+                          <svg
+                            fill="none"
+                            height="24"
+                            shapeRendering="geometricPrecision"
+                            stroke="white"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="1.5"
+                            viewBox="0 0 24 24"
+                            width="24"
                           >
-                            {role}
-                          </option>
-                          <button
-                            disabled={role === user.role ? true : false}
-                            className={
-                              role === user.role
-                                ? "primaryButtonDisabled"
-                                : "primaryButton"
-                            }
-                            onClick={(): void => {
-                              if (user.email && role)
-                                onClickRoleChange(user.email, role);
-                            }}
-                          >
-                            Select
-                          </button>
-                        </div>
-                      );
-                    })}
-                  </details>
-                </div>
-              );
-            })}
+                            <path d="M6 9l6 6 6-6"></path>
+                          </svg>
+                        </span>
+                      </summary>
+                      {SuperAdminRoles.map((role, index) => {
+                        return (
+                          <div key={index} className={"editUser_container"}>
+                            <option
+                              className={
+                                role === user.role
+                                  ? "editUser_labelCurrent"
+                                  : "editUser_label"
+                              }
+                              key={index}
+                              value={role}
+                            >
+                              {role}
+                            </option>
+                            <div
+                              className="modal-wrapper"
+                              style={{ position: "relative" }}
+                            >
+                              <>
+                                <button
+                                  disabled={role === user.role ? true : false}
+                                  className={
+                                    role === user.role
+                                      ? "primaryButtonDisabled"
+                                      : "primaryButton"
+                                  }
+                                  onClick={() =>
+                                    role === "POI Creator" ||
+                                    role === "City Administrator"
+                                      ? handleSelectedUserForCity(
+                                          user.id,
+                                          user.email,
+                                          role
+                                        )
+                                      : onClickRoleChange(
+                                          user.id,
+                                          user.email!,
+                                          role!
+                                        )
+                                  }
+                                >
+                                  Select
+                                </button>
+                                {openModal &&
+                                  createPortal(
+                                    <AddUserCity
+                                      currentUserCities={currentUserCities}
+                                      handleOpenModal={handleOpenModal}
+                                      onClickAssignCity={onClickAssignCity}
+                                      selectedUser={selectedUserForCity}
+                                      refetch={refetch}
+                                      role={role}
+                                    />,
+                                    document.body
+                                  )}
+                              </>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </details>
+                  </div>
+                );
+              })}
+
+          {/* City Administrator view */}
           {currentUserRole === "City Administrator" &&
             users
               .filter(
@@ -225,25 +326,17 @@ export default function ManageUsers() {
                             >
                               {role}
                             </option>
-                            <button
+                            {/* <button
                               disabled={role === user.role ? true : false}
                               className={
                                 role === user.role
                                   ? "primaryButtonDisabled"
                                   : "primaryButton"
                               }
-                              onClick={(): void => {
-                                if ((user.email) && (role === "Super Administrator" || role === "Visitor")) {
-                                  onClickRoleChange(user.email, role);
-                                }
-                                if ((user.email) && (role === "City Administrator" || role === "POI Creator")) {
-                                  onClickOpenModal()
-                                }
-                                  
-                              }}
+                              onClick={handleOpenModal}
                             >
                               Select
-                            </button>
+                            </button> */}
                           </div>
                         );
                       })}
@@ -253,6 +346,6 @@ export default function ManageUsers() {
               })}
         </div>
       </div>
-    </>
+    </div>
   );
 }

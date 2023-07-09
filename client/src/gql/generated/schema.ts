@@ -243,7 +243,7 @@ export type User = {
   __typename?: 'User';
   changePasswordToken?: Maybe<Scalars['String']>;
   cities?: Maybe<Array<City>>;
-  email?: Maybe<Scalars['String']>;
+  email: Scalars['String'];
   hashedPassword?: Maybe<Scalars['String']>;
   id: Scalars['Float'];
   role: Scalars['String'];
@@ -355,12 +355,17 @@ export type FetchTokenQuery = { __typename?: 'Query', fetchToken: { __typename?:
 export type GetProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetProfileQuery = { __typename?: 'Query', profile: { __typename?: 'User', id: number, email?: string | null, role: string } };
+export type GetProfileQuery = { __typename?: 'Query', profile: { __typename?: 'User', id: number, email: string, role: string, cities?: Array<{ __typename?: 'City', name: string, id: number }> | null } };
+
+export type GetUserCitiesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUserCitiesQuery = { __typename?: 'Query', cities: Array<{ __typename?: 'City', id: number, users?: Array<{ __typename?: 'User', id: number }> | null }> };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: number, email?: string | null, role: string }> };
+export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: number, email: string, role: string, cities?: Array<{ __typename?: 'City', name: string }> | null }> };
 
 export type LoginMutationVariables = Exact<{
   data: UserInput;
@@ -379,7 +384,7 @@ export type SendPasswordEmailMutationVariables = Exact<{
 }>;
 
 
-export type SendPasswordEmailMutation = { __typename?: 'Mutation', sendPasswordEmail: { __typename?: 'User', email?: string | null } };
+export type SendPasswordEmailMutation = { __typename?: 'Mutation', sendPasswordEmail: { __typename?: 'User', email: string } };
 
 export type UpdateCategoryMutationVariables = Exact<{
   updateCategoryData: CategoryInput;
@@ -829,6 +834,10 @@ export const GetProfileDocument = gql`
     id
     email
     role
+    cities {
+      name
+      id
+    }
   }
 }
     `;
@@ -859,12 +868,52 @@ export function useGetProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type GetProfileQueryHookResult = ReturnType<typeof useGetProfileQuery>;
 export type GetProfileLazyQueryHookResult = ReturnType<typeof useGetProfileLazyQuery>;
 export type GetProfileQueryResult = Apollo.QueryResult<GetProfileQuery, GetProfileQueryVariables>;
+export const GetUserCitiesDocument = gql`
+    query getUserCities {
+  cities {
+    id
+    users {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetUserCitiesQuery__
+ *
+ * To run a query within a React component, call `useGetUserCitiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserCitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserCitiesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUserCitiesQuery(baseOptions?: Apollo.QueryHookOptions<GetUserCitiesQuery, GetUserCitiesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserCitiesQuery, GetUserCitiesQueryVariables>(GetUserCitiesDocument, options);
+      }
+export function useGetUserCitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserCitiesQuery, GetUserCitiesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserCitiesQuery, GetUserCitiesQueryVariables>(GetUserCitiesDocument, options);
+        }
+export type GetUserCitiesQueryHookResult = ReturnType<typeof useGetUserCitiesQuery>;
+export type GetUserCitiesLazyQueryHookResult = ReturnType<typeof useGetUserCitiesLazyQuery>;
+export type GetUserCitiesQueryResult = Apollo.QueryResult<GetUserCitiesQuery, GetUserCitiesQueryVariables>;
 export const UsersDocument = gql`
     query Users {
   users {
     id
     email
     role
+    cities {
+      name
+    }
   }
 }
     `;

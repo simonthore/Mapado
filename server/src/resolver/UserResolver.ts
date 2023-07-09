@@ -69,6 +69,7 @@ export class UserResolver {
     return true;
   }
 
+
   @Mutation(() => String)
   async updateUser(
     @Arg("id", () => Int) id: number,
@@ -85,8 +86,7 @@ export class UserResolver {
       citiesEntities = await datasource
         .getRepository(City)
         .find({ where: { id: In(cities?.map((c) => c.id)) } });
-      user.cities = [...(user?.cities ? user.cities : []), ...citiesEntities];
-      user.role = UserRole.CITYADMIN;
+        user.cities = [...(user?.cities ? user.cities : []), ...citiesEntities];
     }
     if (hashedPassword)
       user.hashedPassword = await hashPassword(
@@ -97,7 +97,7 @@ export class UserResolver {
 
     const updatedUser = await datasource.getRepository(User).save(user);
 
-    return `${updatedUser.email} has been updated`;
+    return `${updatedUser.email} has been updated: ${updatedUser.role}, ${JSON.stringify(updatedUser.cities)}`;
   }
 
   //Update User Role
