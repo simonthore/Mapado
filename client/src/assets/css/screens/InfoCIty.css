@@ -19,3 +19,17 @@
     width: 30px;
     fill: #EC5D5C;
 }
+
+.leaflet-popup-content{
+    display: flex;
+    flex-direction: column;
+}
+
+.leaflet-popup-content span{
+    display: flex;
+    flex-direction: column;
+    background-color: #173472;
+    color: white;
+    width: fit-content;
+    padding: 0 4px;
+}
