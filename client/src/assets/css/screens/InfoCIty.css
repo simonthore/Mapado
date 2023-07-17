@@ -23,6 +23,7 @@
 .leaflet-popup-content{
     display: flex;
     flex-direction: column;
+    gap: 6px;
 }
 
 .leaflet-popup-content span{
@@ -32,4 +33,12 @@
     color: white;
     width: fit-content;
     padding: 0 4px;
+}
+
+.leaflet-popup-content .description {
+    padding: 4px;
+    border: 1px solid #173472;
+    border-radius: 5px;
+    width: 100%;
+    margin: 0;
 }

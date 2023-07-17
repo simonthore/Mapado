@@ -139,10 +139,10 @@ export class findPOI {
   @Field()
   cityId?: number;
 
-  @Field()
+  @Field({ nullable: true })
   categoryId?: number;
 
-  @Field()
+  @Field({ nullable: true })
   description?: string;
 }
 

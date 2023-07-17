@@ -82,10 +82,7 @@ export default function InfoCity() {
                                     (<span>{e.category}</span>)
                                 }
                                 {e.description && (
-                                    <>
-                                        <h3>Description</h3>
-                                        <p>{e.description}</p>
-                                    </>
+                                    <p className="description">{e.description}</p>
                                 )}
                             </Popup>
                         </Marker>
