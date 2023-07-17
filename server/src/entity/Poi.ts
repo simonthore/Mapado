@@ -141,6 +141,9 @@ export class findPOI {
 
   @Field()
   categoryId?: number;
+
+  @Field()
+  description?: string;
 }
 
 export default Poi;

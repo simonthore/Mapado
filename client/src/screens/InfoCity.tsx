@@ -38,6 +38,7 @@ export default function InfoCity() {
             latitude: e.latitude!,
             address: e.address,
             category: e.category?.name,
+            description: e.description,
         };
         city?.pois?.push(poi);
     });
@@ -80,6 +81,12 @@ export default function InfoCity() {
                                 {e.category &&
                                     (<span>{e.category}</span>)
                                 }
+                                {e.description && (
+                                    <>
+                                        <h3>Description</h3>
+                                        <p>{e.description}</p>
+                                    </>
+                                )}
                             </Popup>
                         </Marker>
                     ))

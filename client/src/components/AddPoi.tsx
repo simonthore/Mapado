@@ -19,6 +19,7 @@ interface PoiRequestedInterface {
     cityId: number;
     cityName: string;
     categoryId: number;
+    description: string;
 }
 
 interface ToastInterface {
@@ -36,6 +37,7 @@ export default function AddPoi({cityId, cityName}: PoiProps) {
         cityId: 0,
         cityName: "",
         categoryId: 0,
+        description : ""
     });
 
     console.log(poiRequested)
@@ -131,7 +133,24 @@ export default function AddPoi({cityId, cityName}: PoiProps) {
                         </option>
                     );
                 }) : null}
+                <option value=""></option>
             </select>
+
+            <div className="poi_description">
+                <textarea
+                    name="description"
+                    id="description"
+                    placeholder="Description"
+                    defaultValue=""
+                    onChange={(e) =>
+                        setPoiRequested((prevState) => ({
+                            ...prevState,
+                            description: e.target.value
+                        }))
+                    }
+                />
+            </div>
+
 
             <button onClick={onClickSendNewPoi} className={"tertiaryButton"}>
                 Ajouter

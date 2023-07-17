@@ -126,12 +126,12 @@ export default function EditCity() {
                     <path d="M24 12.001H2.914l5.294-5.295-.707-.707L1 12.501l6.5 6.5.707-.707-5.293-5.293H24v-1z"/>
                 </svg>
             </button>
-            <div className={"addPoi_InputsContainer"}>
-                <h2 className={"title"}>Ajouter un point d'intérêt</h2>
+            <div className={"addPoi_InputsContainer editCity_container"}>
+                <h2 className={"title editCity_title"}>Ajouter un point d'intérêt</h2>
                 <AddPoi cityId={city.id} cityName={city.name}></AddPoi>
             </div>
-            <div className={"editCity_InputsContainer"}>
-                <h2 className={"title"}>Modifier la ville</h2>
+            <div className={"editCity_InputsContainer editCity_container"}>
+                <h2 className={"title editCity_title"}>Modifier la ville</h2>
                 <form onSubmit={handleSubmit} className={"editCity_form"}>
                     <div className={"editCity_form_inputContainer"}>
                         <label id={"name"}>Nom</label>
@@ -171,7 +171,7 @@ export default function EditCity() {
             <div className="poi_list">
                 {city.pois?.length ? (
                     <>
-                        <h2 className={"title"}>Liste des points d'intérêt</h2>
+                        <h2 className={"title editCity_title"}>Liste des points d'intérêt</h2>
                         {city.pois.map((poi, index: number) => (
                             <BadgeEdit
                                 contentA={poi.name}

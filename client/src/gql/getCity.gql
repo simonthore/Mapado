@@ -11,6 +11,7 @@ query getCity($query: String!) {
       address
       latitude
       longitude
+      description
       category {
         name
       }
