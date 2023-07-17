@@ -1,5 +1,6 @@
 import {useState} from "react";
 import {
+    FindPoi,
     useCategoriesQuery,
     useFetchPoiCoordinatesMutation,
     useGetCityQuery,
@@ -18,7 +19,7 @@ interface PoiRequestedInterface {
     poiNameOrAdress: string;
     cityId: number;
     cityName: string;
-    categoryId: number;
+    categoryId: number | null;
     description: string;
 }
 
@@ -36,7 +37,7 @@ export default function AddPoi({cityId, cityName}: PoiProps) {
         poiNameOrAdress: "",
         cityId: 0,
         cityName: "",
-        categoryId: 0,
+        categoryId: null,
         description : ""
     });
 
@@ -62,7 +63,7 @@ export default function AddPoi({cityId, cityName}: PoiProps) {
     });
 
     const onClickSendNewPoi = () => {
-        sendPoiNameOrAddress({variables: {data: poiRequested}})
+        sendPoiNameOrAddress({ variables: { data: poiRequested as FindPoi } })
             .then((res) => {
                 /* console.log("log du then", res); */
 
