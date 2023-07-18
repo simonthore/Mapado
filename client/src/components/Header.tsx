@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Mapado from "../assets/images/mapado_logo.png";
+import logged_in from "../assets/images/logged_in.png";
 import SearchBar from "./SearchBar";
 import IState from "../interfaces/IState";
 import { motion } from "framer-motion";
@@ -26,8 +27,8 @@ export default function Header({
   const [logout] = useLogoutMutation();
 
   const navigate = useNavigate();
-  const navigateHome = () => {
-    logout();
+  const navigateHome = async () => {
+    await logout();
     client.resetStore();
     console.log("navigate");
     navigate("/");
@@ -37,6 +38,7 @@ export default function Header({
     errorPolicy: "ignore",
   });
   const currentUserRole = currentUser?.profile?.role;
+  const currentUserEmail = currentUser?.profile.email;
 
   const changeNavStyle = () => {
     if (window.scrollY >= 10) {
@@ -81,6 +83,14 @@ export default function Header({
             <NavLink to="/login">Connexion</NavLink>
           )}
         </div>
+        {currentUser && (
+          <div className="loggedContainer">
+            <span className="loggedEmail">
+              <img className="loggedIcon" src={logged_in} alt="logged in as" />{" "}
+              {currentUserEmail}
+            </span>
+          </div>
+        )}
       </div>
     </nav>
   );
@@ -119,16 +129,20 @@ export default function Header({
               <NavLink to="/admin">Admin</NavLink>
             )}
             {currentUser ? (
-              <button
-                onClick={async () => {
-                  await logout();
-                  await client.resetStore();
-                  navigateHome();
-                }}
-              >
-                {" "}
-                Se déconnecter
-              </button>
+              <>
+                <img src={logged_in} alt="logged in as" />
+                <span>{currentUserEmail}</span>
+                <button
+                  onClick={async () => {
+                    await logout();
+                    await client.resetStore();
+                    navigateHome();
+                  }}
+                >
+                  {" "}
+                  Se déconnecter
+                </button>
+              </>
             ) : (
               <NavLink to="/login">Connexion</NavLink>
             )}
