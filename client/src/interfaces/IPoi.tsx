@@ -7,4 +7,5 @@ export default interface IPoi {
   category?: string | null | undefined;
   description?: string | null | undefined;
   rating?: number | null | undefined;
+  photo?: string | null | undefined;
 }

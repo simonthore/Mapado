@@ -52,7 +52,7 @@ export class PoiResolver {
   async fetchPoiCoordinates(
     @Arg("data") data: findPOI
   ): Promise<string | ApolloError> {
-    const { poiNameOrAdress, cityName, cityId, categoryId, description, rating } = data;
+    const { poiNameOrAdress, cityName, cityId, categoryId, description, rating, photo } = data;
 
     if (poiNameOrAdress === "") {
       return new ApolloError("Entrez un point d'intêret svp !");
@@ -93,6 +93,7 @@ export class PoiResolver {
       cityId: cityId,
       categoryId: categoryId,
       rating: rating,
+      photo: photo,
     };
 
     const PoiExists = await datasource

@@ -41,6 +41,7 @@ export default function InfoCity() {
             category: e.category?.name,
             description: e.description,
             rating: e.rating,
+            photo: e.photo,
         };
         city?.pois?.push(poi);
     });
@@ -78,8 +79,11 @@ export default function InfoCity() {
                             }
                         >
                             <Popup>
-                                {e.name}
-                                <br/> {e.address}.
+                                <h2 className="tooltip-poi_title">{e.name}</h2>
+                                <p className="tooltip-poi_address"> {e.address}.</p>
+                                {e.photo && (
+                                    <img src={e.photo} alt={e.photo}/>
+                                )}
                                 {e.category &&
                                     (<span className="tooltip-category">{e.category}</span>)
                                 }
@@ -87,8 +91,9 @@ export default function InfoCity() {
                                     <p className="description">{e.description}</p>
                                 )}
                                 {e.rating && (
-                                    <Rating name="read-only" value={e.rating} readOnly />
+                                    <Rating name="read-only" value={e.rating} readOnly/>
                                 )}
+
                             </Popup>
                         </Marker>
                     ))

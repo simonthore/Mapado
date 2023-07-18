@@ -13,6 +13,7 @@ query getCity($query: String!) {
       longitude
       description
       rating
+      photo
       category {
         name
       }

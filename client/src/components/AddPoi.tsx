@@ -24,6 +24,7 @@ interface PoiRequestedInterface {
     categoryId: number | null;
     description: string;
     rating: number | null;
+    photo: string | undefined;
 }
 
 interface ToastInterface {
@@ -43,6 +44,7 @@ export default function AddPoi({cityId, cityName}: PoiProps) {
         categoryId: null,
         description: "",
         rating: null,
+        photo: undefined
     });
 
     console.log(poiRequested)
@@ -110,7 +112,18 @@ export default function AddPoi({cityId, cityName}: PoiProps) {
                         cityName: cityName,
                     }))
                 }
-            ></input>
+            />
+            <input
+                type="text"
+                placeholder="Photo"
+                value={poiRequested.photo}
+                onChange={(e) =>
+                    setPoiRequested((prevState) => ({
+                        ...prevState,
+                        photo: e.target.value,
+                    }))
+                }
+            />
 
             <label htmlFor="categories" className={"selectCategoryLabel"}>Catégorie</label>
 

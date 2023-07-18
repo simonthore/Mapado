@@ -23,7 +23,7 @@
 .leaflet-popup-content{
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 12px;
 }
 
 .leaflet-popup-content .tooltip-category{
@@ -43,4 +43,12 @@
 
 .rating-stars svg {
     fill: white;
+}
+
+.tooltip-poi_title {
+    font-weight: 800;
+}
+
+.leaflet-popup-content p.tooltip-poi_address {
+    margin: 0;
 }

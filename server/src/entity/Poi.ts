@@ -147,6 +147,9 @@ export class findPOI {
 
   @Field({ nullable: true })
   rating?: number;
+
+  @Field({ nullable: true })
+  photo?: string;
 }
 
 export default Poi;
