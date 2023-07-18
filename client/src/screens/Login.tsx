@@ -40,23 +40,23 @@ export default function Login() {
             onSubmit={(e) => {
               e.preventDefault();
               login({ variables: { data: credentials } })
-              .then(() => {
-                client.resetStore();
-                navigateHome();
-                console.log(currentUser?.profile.role);
-              })
-              .catch((error) => {
-                toast.error("Invalid credentials", {
-                  style: {
-                    border: "3px solid #EC5D5C",
-                    padding: "4rem",
-                    color: "#EC5D5C",
-                  },
-                  iconTheme: {
-                    primary: "#EC5D5C",
-                    secondary: "#FFFFFF",
-                  },
-                });
+                .then(() => {
+                  client.resetStore();
+                  navigateHome();
+                  console.log(currentUser?.profile.role);
+                })
+                .catch((error) => {
+                  toast.error("Invalid credentials", {
+                    style: {
+                      border: "3px solid #EC5D5C",
+                      padding: "4rem",
+                      color: "#EC5D5C",
+                    },
+                    iconTheme: {
+                      primary: "#EC5D5C",
+                      secondary: "#FFFFFF",
+                    },
+                  });
                 });
             }}
           >
@@ -95,9 +95,15 @@ export default function Login() {
               </button>
             </label>
             <div className={"loginButtonsContainer"}>
-             
               <button type="submit" className={"tertiaryButton"}>
                 Se connecter
+              </button>
+              <button
+                type="button"
+                className={"secondaryButton"}
+                onClick={navigateCreateAccount}
+              >
+                Créer un compte
               </button>
               <button
                 type="button"
@@ -105,13 +111,6 @@ export default function Login() {
                 onClick={navigateEmailPassword}
               >
                 Mot de passe oublié ?
-              </button>
-              <button
-                type="button"
-                className={"tertiaryButton"}
-                onClick={navigateCreateAccount}
-              >
-                Créer un compte
               </button>
             </div>
           </form>

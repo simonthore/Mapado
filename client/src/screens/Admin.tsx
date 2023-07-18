@@ -26,14 +26,15 @@ export default function Admin() {
         </button>
         <h1 className={"title"}>Admin</h1>
         {currentUserRole === "Super Administrator" && (
-          <NavLink to={`/manage-cities`} className="country_link">
-            Paramétrer les villes
-          </NavLink>
-        )}
-        {currentUserRole === "Super Administrator" && (
-          <NavLink to={`/manage-categories`} className="country_link">
-            Paramétrer les catégories
-          </NavLink>
+          <>
+            <NavLink to={`/manage-cities`} className="country_link">
+              Paramétrer les villes
+            </NavLink>
+
+            <NavLink to={`/manage-categories`} className="country_link">
+              Paramétrer les catégories
+            </NavLink>
+          </>
         )}
         {(currentUserRole === "Super Administrator" ||
           currentUserRole === "City Administrator") && (

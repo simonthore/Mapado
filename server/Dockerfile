@@ -16,3 +16,4 @@ COPY src src
 COPY .env .env
 
 CMD npm start
+-

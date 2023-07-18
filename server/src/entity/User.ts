@@ -37,16 +37,8 @@ export class UserInput {
   @MinLength(8)
   @Matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)
   password: string;
-
-  @Field(() => [CityId], { nullable: true })
-  cities?: CityId[];
 }
 
-@InputType()
-export class CityId {
-  @Field()
-  id: number;
-}
 
 @ObjectType()
 @InputType()
@@ -59,11 +51,9 @@ export class UpdateUserInput {
   @MinLength(8)
   @Matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)
   hashedPassword?: string;
-
-  @Field(() => [CityId], { nullable: true })
-  cities?: CityId[];
-
 }
+
+
 
 @Entity()
 @ObjectType()

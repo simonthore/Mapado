@@ -12,11 +12,9 @@ import { GraphQLError } from "graphql";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import datasource from "../db";
-import { In } from "typeorm";
 import User, {
   getSafeAttributes,
   hashPassword,
-  UpdateUserInput,
   UserInput,
   UserRole,
   UserRoleInput,
@@ -34,6 +32,17 @@ export class UserResolver {
     //Pour récupérer la liste des cities on ajoute la relation
     return await datasource.getRepository(User).find();
   }
+
+  // @Query(() => [User])
+  // async userCities(@Arg("id", () => Int) id: number): Promise<any[]> {
+  //   //Pour récupérer la liste des cities on ajoute la relation
+  //   let user = await datasource
+  //     .getRepository(User)
+  //     .findOne({ where: { id }, relations: { cities: true } });
+
+  //   if (!user) throw new ApolloError("user not found", "NOT_FOUND");
+  //   return user.cities;
+  // }
 
   @Mutation(() => User)
   async createUser(@Arg("data") data: UserInput): Promise<User> {
@@ -69,41 +78,43 @@ export class UserResolver {
     return true;
   }
 
-
   @Mutation(() => String)
-  async updateUser(
-    @Arg("id", () => Int) id: number,
-    @Arg("data", () => UpdateUserInput)
-    { email, hashedPassword, cities }: UpdateUserInput
+  async updateUserCities(
+    @Arg("userId", () => Int) userId: number,
+    @Arg("cityId", () => Int) cityId: number
   ): Promise<String> {
-    let citiesEntities: City[] = [];
     let user = await datasource
       .getRepository(User)
-      .findOne({ where: { id }, relations: { cities: true } });
+      .findOne({ where: { id: userId }, relations: { cities: true } });
     if (!user) throw new ApolloError("User not found", "NOT_FOUND");
 
-    if (cities) {
-      citiesEntities = await datasource
-        .getRepository(City)
-        .find({ where: { id: In(cities?.map((c) => c.id)) } });
-        user.cities = [...(user?.cities ? user.cities : []), ...citiesEntities];
-    }
-    if (hashedPassword)
-      user.hashedPassword = await hashPassword(
-        user.hashedPassword ? user.hashedPassword : ""
-      );
+    let city = await datasource
+      .getRepository(City)
+      .findOne({ where: { id: cityId } });
 
-    if (email) user.email = email;
+    const cityExists = user.cities.filter((city) => {
+      console.log(city.id, cityId);
+      return city.id === cityId;
+    });
+    console.log("cityExists", cityExists);
+
+    if (cityExists.length) {
+      throw new ApolloError("City already assigned", "DUPLICATE_NOT_ALLOWED");
+    } else if (!city) {
+      throw new ApolloError("City not found", "NOT_FOUND");
+    } else {
+      user.cities = [...user.cities, city];
+    }
 
     const updatedUser = await datasource.getRepository(User).save(user);
 
-    return `${updatedUser.email} has been updated: ${updatedUser.role}, ${JSON.stringify(updatedUser.cities)}`;
+    return `${updatedUser.email} has been updated:
+      ${JSON.stringify(updatedUser.cities.map((city) => city.name))}`;
   }
 
   //Update User Role
   @Authorized<UserRole>([UserRole.SUPERADMIN, UserRole.CITYADMIN])
   @Mutation(() => String)
-  // specify access for cityAdmin who can only change to poi creator
   async updateUserRole(
     @Arg("data", () => UserRoleInput) { email, role }: UserRoleInput
   ): Promise<String> {

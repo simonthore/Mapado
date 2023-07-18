@@ -30,6 +30,19 @@ export class CityResolver {
 
     return city;
   }
+
+  @Query(() => City)
+  async cityByUserId(@Arg("user", () => Int) users: []): Promise<City[]> {
+    const cities = await datasource
+      .getRepository(City)
+      .find({ where: { users } });
+
+    if (cities === null) throw new ApolloError("cities not found", "NOT_FOUND");
+    console.log(cities.map((city: City) => city.name))
+
+    return cities;
+  }
+
   @Authorized<UserRole>([UserRole.SUPERADMIN])
   @Mutation(() => City)
   async createCity(@Arg("data") data: CityInput): Promise<City> {

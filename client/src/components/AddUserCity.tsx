@@ -3,7 +3,7 @@ import { useCitiesQuery, useGetProfileQuery } from "../gql/generated/schema";
 export default function AddUserCity({
   handleOpenModal,
   onClickAssignCity,
-  currentUserCities,
+  displayUserCities,
   selectedUser,
   refetch,
   role,
@@ -22,6 +22,8 @@ export default function AddUserCity({
     //refetch()
   }
 
+  console.log("displayuserCities", displayUserCities?.cityById.name);
+
   return (
     <div
       style={{
@@ -37,10 +39,7 @@ export default function AddUserCity({
         top: "20%",
       }}
     >
-      <p>
-        Villes:{" "}
-        {currentUserCities ? currentUserCities : "Aucune ville associée"}
-      </p>
+      <p>Villes:{displayUserCities?.cityById.name}</p>
       <ul>
         {cities.map((city) => {
           return (

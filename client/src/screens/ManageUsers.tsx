@@ -4,10 +4,10 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
 import AddUserCity from "../components/AddUserCity";
 import {
-  useCitiesQuery,
+  useGetCityByUserIdQuery,
   useGetProfileQuery,
   useGetUserCitiesQuery,
-  useUpdateUserCityMutation,
+  useUpdateUserCitiesMutation,
   useUpdateUserRoleMutation,
   useUsersQuery,
 } from "../gql/generated/schema";
@@ -32,10 +32,7 @@ export default function ManageUsers() {
   const [userId, setUserId] = useState<number>();
   const [openModal, setOpenModal] = useState(false);
 
-  const [cityAdded, setCityAdded] = useState({
-    cityId: 0,
-    userId: 0,
-  });
+  const [cityId, setCityId] = useState<any>();
 
   const navigate = useNavigate();
 
@@ -50,40 +47,32 @@ export default function ManageUsers() {
   const { data: currentUser } = useGetProfileQuery();
   const currentUserRole = currentUser?.profile?.role;
   const currentUserId = currentUser?.profile.id;
-  const currentUserCities = currentUser?.profile.cities;
 
-  const [updateCity] = useUpdateUserCityMutation({
+  const [updateCity] = useUpdateUserCitiesMutation({
     onCompleted: () => refetch(),
   });
 
-  const getCities = useGetUserCitiesQuery({
-    onCompleted: () => refetch(),
+  // const { data: getCities } = useGetUserCitiesQuery({
+  //   onCompleted: () => refetch(),
+  // });
+  // const cities = getCities?.cities;
+
+  // const findUserCities = (userId: any) => {
+  //   cities?.map((city) =>
+  //     city?.users?.map((user) => user.id)
+  //   );
+  //   // if (cityUserIds?.map((user) => user?.includes(userId))) {
+  //   setCityId(cities?.map((city) => city.id));
+  // }
+  //};
+
+  //console.log(findUserCities(userId));
+
+  const { data: displayUserCities } = useGetCityByUserIdQuery({
+    variables: { user: userId! },
   });
-
-  // console.log(getCities, "---------");
-  const cities = getCities?.data?.cities;
-  //console.log(getCities?.data?.cities.map((city) => city?.users?.map((user) => user.id.includes(userId))))
-
-  //cityId
-  //console.log(getCities?.data?.cities.map((city) => city.id));
-
-  //console.log(cities?.map((city) => city.users?.map((user) => user.id)));
-
-  //I have cities
-  // I want cities with matching userId
-  // I input userId
-
-  let userCities: any = [];
-  const displayUserCities = (userId: any) => {
-    const cityUserIds = getCities?.data?.cities.map((city) =>
-      city?.users?.map((user) => user.id)
-    );
-    if (cityUserIds?.map((user) => user?.includes(userId)))
-      userCities.push(getCities?.data?.cities.map((city) => city.id));
-    return userCities.flat();
-  };
-
-displayUserCities(3);
+  console.log(userId);
+  console.log(displayUserCities);
 
   async function handleSelectedUserForCity(
     selectedUserId: any,
@@ -95,6 +84,7 @@ displayUserCities(3);
       email: selectedUserEmail,
       id: selectedUserId,
     }));
+    setUserId(() => selectedUserId);
     setOpenModal(true);
   }
 
@@ -107,14 +97,8 @@ displayUserCities(3);
     try {
       await updateCity({
         variables: {
-          data: {
-            cities: [
-              {
-                id: selectedCity,
-              },
-            ],
-          },
-          updateUserId: userId,
+          cityId: selectedCity,
+          userId: userId
         },
       });
       await toast.success(
@@ -142,7 +126,7 @@ displayUserCities(3);
     role: string
   ): Promise<void> => {
     try {
-      setUserDetails(() => ({
+      await setUserDetails(() => ({
         email,
         role,
       }));
@@ -261,7 +245,7 @@ displayUserCities(3);
                                 {openModal &&
                                   createPortal(
                                     <AddUserCity
-                                      currentUserCities={currentUserCities}
+                                      displayUserCities={displayUserCities}
                                       handleOpenModal={handleOpenModal}
                                       onClickAssignCity={onClickAssignCity}
                                       selectedUser={selectedUserForCity}
