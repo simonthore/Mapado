@@ -32,6 +32,11 @@ textarea {
     gap: 3px;
 }
 
-.poi_description label {
+.poi_description label, .create_category_link {
     color: white;
+}
+
+.add_category_container {
+    display: flex;
+    flex-direction: column;
 }

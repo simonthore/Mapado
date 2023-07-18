@@ -10,6 +10,7 @@ import checkIcon from "../assets/svg/check.svg";
 import errorIcon from "../assets/svg/error.svg";
 import Toast from "./Toast";
 import Rating from '@mui/material/Rating';
+import {Link} from "react-router-dom";
 
 interface PoiProps {
     cityId: number;
@@ -113,32 +114,34 @@ export default function AddPoi({cityId, cityName}: PoiProps) {
 
             <label htmlFor="categories" className={"selectCategoryLabel"}>Catégorie</label>
 
-            <select
-                className="categorySelect"
-                name="categories"
-                id="categories"
-                defaultValue=""
-                onChange={(e) => {
-                    console.log(e.target.value);
-                    setPoiRequested((prevState) => ({
-                        ...prevState,
-                        categoryId: parseInt(e.target.value, 10),
-                    }));
-                }}
-            >
-                <option value="" disabled className="defaultValue">Catégorie du POI</option>
-                {categories ? categories.map((category, index) => {
-                    return (
-                        <option
-                            key={index}
-                            value={category.id}
-                        >
-                            {category.name}
-                        </option>
-                    );
-                }) : null}
-                <option value=""></option>
-            </select>
+            <div className="add_category_container">
+                <select
+                    className="categorySelect"
+                    name="categories"
+                    id="categories"
+                    defaultValue=""
+                    onChange={(e) => {
+                        console.log(e.target.value);
+                        setPoiRequested((prevState) => ({
+                            ...prevState,
+                            categoryId: parseInt(e.target.value, 10),
+                        }));
+                    }}
+                >
+                    <option value="" className="defaultValue">Sélectionner la catégorie du POI</option>
+                    {categories ? categories.map((category, index) => {
+                        return (
+                            <option
+                                key={index}
+                                value={category.id}
+                            >
+                                {category.name}
+                            </option>
+                        );
+                    }) : null}
+                </select>
+                <Link className="create_category_link" to="/manage-categories">Créer une nouvelle catégorie</Link>
+            </div>
 
             <div className="poi_description">
                 <textarea
