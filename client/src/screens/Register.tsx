@@ -3,6 +3,8 @@ import { useCreateUserMutation, useUsersQuery } from "../gql/generated/schema";
 import Card from "../components/Card";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 export default function Register() {
   const [userInfo, setUserInfo] = useState({ email: "", password: "" });
@@ -11,6 +13,8 @@ export default function Register() {
   const goBack = () => {
     navigate(-1);
   };
+  const navigateLandingPage = () => navigate("/cities-list");
+
   const [createUser] = useCreateUserMutation();
   const { data: usersData } = useUsersQuery();
   const users = usersData?.users ?? [];
@@ -24,9 +28,10 @@ export default function Register() {
     } else {
       e.preventDefault();
       toast.success("Bienvenue sur Mapado");
-      createUser({ variables: { data: userInfo } }).then(() => {
+      await createUser({ variables: { data: userInfo } }).then(() => {
         console.log("ok");
       });
+      navigateLandingPage();
     }
   };
 
@@ -55,9 +60,6 @@ export default function Register() {
                 setUserInfo({ ...userInfo, email: e.target.value })
               }
             ></input>
-            <button type="button" onClick={togglePassword}>
-              Show Password
-            </button>
           </label>
           <label htmlFor="password">
             <input
@@ -69,6 +71,14 @@ export default function Register() {
                 setUserInfo({ ...userInfo, password: e.target.value })
               }
             ></input>
+            <button
+              type="button"
+              onClick={togglePassword}
+              style={{ color: "#EC5D5C" }}
+            >
+              {" "}
+              {passwordShown ? <VisibilityOffIcon /> : <VisibilityIcon />}
+            </button>
           </label>
           <button type="submit" className={"tertiaryButton"}>
             Créer un compte
