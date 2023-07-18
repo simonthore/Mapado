@@ -12,6 +12,7 @@ query getCity($query: String!) {
       latitude
       longitude
       description
+      rating
       category {
         name
       }

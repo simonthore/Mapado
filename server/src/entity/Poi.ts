@@ -144,6 +144,9 @@ export class findPOI {
 
   @Field({ nullable: true })
   description?: string;
+
+  @Field({ nullable: true })
+  rating?: number;
 }
 
 export default Poi;

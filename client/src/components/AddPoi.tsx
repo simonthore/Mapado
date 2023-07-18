@@ -1,4 +1,4 @@
-import {useState} from "react";
+import React, {useState} from 'react';
 import {
     FindPoi,
     useCategoriesQuery,
@@ -9,6 +9,7 @@ import {ApolloError} from "@apollo/client";
 import checkIcon from "../assets/svg/check.svg";
 import errorIcon from "../assets/svg/error.svg";
 import Toast from "./Toast";
+import Rating from '@mui/material/Rating';
 
 interface PoiProps {
     cityId: number;
@@ -21,6 +22,7 @@ interface PoiRequestedInterface {
     cityName: string;
     categoryId: number | null;
     description: string;
+    rating: number | null;
 }
 
 interface ToastInterface {
@@ -38,7 +40,8 @@ export default function AddPoi({cityId, cityName}: PoiProps) {
         cityId: 0,
         cityName: "",
         categoryId: null,
-        description : ""
+        description: "",
+        rating: null,
     });
 
     console.log(poiRequested)
@@ -63,7 +66,7 @@ export default function AddPoi({cityId, cityName}: PoiProps) {
     });
 
     const onClickSendNewPoi = () => {
-        sendPoiNameOrAddress({ variables: { data: poiRequested as FindPoi } })
+        sendPoiNameOrAddress({variables: {data: poiRequested as FindPoi}})
             .then((res) => {
                 /* console.log("log du then", res); */
 
@@ -151,7 +154,18 @@ export default function AddPoi({cityId, cityName}: PoiProps) {
                     }
                 />
             </div>
-
+            <Rating
+                name="half-rating"
+                defaultValue={0}
+                precision={0.5}
+                className="rating-stars"
+                onChange={(e) =>
+                    setPoiRequested((prevState) => ({
+                        ...prevState,
+                        rating: (parseInt((e.target as HTMLInputElement).value, 10))
+                    }))
+                }
+            />
 
             <button onClick={onClickSendNewPoi} className={"tertiaryButton"}>
                 Ajouter
