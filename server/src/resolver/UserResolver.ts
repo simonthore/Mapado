@@ -29,20 +29,20 @@ import City from "../entity/City";
 export class UserResolver {
   @Query(() => [User])
   async users(): Promise<User[]> {
-    //Pour récupérer la liste des cities on ajoute la relation
-    return await datasource.getRepository(User).find();
+    function compare(a: any, b: any) {
+      if (a.email < b.email) {
+        return -1;
+      }
+      if (a.email > b.email) {
+        return 1;
+      }
+      return 0;
+    }
+    const users = await datasource.getRepository(User).find();
+
+    const sortedUsers = users.sort(compare);
+    return sortedUsers;
   }
-
-  // @Query(() => [User])
-  // async userCities(@Arg("id", () => Int) id: number): Promise<any[]> {
-  //   //Pour récupérer la liste des cities on ajoute la relation
-  //   let user = await datasource
-  //     .getRepository(User)
-  //     .findOne({ where: { id }, relations: { cities: true } });
-
-  //   if (!user) throw new ApolloError("user not found", "NOT_FOUND");
-  //   return user.cities;
-  // }
 
   @Mutation(() => User)
   async createUser(@Arg("data") data: UserInput): Promise<User> {
@@ -82,7 +82,7 @@ export class UserResolver {
   async updateUserCities(
     @Arg("userId", () => Int) userId: number,
     @Arg("cityId", () => Int) cityId: number
-  ): Promise<String> {
+  ): Promise<City[]> {
     let user = await datasource
       .getRepository(User)
       .findOne({ where: { id: userId }, relations: { cities: true } });
@@ -108,8 +108,9 @@ export class UserResolver {
 
     const updatedUser = await datasource.getRepository(User).save(user);
 
-    return `${updatedUser.email} has been updated:
-      ${JSON.stringify(updatedUser.cities.map((city) => city.name))}`;
+    // return `${updatedUser.email} has been updated:
+    //   ${JSON.stringify(updatedUser.cities.map((city) => city.name))}`;
+    return updatedUser.cities;
   }
 
   //Update User Role
