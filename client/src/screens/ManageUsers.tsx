@@ -4,12 +4,12 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
 import AddUserCity from "../components/AddUserCity";
 import {
-  useGetCityByUserIdQuery,
   useGetProfileQuery,
-  useGetUserCitiesQuery,
   useUpdateUserCitiesMutation,
   useUpdateUserRoleMutation,
   useUsersQuery,
+  GetUserCitiesQuery,
+  useGetUserCitiesQuery,
 } from "../gql/generated/schema";
 
 const SuperAdminRoles = [
@@ -25,6 +25,7 @@ export default function ManageUsers() {
     email: "",
     role: "",
   });
+  const [userCities, setUserCities] = useState<String[]>([]);
   const [selectedUserForCity, setSelectedUserForCity] = useState({
     email: "",
     id: 0,
@@ -32,12 +33,10 @@ export default function ManageUsers() {
   const [userId, setUserId] = useState<number>();
   const [openModal, setOpenModal] = useState(false);
 
-  const [cityId, setCityId] = useState<any>();
-
   const navigate = useNavigate();
 
-  const { data: usersData, refetch } = useUsersQuery({
-    onCompleted: () => refetch(),
+  const { data: usersData, refetch: refetchUsers } = useUsersQuery({
+    onCompleted: () => refetchUsers(),
   });
 
   const users = usersData?.users ?? [];
@@ -48,31 +47,26 @@ export default function ManageUsers() {
   const currentUserRole = currentUser?.profile?.role;
   const currentUserId = currentUser?.profile.id;
 
-  const [updateCity] = useUpdateUserCitiesMutation({
-    onCompleted: () => refetch(),
+  const [updateCity, { data: updatedUserCities }] =
+    useUpdateUserCitiesMutation();
+  // const userCitiesNames = updatedUserCities?.updateUserCities.cities?.map(
+  //   (city) => city.name
+  // );
+
+  // console.log("----userCitiesNames", userCitiesNames);
+
+  const { data: cities, refetch: refetchUserCities } = useGetUserCitiesQuery({
+    variables: { getUserCitiesId: userId! },
+    onCompleted: () => refetchUserCities(),
   });
+  const userCitiesList = cities?.getUserCities?.cities?.map(
+    (city) => city.name
+  );
+  console.log("------userCitiesList", userCitiesList);
 
-  // const { data: getCities } = useGetUserCitiesQuery({
-  //   onCompleted: () => refetch(),
-  // });
-  // const cities = getCities?.cities;
-
-  // const findUserCities = (userId: any) => {
-  //   cities?.map((city) =>
-  //     city?.users?.map((user) => user.id)
-  //   );
-  //   // if (cityUserIds?.map((user) => user?.includes(userId))) {
-  //   setCityId(cities?.map((city) => city.id));
-  // }
-  //};
-
-  //console.log(findUserCities(userId));
-
-  const { data: displayUserCities } = useGetCityByUserIdQuery({
-    variables: { user: userId! },
-  });
-  console.log(userId);
-  console.log(displayUserCities);
+  // useEffect(() => {
+  //   if (userCitiesList && userCitiesList.length) setUserCities(userCitiesList)
+  // }, [userCitiesList])
 
   async function handleSelectedUserForCity(
     selectedUserId: any,
@@ -93,12 +87,12 @@ export default function ManageUsers() {
     cityName: string,
     userId: number,
     userEmail: string
-  ): Promise<void> => {
+  ): Promise<any> => {
     try {
       await updateCity({
         variables: {
           cityId: selectedCity,
-          userId: userId
+          userId: userId,
         },
       });
       await toast.success(
@@ -107,8 +101,9 @@ export default function ManageUsers() {
           duration: 10000,
         }
       );
-      refetch();
-      await setOpenModal(false);
+      refetchUsers();
+      refetchUserCities();
+      setOpenModal(false);
     } catch (error) {
       console.log(JSON.stringify(error, null, 2));
       toast.error(
@@ -132,7 +127,7 @@ export default function ManageUsers() {
       }));
       setUserId(() => id);
       updateUser({ variables: { data: { email, role } } });
-      refetch();
+      refetchUsers();
       toast.success(`Role mis à jour : ${email} est désormais ${role}`, {
         duration: 10000,
       });
@@ -146,9 +141,9 @@ export default function ManageUsers() {
     setOpenModal(() => !openModal);
   };
 
-  useEffect(() => {
-    refetch();
-  }, [userDetails, refetch()]);
+  // useEffect(() => {
+  //   refetch();
+  // }, [userDetails, refetch()]);
 
   const goBack = () => {
     navigate(-1);
@@ -183,7 +178,10 @@ export default function ManageUsers() {
                           {user.email} est actuellement un {user.role}
                         </h2>
 
-                        <span className="transition group-open:rotate-180">
+                        <span
+                          className="transition group-open:rotate-180"
+                          onClick={() => setUserId(user.id)}
+                        >
                           <svg
                             fill="none"
                             height="24"
@@ -199,6 +197,9 @@ export default function ManageUsers() {
                           </svg>
                         </span>
                       </summary>
+                      <h3 className={"editUser_title"}>
+                        Villes: {userCitiesList?.join(", ")}
+                      </h3>
                       {SuperAdminRoles.map((role, index) => {
                         return (
                           <div key={index} className={"editUser_container"}>
@@ -245,11 +246,10 @@ export default function ManageUsers() {
                                 {openModal &&
                                   createPortal(
                                     <AddUserCity
-                                      displayUserCities={displayUserCities}
+                                      userCitiesList={userCitiesList}
                                       handleOpenModal={handleOpenModal}
                                       onClickAssignCity={onClickAssignCity}
                                       selectedUser={selectedUserForCity}
-                                      refetch={refetch}
                                       role={role}
                                     />,
                                     document.body

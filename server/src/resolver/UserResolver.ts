@@ -24,6 +24,7 @@ import User, {
 import { env } from "../environment";
 import { ContextType } from "../index";
 import City from "../entity/City";
+import { Any } from "typeorm";
 
 @Resolver(User)
 export class UserResolver {
@@ -43,6 +44,17 @@ export class UserResolver {
     const sortedUsers = users.sort(compare);
     return sortedUsers;
   }
+
+  // @Query(() => City)
+  // async userCities(@Arg("userId", () => Int) userId: number): Promise<any> {
+  //   const citiesIds = await datasource
+  //     .getRepository(User)
+  //     .findOne({ where: { id: userId } });
+  //   const citiesList = await datasource.getRepository(City).find();
+
+  //   console.log(citiesIds);
+  //   console.log(citiesList);
+  // }
 
   @Mutation(() => User)
   async createUser(@Arg("data") data: UserInput): Promise<User> {
@@ -78,11 +90,11 @@ export class UserResolver {
     return true;
   }
 
-  @Mutation(() => String)
+  @Mutation(() => User)
   async updateUserCities(
     @Arg("userId", () => Int) userId: number,
     @Arg("cityId", () => Int) cityId: number
-  ): Promise<City[]> {
+  ): Promise<User> {
     let user = await datasource
       .getRepository(User)
       .findOne({ where: { id: userId }, relations: { cities: true } });
@@ -106,11 +118,11 @@ export class UserResolver {
       user.cities = [...user.cities, city];
     }
 
-    const updatedUser = await datasource.getRepository(User).save(user);
+    datasource.getRepository(User).save(user);
 
     // return `${updatedUser.email} has been updated:
     //   ${JSON.stringify(updatedUser.cities.map((city) => city.name))}`;
-    return updatedUser.cities;
+    return user;
   }
 
   //Update User Role
@@ -170,6 +182,16 @@ export class UserResolver {
   @Query(() => User)
   async profile(@Ctx() ctx: ContextType): Promise<User> {
     return getSafeAttributes(ctx.currentUser as User);
+  }
+
+  @Query(() => User)
+  async getUserCities(@Arg("id") id: number): Promise<User> {
+    const user = await datasource
+      .getRepository(User)
+      .findOne({ where: { id }, relations: { cities: true } });
+    if (!user) throw new ApolloError("no such user", "NOT_FOUND");
+
+    return user;
   }
 
   @Mutation(() => User)

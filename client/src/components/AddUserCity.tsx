@@ -1,12 +1,10 @@
-import { useCitiesQuery, useGetProfileQuery } from "../gql/generated/schema";
+import { useCitiesQuery, useGetProfileQuery, useUpdateUserCitiesMutation } from "../gql/generated/schema";
 
 export default function AddUserCity({
   handleOpenModal,
   onClickAssignCity,
-  displayUserCities,
+  userCitiesList,
   selectedUser,
-  refetch,
-  role,
 }: any) {
   const { data } = useCitiesQuery();
 
@@ -19,10 +17,8 @@ export default function AddUserCity({
     selectedUserEmail: string
   ) {
     onClickAssignCity(cityId, cityName, selectedUserId, selectedUserEmail);
-    //refetch()
   }
 
-  console.log("displayuserCities", displayUserCities?.cityById.name);
 
   return (
     <div
@@ -39,7 +35,7 @@ export default function AddUserCity({
         top: "20%",
       }}
     >
-      <p>Villes:{displayUserCities?.cityById.name}</p>
+      <p>Villes:{" "}{userCitiesList?.join(", ")}</p>
       <ul>
         {cities.map((city) => {
           return (

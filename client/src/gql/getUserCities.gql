@@ -1,8 +1,7 @@
-query getUserCities {
-  cities {
-    id
-    users {
-      id
+query GetUserCities($getUserCitiesId: Float!) {
+  getUserCities(id: $getUserCitiesId) {
+    cities {
+      name
     }
   }
 }

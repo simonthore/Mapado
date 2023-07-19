@@ -1,5 +1,0 @@
-query GetCityByUserId($user: Int!) {
-  cityByUserId(user: $user) {
-    name
-  }
-}

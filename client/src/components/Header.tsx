@@ -129,22 +129,30 @@ export default function Header({
               <NavLink to="/admin">Admin</NavLink>
             )}
             {currentUser ? (
-              <>
-                <img src={logged_in} alt="logged in as" />
-                <span>{currentUserEmail}</span>
-                <button
-                  onClick={async () => {
-                    await logout();
-                    await client.resetStore();
-                    navigateHome();
-                  }}
-                >
-                  {" "}
-                  Se déconnecter
-                </button>
-              </>
+              <button
+                onClick={async () => {
+                  await logout();
+                  await client.resetStore();
+                  navigateHome();
+                }}
+              >
+                {" "}
+                Se déconnecter
+              </button>
             ) : (
               <NavLink to="/login">Connexion</NavLink>
+            )}
+            {currentUser && (
+              <div className="loggedContainer">
+                <span className="loggedEmail">
+                  <img
+                    className="loggedIcon"
+                    src={logged_in}
+                    alt="logged in as"
+                  />{" "}
+                  {currentUserEmail}
+                </span>
+              </div>
             )}
           </div>
         </div>

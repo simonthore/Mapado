@@ -67,7 +67,7 @@ export type Mutation = {
   updateCategory: Category;
   updateCity: City;
   updatePoi: Poi;
-  updateUserCities: Scalars['String'];
+  updateUserCities: User;
   updateUserRole: Scalars['String'];
 };
 
@@ -204,6 +204,7 @@ export type Query = {
   city: City;
   cityByUserId: City;
   fetchToken: User;
+  getUserCities: User;
   profile: User;
   users: Array<User>;
 };
@@ -220,6 +221,11 @@ export type QueryCityByUserIdArgs = {
 
 
 export type QueryFetchTokenArgs = {
+  id: Scalars['Float'];
+};
+
+
+export type QueryGetUserCitiesArgs = {
   id: Scalars['Float'];
 };
 
@@ -340,13 +346,6 @@ export type GetCityQueryVariables = Exact<{
 
 export type GetCityQuery = { __typename?: 'Query', city: { __typename?: 'City', id: number, name: string, latitude?: number | null, longitude?: number | null, photo?: string | null, poi?: Array<{ __typename?: 'Poi', id: number, name: string, address: string, latitude?: number | null, longitude?: number | null }> | null } };
 
-export type GetCityByUserIdQueryVariables = Exact<{
-  user: Scalars['Int'];
-}>;
-
-
-export type GetCityByUserIdQuery = { __typename?: 'Query', cityByUserId: { __typename?: 'City', name: string } };
-
 export type FetchTokenQueryVariables = Exact<{
   fetchTokenId: Scalars['Float'];
 }>;
@@ -359,10 +358,12 @@ export type GetProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetProfileQuery = { __typename?: 'Query', profile: { __typename?: 'User', id: number, email: string, role: string, cities?: Array<{ __typename?: 'City', name: string, id: number }> | null } };
 
-export type GetUserCitiesQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetUserCitiesQueryVariables = Exact<{
+  getUserCitiesId: Scalars['Float'];
+}>;
 
 
-export type GetUserCitiesQuery = { __typename?: 'Query', cities: Array<{ __typename?: 'City', id: number, users?: Array<{ __typename?: 'User', id: number }> | null }> };
+export type GetUserCitiesQuery = { __typename?: 'Query', getUserCities: { __typename?: 'User', cities?: Array<{ __typename?: 'City', name: string }> | null } };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -417,7 +418,7 @@ export type UpdateUserCitiesMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserCitiesMutation = { __typename?: 'Mutation', updateUserCities: string };
+export type UpdateUserCitiesMutation = { __typename?: 'Mutation', updateUserCities: { __typename?: 'User', cities?: Array<{ __typename?: 'City', name: string }> | null } };
 
 
 export const ChangePasswordDocument = gql`
@@ -795,41 +796,6 @@ export function useGetCityLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ge
 export type GetCityQueryHookResult = ReturnType<typeof useGetCityQuery>;
 export type GetCityLazyQueryHookResult = ReturnType<typeof useGetCityLazyQuery>;
 export type GetCityQueryResult = Apollo.QueryResult<GetCityQuery, GetCityQueryVariables>;
-export const GetCityByUserIdDocument = gql`
-    query GetCityByUserId($user: Int!) {
-  cityByUserId(user: $user) {
-    name
-  }
-}
-    `;
-
-/**
- * __useGetCityByUserIdQuery__
- *
- * To run a query within a React component, call `useGetCityByUserIdQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCityByUserIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetCityByUserIdQuery({
- *   variables: {
- *      user: // value for 'user'
- *   },
- * });
- */
-export function useGetCityByUserIdQuery(baseOptions: Apollo.QueryHookOptions<GetCityByUserIdQuery, GetCityByUserIdQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetCityByUserIdQuery, GetCityByUserIdQueryVariables>(GetCityByUserIdDocument, options);
-      }
-export function useGetCityByUserIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCityByUserIdQuery, GetCityByUserIdQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetCityByUserIdQuery, GetCityByUserIdQueryVariables>(GetCityByUserIdDocument, options);
-        }
-export type GetCityByUserIdQueryHookResult = ReturnType<typeof useGetCityByUserIdQuery>;
-export type GetCityByUserIdLazyQueryHookResult = ReturnType<typeof useGetCityByUserIdLazyQuery>;
-export type GetCityByUserIdQueryResult = Apollo.QueryResult<GetCityByUserIdQuery, GetCityByUserIdQueryVariables>;
 export const FetchTokenDocument = gql`
     query FetchToken($fetchTokenId: Float!) {
   fetchToken(id: $fetchTokenId) {
@@ -906,11 +872,10 @@ export type GetProfileQueryHookResult = ReturnType<typeof useGetProfileQuery>;
 export type GetProfileLazyQueryHookResult = ReturnType<typeof useGetProfileLazyQuery>;
 export type GetProfileQueryResult = Apollo.QueryResult<GetProfileQuery, GetProfileQueryVariables>;
 export const GetUserCitiesDocument = gql`
-    query getUserCities {
-  cities {
-    id
-    users {
-      id
+    query GetUserCities($getUserCitiesId: Float!) {
+  getUserCities(id: $getUserCitiesId) {
+    cities {
+      name
     }
   }
 }
@@ -928,10 +893,11 @@ export const GetUserCitiesDocument = gql`
  * @example
  * const { data, loading, error } = useGetUserCitiesQuery({
  *   variables: {
+ *      getUserCitiesId: // value for 'getUserCitiesId'
  *   },
  * });
  */
-export function useGetUserCitiesQuery(baseOptions?: Apollo.QueryHookOptions<GetUserCitiesQuery, GetUserCitiesQueryVariables>) {
+export function useGetUserCitiesQuery(baseOptions: Apollo.QueryHookOptions<GetUserCitiesQuery, GetUserCitiesQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetUserCitiesQuery, GetUserCitiesQueryVariables>(GetUserCitiesDocument, options);
       }
@@ -1179,7 +1145,11 @@ export type UpdateUserRoleMutationResult = Apollo.MutationResult<UpdateUserRoleM
 export type UpdateUserRoleMutationOptions = Apollo.BaseMutationOptions<UpdateUserRoleMutation, UpdateUserRoleMutationVariables>;
 export const UpdateUserCitiesDocument = gql`
     mutation UpdateUserCities($cityId: Int!, $userId: Int!) {
-  updateUserCities(cityId: $cityId, userId: $userId)
+  updateUserCities(cityId: $cityId, userId: $userId) {
+    cities {
+      name
+    }
+  }
 }
     `;
 export type UpdateUserCitiesMutationFn = Apollo.MutationFunction<UpdateUserCitiesMutation, UpdateUserCitiesMutationVariables>;
