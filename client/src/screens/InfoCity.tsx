@@ -7,8 +7,9 @@ import {Icon} from "leaflet";
 import ICity from "../interfaces/ICity";
 import IPoi from "../interfaces/IPoi";
 import {useNavigate} from "react-router";
-import {useEffect} from "react";
+import React, {useEffect} from "react";
 import {motion} from "framer-motion";
+import Rating from "@mui/material/Rating";
 
 export default function InfoCity() {
     const {cityName} = useParams();
@@ -38,6 +39,9 @@ export default function InfoCity() {
             latitude: e.latitude!,
             address: e.address,
             category: e.category?.name,
+            description: e.description,
+            rating: e.rating,
+            photo: e.photo,
         };
         city?.pois?.push(poi);
     });
@@ -75,11 +79,21 @@ export default function InfoCity() {
                             }
                         >
                             <Popup>
-                                {e.name}
-                                <br/> {e.address}.
+                                <h2 className="tooltip-poi_title">{e.name}</h2>
+                                <p className="tooltip-poi_address"> {e.address}.</p>
+                                {e.photo && (
+                                    <img src={e.photo} alt={e.photo}/>
+                                )}
                                 {e.category &&
-                                    (<span>{e.category}</span>)
+                                    (<span className="tooltip-category">{e.category}</span>)
                                 }
+                                {e.description && (
+                                    <p className="description">{e.description}</p>
+                                )}
+                                {e.rating && (
+                                    <Rating name="read-only" value={e.rating} readOnly/>
+                                )}
+
                             </Popup>
                         </Marker>
                     ))

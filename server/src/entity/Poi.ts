@@ -139,8 +139,17 @@ export class findPOI {
   @Field()
   cityId?: number;
 
-  @Field()
+  @Field({ nullable: true })
   categoryId?: number;
+
+  @Field({ nullable: true })
+  description?: string;
+
+  @Field({ nullable: true })
+  rating?: number;
+
+  @Field({ nullable: true })
+  photo?: string;
 }
 
 export default Poi;

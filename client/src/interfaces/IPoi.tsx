@@ -5,4 +5,7 @@ export default interface IPoi {
   longitude?: number;
   address?: string | null | undefined;
   category?: string | null | undefined;
+  description?: string | null | undefined;
+  rating?: number | null | undefined;
+  photo?: string | null | undefined;
 }
