@@ -1,11 +1,11 @@
-import {Route, Routes, useSearchParams, useLocation} from "react-router-dom";
+import { Route, Routes, useSearchParams, useLocation } from "react-router-dom";
 import CSS from "csstype";
 import Login from "./screens/Login";
 import Home from "./screens/Home";
 import Header from "./components/Header";
 import ManageCities from "./screens/ManageCities";
 import "./App.css";
-import {useCitiesQuery} from "./gql/generated/schema";
+import { useCitiesQuery } from "./gql/generated/schema";
 import Register from "./screens/Register";
 import PasswordReset from "./screens/PasswordReset";
 import EmailPassword from "./screens/EmailPassword";
@@ -16,7 +16,7 @@ import CitiesList from "./screens/CitiesList";
 import Admin from "./screens/Admin";
 import ManageCategories from "./screens/ManageCategories";
 import IState from "./interfaces/IState";
-import {AnimatePresence} from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 
 const styles: CSS.Properties = {
     margin: 0,
@@ -24,7 +24,7 @@ const styles: CSS.Properties = {
 };
 
 function App() {
-    const {data} = useCitiesQuery();
+    const { data } = useCitiesQuery();
 
     const currentUrl = useLocation().pathname;
 
@@ -54,30 +54,59 @@ function App() {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const results = cities.filter((city) => {
             if (e.target.value === " ") return cities;
-            return city.name.toLowerCase().includes(e.target.value.toLowerCase());
+            return city.name
+                .toLowerCase()
+                .includes(e.target.value.toLowerCase());
         });
 
-        setSearchParams({query: e.target.value});
+        setSearchParams({ query: e.target.value });
 
         setState({
             query: e.target.value,
             list: results,
         });
     };
-
+  
     const location = useLocation();
-
+  
     return (
         <>
             {/*<Toaster position="top-center"/>*/}
             <div style={styles}>
-
                 <Header
                     currentUrl={currentUrl}
                     state={state}
                     handleChange={handleChange}
                     shouldAnimate={shouldAnimate}
                 />
+
+                <AnimatePresence mode="wait">
+                    <Routes location={location} key={location.pathname}>
+                        <Route path="/" element={<Home />} />
+                        <Route
+                            path="/cities-list"
+                            element={<CitiesList state={state} />}
+                        />
+                    </Routes>
+                </AnimatePresence>
+                <Routes>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/password/email" element={<EmailPassword />} />
+                    <Route
+                        path="/password/reset/:id/:token"
+                        element={<PasswordReset />}
+                    />
+                    <Route path="/info/:cityName" element={<InfoCity />} />
+                    <Route path="/manage-cities" element={<ManageCities />} />
+                    <Route path="/edit-city/:cityName" element={<EditCity />} />
+                    <Route path="/admin" element={<Admin />} />
+                    <Route
+                        path="/manage-categories"
+                        element={<ManageCategories />}
+                    />
+                </Routes>
+
                 {/*<AnimatedPresence permet de gérer les transitions entre les pages>*/}
                 <AnimatePresence mode='wait'>
                     <Routes location={location} key={location.pathname}>
@@ -98,7 +127,6 @@ function App() {
             </div>
         </>
     );
-
 }
 
 export default App;
