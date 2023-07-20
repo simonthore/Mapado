@@ -4,8 +4,8 @@ import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { City } from "../gql/generated/schema";
 import { useGetCityQuery } from "../gql/generated/schema";
 import ICity from "../interfaces/ICity";
-// import CityDescription from "../components/CityDescription";
-// import axios from "axios";
+import CityDescription from "../components/CityDescription";
+import axios from "axios";
 // import MarkerIconPng from "../assets/images/marker.png";
 interface CityInfoScreenProps {
     route: any;
@@ -46,49 +46,49 @@ const CityInfoScreen: React.FC<CityInfoScreenProps> = ({ route }) => {
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
             });
-        }
-    }, []);
 
-    //         // Appel à l'API Wikipedia pour récupérer la description de la ville
-    //         axios
-    //             .get(
-    //                 `https://fr.wikipedia.org/api/rest_v1/page/summary/${data.city.name}`
-    //             )
-    //             .then((response) => {
-    //                 setCityDescriptionData(response.data.extract);
-    //             })
-    //             .catch((error) => {
-    //                 console.error(
-    //                     "Erreur lors de la récupération de la description de la ville :",
-    //                     error
-    //                 );
-    //             });
-    //     }
-    // }, [data]);
+            // Appel à l'API Wikipedia pour récupérer la description de la ville
+            axios
+                .get(
+                    `https://fr.wikipedia.org/api/rest_v1/page/summary/${data.city.name}`
+                )
+                .then((response) => {
+                    setCityDescriptionData(response.data.extract);
+                })
+                .catch((error) => {
+                    console.error(
+                        "Erreur lors de la récupération de la description de la ville :",
+                        error
+                    );
+                });
+        }
+    }, [data]);
 
     console.log("CityInfoScreen.tsx - city :", city);
     return (
         <View style={styles.container}>
-            {/* <CityDescription cityName={name} description={CityDescription} /> */}
+            <CityDescription
+                cityName={name}
+                description={CityDescriptionData}
+            />
             <Image source={{ uri: image }} style={styles.cityImage} />
-            <Text style={styles.cityTitle}>{name}</Text>
-            <MapView
-                provider={PROVIDER_GOOGLE}
-                style={styles.cityMap}
-                region={mapRegion}
-            >
-                <Marker
-                    coordinate={{
-                        latitude: 47.2009456,
-                        longitude: 0.6327305,
-                    }}
-                    title={name}
-                    // image={require("../assets/images/starred.png")}
-                />
-            </MapView>
-            <TouchableOpacity style={styles.backButton}>
-                <Text style={styles.backButtonText}>Back</Text>
-            </TouchableOpacity>
+
+            <View style={styles.cityMapContainer}>
+                <MapView
+                    provider={PROVIDER_GOOGLE}
+                    style={styles.cityMap}
+                    region={mapRegion}
+                >
+                    <Marker
+                        coordinate={{
+                            latitude: 47.2009456,
+                            longitude: 0.6327305,
+                        }}
+                        title={name}
+                        // image={require("../assets/images/starred.png")}
+                    />
+                </MapView>
+            </View>
         </View>
     );
 };
@@ -96,35 +96,26 @@ const CityInfoScreen: React.FC<CityInfoScreenProps> = ({ route }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "white",
+        justifyContent: "flex-start",
+        width: "100%",
+        backgroundColor: "black",
     },
     cityTitle: {
         fontSize: 25,
         color: "#EC5D5B",
-        paddingTop: 20,
         textAlign: "center",
     },
+
     cityImage: {
         width: "100%",
-        height: 200,
+    },
+    cityMapContainer: {
+        flex: 1, // Utilisez un flex de 1 pour que la carte prenne une part sur trois
+        width: "100%",
     },
     cityMap: {
-        flex: 1,
+        flex: 1, // Utilisez un flex de 1 pour que la carte prenne une part sur trois
         width: "100%",
-        height: "50%",
-    },
-    backButton: {
-        backgroundColor: "#3270F4",
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        borderRadius: 5,
-        alignSelf: "center",
-        marginTop: 20,
-    },
-    backButtonText: {
-        color: "white",
-        fontSize: 16,
-        fontWeight: "bold",
     },
 });
 

@@ -70,7 +70,7 @@ function Cities() {
         >
             <Stack.Screen name="Home" component={CitiesScreen} />
             <Stack.Screen name="Info" component={CityInfoScreen} />
-            {/* <Stack.Screen name="Profile" component={UserProfile}/> */}
+            {/* <Stack.Screen name="Profile" component={UserProfile} /> */}
             <Stack.Screen name="Forgot" component={ForgotPassword} />
             <Stack.Screen name="Register" component={UserRegister} />
             <Stack.Screen name="Login" component={LoginScreen} />
