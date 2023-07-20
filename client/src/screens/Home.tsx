@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Mapado from "../assets/images/mapado_logo.png";
 import directions from "../assets/images/directions.png";
+
 import { motion } from "framer-motion";
 
 export default function Home() {
@@ -20,6 +21,19 @@ export default function Home() {
     return (
         <>
             <motion.div exit={{ opacity: 0, top: "-100vh" }}>
+
+import {motion} from "framer-motion";
+import {buttonAnimation} from "../utils/homeButtonAnimation";
+
+export default function Home() {
+
+    return (
+        <>
+            {/*Le préfixe motion permet d'animer un élément HTML avec Framer Motion*/}
+            <motion.div
+                // On indique ici qu'à la sortie de la page, on joue l'animation
+                exit={{opacity: 0, top: "-100vh"}}>
+
                 <header className="intro">
                     <motion.div initial={{ x: "-200px" }} animate={{ x: 0 }}>
                         <Link to="/">
@@ -55,11 +69,18 @@ export default function Home() {
                                         type: "spring",
                                     }}
                                 >
+
                                     Nous avons créé une application qui vous
                                     permet d'ajouter vos coins préférés à vos
                                     villes préférées. Ou futures villes
                                     préférées. Même si c'est notre application
                                     que vous allez préférer.
+
+                                    Nous avons créé une application qui vous permet d'ajouter vos
+                                    coins préférés à vos villes préférées. Ou futures villes
+                                    préférées.<br/>Même si c'est notre application que vous allez
+                                    préférer.
+
                                 </motion.h2>
                             </div>
                             <motion.div

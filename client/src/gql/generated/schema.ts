@@ -257,9 +257,12 @@ export type UserSendPassword = {
 };
 
 export type FindPoi = {
+  categoryId?: InputMaybe<Scalars['Float']>;
   cityId: Scalars['Float'];
   cityName: Scalars['String'];
+  description?: InputMaybe<Scalars['String']>;
   poiNameOrAdress: Scalars['String'];
+  rating?: InputMaybe<Scalars['Float']>;
 };
 
 export type ChangePasswordMutationVariables = Exact<{
@@ -334,7 +337,7 @@ export type GetCityQueryVariables = Exact<{
 }>;
 
 
-export type GetCityQuery = { __typename?: 'Query', city: { __typename?: 'City', id: number, name: string, latitude?: number | null, longitude?: number | null, photo?: string | null, poi?: Array<{ __typename?: 'Poi', id: number, name: string, address: string, latitude?: number | null, longitude?: number | null }> | null } };
+export type GetCityQuery = { __typename?: 'Query', city: { __typename?: 'City', id: number, name: string, latitude?: number | null, longitude?: number | null, photo?: string | null, poi?: Array<{ __typename?: 'Poi', id: number, name: string, address: string, latitude?: number | null, longitude?: number | null, description?: string | null, rating?: number | null, photo?: string | null, category?: { __typename?: 'Category', name: string } | null }> | null } };
 
 export type FetchTokenQueryVariables = Exact<{
   fetchTokenId: Scalars['Float'];
@@ -732,6 +735,12 @@ export const GetCityDocument = gql`
       address
       latitude
       longitude
+      description
+      rating
+      photo
+      category {
+        name
+      }
     }
   }
 }
