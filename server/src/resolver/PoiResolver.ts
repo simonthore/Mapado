@@ -1,8 +1,9 @@
-import {Arg, Int, Mutation, Query, Resolver} from "type-graphql";
-import Poi, {PoiInput, UpdatePoiInput, findPOI} from "../entity/Poi";
+import {Arg, Int, Mutation, Query, Resolver, Authorized} from "type-graphql";
 import datasource from "../db";
 import {ApolloError} from "apollo-server-errors";
 import {env} from "../env";
+import Poi, {PoiInput, UpdatePoiInput, findPOI} from "../entity/Poi";
+import { UserRole } from "../entity/User";
 
 @Resolver(Poi)
 export class PoiResolver {
@@ -13,11 +14,13 @@ export class PoiResolver {
       .find({ relations: { city: true, category: true } });
   }
 
+    @Authorized<UserRole>([UserRole.SUPERADMIN, UserRole.CITYADMIN, UserRole.POICREATOR])
     @Mutation(() => Poi)
     async createPoi(@Arg("data") data: PoiInput): Promise<Poi> {
         return await datasource.getRepository(Poi).save(data);
     }
 
+    @Authorized<UserRole>([UserRole.SUPERADMIN, UserRole.CITYADMIN]) 
     @Mutation(() => Boolean)
     async deletePoi(@Arg("id", () => Int) id: number): Promise<boolean> {
         const {affected} = await datasource.getRepository(Poi).delete(id);
@@ -25,18 +28,17 @@ export class PoiResolver {
         return true;
     }
 
-  @Mutation(() => Poi)
-  async updatePoi(
-    @Arg("id", () => Int) id: number,
-    @Arg("data") { name, address, description }: UpdatePoiInput
-  ): Promise<Poi | null> {
-    const poiToUpdate = await datasource.getRepository(Poi).findOne({
-      where: { id },
-      relations: { category: true, city: true },
-    });
-    const { affected } = await datasource
-      .getRepository(Poi)
-      .update(id, { name, address, description });
+    @Authorized<UserRole>([UserRole.SUPERADMIN, UserRole.CITYADMIN]) 
+    @Mutation(() => Poi)
+    async updatePoi(
+        @Arg("id", () => Int) id: number,
+        @Arg("data") {name, address, description}: UpdatePoiInput
+    ): Promise<Poi | null> {
+        const poiToUpdate = await datasource.getRepository(Poi).findOne({
+            where: {id},
+            relations: {category: true, city: true},
+        });
+        const {affected} = await datasource.getRepository(Poi).update(id, {name, address, description});
 
         if (affected === 0) throw new ApolloError("Poi not found", "NOT_FOUND");
 

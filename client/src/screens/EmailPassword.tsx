@@ -43,7 +43,17 @@ export default function PasswordReset() {
             <button
               type="submit"
               className={"tertiaryButton"}
-              onClick={() => toast("please check your email")}
+              onClick={() =>
+                toast(
+                  "Si vous avez un compte Mapado, vous recevrez un email pour réinitialiser votre mot de passe",
+                  {
+                    style: {
+                      border: "3px solid",
+                      padding: "4rem",
+                    },
+                  }
+                )
+              }
             >
               Valider
             </button>

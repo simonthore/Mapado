@@ -13,6 +13,7 @@
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
+    margin-top: 10rem;
 }
 
 form {
@@ -35,9 +36,10 @@ input {
 .primaryButtonEmailPassword {
     height: 2.5rem;
     width: 15rem;
-    background-color: #FFFFFF;
+    /* background-color: #FFFFFF; */
     border-radius: 15px;
     border: 3px solid #173472;
+    color: #FFFFFF;
 }
 
 .tertiaryButton {
@@ -45,15 +47,17 @@ input {
     width: 15rem;
     border-radius: 15px;
     border: 3px solid #173472;
-    background-color: #EC5D5C;
-    color: white;
+    background-color: #FFFFFF;
+    /* color: white; */
 }
 
 .secondaryButton {
     height: 2.5rem;
     width: 15rem;
+    background-color: #FFFFFF;
     border-radius: 15px;
-    border: 3px solid #EC5D5C;
+    border: 3px solid #173472;
+    color: #EC5D5C;
 }
 
 .loginButtonsContainer {

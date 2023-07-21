@@ -24,17 +24,17 @@ export default function Login() {
 
   const navigateCreateAccount = () => navigate("/register");
 
+  const navigateHome = () => navigate("/cities-list");
+
   return (
     <>
       <div className={"loginStyle"}>
         <button className={"backButton"} onClick={goBack}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25">
             <path d="M24 12.001H2.914l5.294-5.295-.707-.707L1 12.501l6.5 6.5.707-.707-5.293-5.293H24v-1z" />
-
           </svg>
         </button>
-        {/*{currentUser && <Navigate to="/" replace={false} />}*/}
-        <Card customClass={" registerCard"}>
+        <Card customClass={"registerCard"}>
           <form
             className={"loginContainer"}
             onSubmit={(e) => {
@@ -42,9 +42,10 @@ export default function Login() {
               login({ variables: { data: credentials } })
                 .then(() => {
                   client.resetStore();
+                  navigateHome();
+                  console.log(currentUser?.profile.role);
                 })
                 .catch((error) => {
-                  console.log(error);
                   toast.error("Invalid credentials", {
                     style: {
                       border: "3px solid #EC5D5C",
@@ -60,6 +61,7 @@ export default function Login() {
             }}
           >
             {/* <img src={login} alt="" style={iconStyles} /> */}
+            <h1 className={"title"}>Se connecter</h1>
             <label htmlFor="email">
               <input
                 type="email"
@@ -93,22 +95,22 @@ export default function Login() {
               </button>
             </label>
             <div className={"loginButtonsContainer"}>
+              <button type="submit" className={"tertiaryButton"}>
+                Se connecter
+              </button>
+              <button
+                type="button"
+                className={"secondaryButton"}
+                onClick={navigateCreateAccount}
+              >
+                Créer un compte
+              </button>
               <button
                 type="button"
                 className={"primaryButtonEmailPassword"}
                 onClick={navigateEmailPassword}
               >
                 Mot de passe oublié ?
-              </button>
-              <button type="submit" className={"tertiaryButton"}>
-                Se connecter
-              </button>
-              <button
-                type="button"
-                className={"tertiaryButton"}
-                onClick={navigateCreateAccount}
-              >
-                Créer un compte
               </button>
             </div>
           </form>

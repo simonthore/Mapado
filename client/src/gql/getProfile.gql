@@ -3,5 +3,9 @@ query GetProfile {
     id
     email
     role
+    cities {
+      name
+      id
+    }
   }
 }
