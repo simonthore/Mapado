@@ -37,6 +37,11 @@ export class UserInput {
   @MinLength(8)
   @Matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)
   password: string;
+
+  @Field({ nullable: true })
+  @MinLength(8)
+  @Matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)
+  hashedPassword?: string;
 }
 
 
