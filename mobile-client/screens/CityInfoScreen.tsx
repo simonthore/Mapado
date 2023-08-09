@@ -6,6 +6,7 @@ import { useGetCityQuery } from "../gql/generated/schema";
 import ICity from "../interfaces/ICity";
 import CityDescription from "../components/CityDescription";
 import axios from "axios";
+import LinearGradient from "react-native-linear-gradient";
 // import MarkerIconPng from "../assets/images/marker.png";
 interface CityInfoScreenProps {
     route: any;

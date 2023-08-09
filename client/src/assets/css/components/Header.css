@@ -15,8 +15,16 @@
   transition: box-shadow 0.5s;
 }
 
-.headerStyle img {
+.logo{
   width: 180px;
+}
+
+.exclamation{
+  width: 37px;
+}
+
+.nav_sentence{
+  display: flex;
 }
 
 .headerStyle h1 {

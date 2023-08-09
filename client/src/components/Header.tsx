@@ -55,7 +55,7 @@ export default function Header({
       className={`headerStyle${headerWithShadow ? " headerWithShadow" : ""}`}
     >
       <NavLink to="/cities-list">
-        <img src={Mapado} alt="logo" />
+        <img src={Mapado} alt="logo" className="logo"/>
       </NavLink>
       <SearchBar
         currentUrl={currentUrl}
@@ -63,7 +63,9 @@ export default function Header({
         handleChange={handleChange}
       />
       <div className="nav__description">
-        <p>Locate, discover & share !</p>
+        <div className="nav_sentence">
+        <p>Locate, discover & share </p><img src={logged_in} alt="logo" className="exclamation"/>
+        </div>
         <div className="demos">
           <NavLink to="/cities-list">Accueil</NavLink>
           {(currentUserRole === "Super Administrator" ||

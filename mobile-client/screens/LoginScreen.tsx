@@ -11,7 +11,7 @@ import {
   Text,
   ScrollView,
   RefreshControl,
-  TouchableHighlight,
+  Image,
   Pressable,
 } from "react-native";
 import { useFonts } from "expo-font";
@@ -21,14 +21,17 @@ import {
   useLogoutMutation,
 } from "../gql/generated/schema";
 import * as SecureStore from "expo-secure-store";
+import {LinearGradient} from "expo-linear-gradient";
+
 
 export default function LoginScreen({ navigation }) {
   const [credentials, setCredentials] = useState({
-    email: "Pierre@gmail.com",
-    password: "Test@33000",
+    email: "",
+    password: "",
   });
 
   const [refresh, setRefresh] = useState(false);
+  const image = require("../assets/images/Navigation.png");
 
   const pullRefresh = () => {
     setRefresh(true);
@@ -52,26 +55,16 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <TouchableHighlight
-        style={{
-          borderRadius:
-            Math.round(
-              Dimensions.get("window").width + Dimensions.get("window").height
-            ) / 2,
-          width: Dimensions.get("window").width * 0.5,
-          height: Dimensions.get("window").width * 0.5,
-          borderWidth: 8,
-          borderColor: "#F5DEB3",
-          justifyContent: "center",
-          alignItems: "center",
-          marginBottom: 60,
-          marginTop: 20,
-        }}
-        underlayColor="#CCC30A"
-        onPress={() => alert("Mapado's Rule")}
+    <LinearGradient
+      colors={['rgba(2, 0, 36, 1)', 'rgba(23, 52, 114, 1)', 'rgba(236, 93, 92, 1)']}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.gradient}
       >
-        <Text style={styles.mainName}>Mapado</Text>
-      </TouchableHighlight>
+      <Image
+                source={image}
+                style={{width:200, height:200, marginBottom:50}}
+                />
       <ScrollView
         refreshControl={
           <RefreshControl
@@ -81,7 +74,6 @@ export default function LoginScreen({ navigation }) {
         }
         style={styles.ScrollView}
       >
-        <Text>Bienvenue sur Mapado</Text>
         {currentUser?.profile ? (
           <View>
             <Text>connected as {currentUser?.profile.email}</Text>
@@ -105,9 +97,9 @@ export default function LoginScreen({ navigation }) {
               style={styles.info}
             />
 
-            <Svg height="15" width="100%">
+            {/* <Svg height="15" width="100%">
               <Rect x="0" y="10" width="1120" height="3" fill="white" />
-            </Svg>
+            </Svg> */}
 
             <TextInput
               onChangeText={(val) =>
@@ -118,9 +110,9 @@ export default function LoginScreen({ navigation }) {
               style={styles.info}
             />
 
-            <Svg height="50" width="100%">
+            {/* <Svg height="50" width="100%">
               <Rect x="0" y="10" width="1120" height="3" fill="white" />
-            </Svg>
+            </Svg> */}
 
             {error && <Text style={{ color: "red" }}>{error}</Text>}
             <View style={styles.contain}>
@@ -170,6 +162,7 @@ export default function LoginScreen({ navigation }) {
         </View>
         <StatusBar style="auto" />
       </ScrollView>
+      </LinearGradient>
     </View>
   );
 }
@@ -185,8 +178,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   info: {
-    color: "white",
+    width: '80%',
+    padding: 10,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    fontSize: 16,
+    backgroundColor: '#fff',
+    color: '#333',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+    alignSelf:"center",
   },
+
+  //bouton "Se connecter"
   connexion: {
     alignItems: "center",
     justifyContent: "center",
@@ -195,23 +204,25 @@ const styles = StyleSheet.create({
     height: 50,
     width: 200,
     borderRadius: 20,
-    backgroundColor: "#F5DEB3",
+    backgroundColor: "#ec5d5c",
     marginBottom: 70,
   },
+
+  //texte du bouton "Se connecter"
   connexionText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#08415C",
+    color: "#173472",
   },
   text: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "white",
+    color: "#173472",
   },
   Mdp: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "white",
+    color: "#173472",
     marginRight: 60,
   },
   box: {
@@ -222,4 +233,11 @@ const styles = StyleSheet.create({
     fontSize: 40,
   },
   ScrollView: {},
+  gradient: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    height:"100%",
+    width:"100%",
+},
 });

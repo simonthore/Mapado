@@ -15,7 +15,7 @@ import { useState } from "react";
 import { useQuery, gql } from "@apollo/client";
 import { useGetProfileQuery } from "./gql/generated/schema";
 import { useEffect } from "react";
-
+//
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -40,9 +40,9 @@ function Cities() {
             screenOptions={{
                 headerShown: true,
                 headerStyle: {
-                    backgroundColor: "black",
+                    backgroundColor: "#051944",
                 },
-                headerTintColor: "#fff",
+                headerTintColor: "#ec5d5c",
                 headerRight: () => (
                     <View
                         style={{ flexDirection: "row", alignItems: "center" }}
@@ -57,7 +57,7 @@ function Cities() {
                         />
                         <Text
                             style={{
-                                color: "white",
+                                color: "#ec5d5c",
                                 fontSize: 12,
                                 fontWeight: "bold",
                             }}
@@ -69,7 +69,7 @@ function Cities() {
             }}
         >
             <Stack.Screen name="Home" component={CitiesScreen} />
-            <Stack.Screen name="Info" component={CityInfoScreen} />
+            <Stack.Screen name="Info" component={CityInfoScreen}/>
             {/* <Stack.Screen name="Profile" component={UserProfile} /> */}
             <Stack.Screen name="Forgot" component={ForgotPassword} />
             <Stack.Screen name="Register" component={UserRegister} />
@@ -117,9 +117,12 @@ export default function App() {
                                 />
                             );
                         },
-                        tabBarActiveTintColor: "#A9B18F",
+                        tabBarActiveTintColor: "#ec5d5c",
                         tabBarInactiveTintColor: "gray",
                         tabBarStyle: { height: 60, paddingBottom: 10 },
+                        headerStyle: {
+                            backgroundColor: '#051944', // Couleur de fond du header pour tous les écrans empilés dans `Cities`
+                          },
                     })}
                 >
                     {/* nom de la page reliée à chaque composant */}
@@ -128,7 +131,10 @@ export default function App() {
                         component={Cities}
                         options={{ headerShown: false }}
                     />
-                    <Tab.Screen name="Login" component={LoginScreen} />
+                    <Tab.Screen name="login" component={LoginScreen}
+                     options={{
+                        headerTitleStyle:{color:'#ec5d5c'},
+                    }} />
                 </Tab.Navigator>
             </NavigationContainer>
         </ApolloProvider>
