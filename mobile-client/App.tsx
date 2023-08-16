@@ -2,7 +2,7 @@ import client from "./gql/client";
 import { ApolloProvider } from "@apollo/client";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createNativeStackNavigator } from "react-native-screens/native-stack";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Ionicons from "@expo/vector-icons/Ionicons";
 import CitiesScreen from "./screens/CitiesScreen";
 import CityInfoScreen from "./screens/CityInfoScreen";
