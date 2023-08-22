@@ -8,81 +8,44 @@ import {
   Query,
   Resolver,
 } from "type-graphql";
-import { GraphQLError } from "graphql";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import datasource from "../db";
+import {In} from "typeorm";
 import User, {
   getSafeAttributes,
   hashPassword,
+  Role,
+  UserChangePassword,
   UserInput,
-  UserRole,
-  UserRoleInput,
   UserSendPassword,
   verifyPassword,
+  UpdateUserInput
 } from "../entity/User";
 import { env } from "../environment";
 import { ContextType } from "../index";
+import { stringify } from "querystring";
 import City from "../entity/City";
-import { Any } from "typeorm";
 
 @Resolver(User)
 export class UserResolver {
-  @Query(() => [User])
-  async users(): Promise<User[]> {
-    function compare(a: any, b: any) {
-      if (a.email < b.email) {
-        return -1;
-      }
-      if (a.email > b.email) {
-        return 1;
-      }
-      return 0;
+    @Query(() => [User])
+    async users(): Promise<User[]> {
+        //Pour récupérer la liste des cities on ajoute la relation
+        return await datasource.getRepository(User).find({relations: {cities: true}});
     }
-    const users = await datasource.getRepository(User).find();
-
-    const sortedUsers = users.sort(compare);
-    return sortedUsers;
-  }
-
-  // @Query(() => City)
-  // async userCities(@Arg("userId", () => Int) userId: number): Promise<any> {
-  //   const citiesIds = await datasource
-  //     .getRepository(User)
-  //     .findOne({ where: { id: userId } });
-  //   const citiesList = await datasource.getRepository(City).find();
-
-  //   console.log(citiesIds);
-  //   console.log(citiesList);
-  // }
 
   @Mutation(() => User)
   async createUser(@Arg("data") data: UserInput): Promise<User> {
-    const userList = datasource.getRepository(User).find();
-    const userListEmail = (await userList).map((user) => user.email);
-    if (userListEmail.indexOf(data.email) !== -1) {
-      throw new GraphQLError(
-        "Un compte est déjà enregistré avec cette adresse email",
-        null,
-        null,
-        null,
-        null,
-        null,
-        {
-          extensions: {
-            code: "FORBIDDEN",
-          },
-        }
-      );
-    }
     const hashedPassword = await hashPassword(data.password);
+    const createdAt = await Date.now();
     const user = await datasource
       .getRepository(User)
-      .save({ ...data, hashedPassword });
+      .save({ ...data, createdAt, hashedPassword });
     return user;
   }
 
-  @Authorized<UserRole>([UserRole.SUPERADMIN])
+  @Authorized<Role>(["cityAdmin"])
   @Mutation(() => Boolean)
   async deleteUser(@Arg("id", () => Int) id: number): Promise<boolean> {
     const { affected } = await datasource.getRepository(User).delete(id);
@@ -90,58 +53,30 @@ export class UserResolver {
     return true;
   }
 
-  @Mutation(() => User)
-  async updateUserCities(
-    @Arg("userId", () => Int) userId: number,
-    @Arg("cityId", () => Int) cityId: number
-  ): Promise<User> {
-    let user = await datasource
-      .getRepository(User)
-      .findOne({ where: { id: userId }, relations: { cities: true } });
-    if (!user) throw new ApolloError("User not found", "NOT_FOUND");
+    @Mutation(() => String)
+    async updateUser(
+        @Arg("id", () => Int) id: number,
+        @Arg("data", () => UpdateUserInput) {email, hashedPassword, cities}: UpdateUserInput): Promise<String>
+    {
+        let citiesEntities: City[] = []
+        let user = await datasource.getRepository(User).findOne({where: {id}, relations: {cities: true}})
+        if (!user) throw new ApolloError("User not found", "NOT_FOUND")
 
-    let city = await datasource
-      .getRepository(City)
-      .findOne({ where: { id: cityId } });
+        if (cities) {
+            citiesEntities = await datasource.getRepository(City).find({where: {id: In(cities?.map(c => c.id))}})
+            user.cities = [...(user?.cities ? user.cities : []), ...citiesEntities]
+        }
+        if (hashedPassword) user.hashedPassword = await hashPassword(user.hashedPassword ? user.hashedPassword : '');
 
-    const cityExists = user.cities.filter((city) => {
-      console.log(city.id, cityId);
-      return city.id === cityId;
-    });
-    console.log("cityExists", cityExists);
+        if (email) user.email = email
 
-    if (cityExists.length) {
-      throw new ApolloError("City already assigned", "DUPLICATE_NOT_ALLOWED");
-    } else if (!city) {
-      throw new ApolloError("City not found", "NOT_FOUND");
-    } else {
-      user.cities = [...user.cities, city];
+        const updatedUser = await datasource
+            .getRepository(User)
+            .save(user);
+
+        return "data updated";
+
     }
-
-    datasource.getRepository(User).save(user);
-
-    // return `${updatedUser.email} has been updated:
-    //   ${JSON.stringify(updatedUser.cities.map((city) => city.name))}`;
-    return user;
-  }
-
-  //Update User Role
-  @Authorized<UserRole>([UserRole.SUPERADMIN, UserRole.CITYADMIN])
-  @Mutation(() => String)
-  async updateUserRole(
-    @Arg("data", () => UserRoleInput) { email, role }: UserRoleInput
-  ): Promise<String> {
-    let userToUpdate = await datasource
-      .getRepository(User)
-      .findOne({ where: { email } });
-    if (!userToUpdate) throw new ApolloError("User not found", "NOT_FOUND");
-
-    userToUpdate.role = role;
-
-    const updatedUser = await datasource.getRepository(User).save(userToUpdate);
-
-    return `${updatedUser.email} been assigned ${updatedUser.role} role`;
-  }
 
   @Mutation(() => String)
   async login(
@@ -151,7 +86,7 @@ export class UserResolver {
     const user = await datasource
       .getRepository(User)
       .findOne({ where: { email } });
-    // const hashedPassword = await hashPassword(password);
+    ///const hashedPassword = await hashPassword(password);
 
     if (
       user === null ||
@@ -184,16 +119,6 @@ export class UserResolver {
     return getSafeAttributes(ctx.currentUser as User);
   }
 
-  @Query(() => User)
-  async getUserCities(@Arg("id") id: number): Promise<User> {
-    const user = await datasource
-      .getRepository(User)
-      .findOne({ where: { id }, relations: { cities: true } });
-    if (!user) throw new ApolloError("no such user", "NOT_FOUND");
-
-    return user;
-  }
-
   @Mutation(() => User)
   async sendPasswordEmail(@Arg("data") data: UserSendPassword): Promise<User> {
     const { email } = data;
@@ -216,8 +141,8 @@ export class UserResolver {
 
     const userId = userToEmail.id;
     const hashedPassword = userToEmail.hashedPassword;
-
-    const secret = hashedPassword!;
+    const createdAt = userToEmail.created_at;
+    const secret = hashedPassword + "-" + createdAt;
 
     const emailToken = jwt.sign({ userId }, secret, { expiresIn: 36000 });
 
@@ -261,9 +186,10 @@ export class UserResolver {
   // mutation to change password
   @Mutation(() => User)
   async changePassword(
-    @Arg("id", () => Int) id: number,
-    @Arg("newPassword", () => String) newPassword: string
+    @Arg('id', () => Int) id: number,
+    @Arg('newPassword', () => String) newPassword: string
   ): Promise<boolean> {
+
     //create userToUpdate which is the user in the db matching the email (with properties email, hashedPassword, etc)
     const userToUpdate = await datasource
       .getRepository(User)

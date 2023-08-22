@@ -1,4 +1,0 @@
-mutation UpdateUserRole($data: UserRoleInput!) {
-    updateUserRole(data: $data)
-}
-
