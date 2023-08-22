@@ -5,8 +5,6 @@ import {
   useChangePasswordMutation,
   useFetchTokenQuery,
 } from "../gql/generated/schema";
-import {useNavigate} from "react-router";
-import toast from "react-hot-toast";
 
 const resetPasswordStyles: CSS.Properties = {
   height: "100vh",
@@ -29,8 +27,7 @@ const passwordResetContainerStyles: CSS.Properties = {
 
   justifyContent: "space-around",
   alignItems: "center",
-
-  marginTop: "10rem"
+  border: "2px solid #E2FE53",
 };
 
 const inputStyles: CSS.Properties = {
@@ -65,12 +62,6 @@ export default function PasswordReset() {
 
   const { token, id } = useParams();
 
-  const navigate = useNavigate();
-
-  const goToLogin = () => {
-    navigate("/login");
-}
-
   //create clean string form of id
   const cleanId = id?.replace(/[:]+/g, "") ?? "0";
 
@@ -97,7 +88,6 @@ export default function PasswordReset() {
   const cleanServerToken = JSON.stringify(serverToken)
     .replace(/[\\]/g, "")
     .replace(/['"]+/g, "");
-    
   const cleanToken = token?.replace(/[:]+/g, "");
 
   if (!token || cleanToken !== cleanServerToken)
@@ -117,13 +107,8 @@ export default function PasswordReset() {
             e.preventDefault();
             changePassword({ variables: { newPassword: credentials.newPassword, changePasswordId: +credentials.id } })
               .then(() => {
-                toast.success("Votre mot de pass a bien été modifié", {
-                  style: {
-                    border: "3px solid",
-                    padding: "4rem",
-                  }})
-                ;
-              }).then(() => goToLogin())
+                console.log("success");
+              })
               .catch(console.error);
           }}
         >

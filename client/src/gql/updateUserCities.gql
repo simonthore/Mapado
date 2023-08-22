@@ -1,7 +1,0 @@
-mutation UpdateUserCities($cityId: Int!, $userId: Int!) {
-  updateUserCities(cityId: $cityId, userId: $userId) {
-    cities {
-      name
-    }
-  }
-}

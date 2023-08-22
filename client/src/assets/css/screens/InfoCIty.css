@@ -3,16 +3,16 @@
 }
 
 .backButton {
-  height: 2.5rem;
-  display: flex;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: #173472;
-  border-radius: 20px;
-  z-index: 999;
-  position: absolute;
-  top: 9.2rem;
-  left: 2rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #173472;
+    border-radius: 20px;
+    z-index: 999;
+    position: absolute;
+    top: 9.2rem;
+    left: 2rem;
 }
 
 .backButton svg {

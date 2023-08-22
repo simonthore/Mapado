@@ -37,28 +37,9 @@ async function seed(): Promise<void> {
     ]);
     await db.getRepository(User).insert([
         {
-            email: "admin@test.com",
-            id: 8,
-            hashedPassword: "$argon2id$v=19$m=65536,t=5,p=4$ESNK5+jJkIYHHrEhPsoo4w$LDyT5r3NBDE5GxT0Ksva/XdovpmRLnAgUnb3wpdKeaY",
-            role: "Super Administrator"
-        },
-        {
-            email: "anna.gosme@gmail.com",
-            id: 8,
-            hashedPassword: "$argon2id$v=19$m=65536,t=5,p=4$ESNK5+jJkIYHHrEhPsoo4w$LDyT5r3NBDE5GxT0Ksva/XdovpmRLnAgUnb3wpdKeaY",
-            role: "Super Administrator"
-        },
-        {
             email: "gg@test.com",
             id: 7,
-            hashedPassword: "$argon2id$v=19$m=65536,t=5,p=4$to+4ziOVZQe7ypnIs36mjg$3F6fWRb6FWRbd/U0XAEaleJnF+N86Dx1lp7Kk8sNEWk",
-            role: "Super Administrator"
-        },
-        {
-            email: "ap_levy@hotmail.com",
-            id: 10,
-            hashedPassword: "$argon2id$v=19$m=65536,t=5,p=4$AmSivMWMhsjlzHWuLgcd3A$Jeedbbq8lqVxmW24",
-            role: "City Administrator"
+            hashedPassword: "$argon2id$v=19$m=65536,t=5,p=4$to+4ziOVZQe7ypnIs36mjg$3F6fWRb6FWRbd/U0XAEaleJnF+N86Dx1lp7Kk8sNEWk"
         },
         {
             email: "leila@test.com",

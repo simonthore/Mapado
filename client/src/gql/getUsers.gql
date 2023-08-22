@@ -1,10 +1,5 @@
 query Users {
   users {
     id
-    email
-    role
-    cities {
-      name
-    }
   }
 }

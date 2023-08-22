@@ -1,7 +1,0 @@
-query GetUserCities($getUserCitiesId: Float!) {
-  getUserCities(id: $getUserCitiesId) {
-    cities {
-      name
-    }
-  }
-}

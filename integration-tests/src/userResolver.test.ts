@@ -63,7 +63,7 @@ describe("User resolver", () => {
         it("should return an array", async () => {
             await db
                 .getRepository(User)
-                .insert([{id: 1, email: "plato@plato.com"}, {id: 2, email: "plata@plata.com"}]);
+                .insert([{id: 1}, {id: 2}]);
 
             const res = await client.query({
                 query: getUsersQuery, fetchPolicy: "no-cache",
