@@ -6,7 +6,9 @@ import { useGetCityQuery } from "../gql/generated/schema";
 import ICity from "../interfaces/ICity";
 import CityDescription from "../components/CityDescription";
 import axios from "axios";
-import LinearGradient from "react-native-linear-gradient";
+import IPoi from "../interfaces/IPoi";
+import {LinearGradient} from "expo-linear-gradient";
+
 // import MarkerIconPng from "../assets/images/marker.png";
 interface CityInfoScreenProps {
     route: any;
@@ -30,14 +32,28 @@ const CityInfoScreen: React.FC<CityInfoScreenProps> = ({ route }) => {
             query: name,
         },
     });
-    console.log("CityInfoScreen.tsx - data :", data?.city);
     const city: ICity = {
         id: data?.city?.id!,
         name: data?.city?.name!,
         latitude: data?.city?.latitude!,
         longitude: data?.city?.longitude!,
-        // pois: []
+        pois: [],
     };
+
+    data?.city?.poi?.forEach((e) => {
+        const poi: IPoi = {
+            id: e.id,
+            name: e.name,
+            longitude: e.longitude!,
+            latitude: e.latitude!,
+            address: e.address,
+            category: e.category?.name,
+            description: e.description,
+            rating: e.rating,
+            photo: e.photo,
+        };
+        city?.pois?.push(poi);
+    });
 
     useEffect(() => {
         if (data?.city) {
@@ -47,6 +63,8 @@ const CityInfoScreen: React.FC<CityInfoScreenProps> = ({ route }) => {
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
             });
+
+        
 
             // Appel à l'API Wikipedia pour récupérer la description de la ville
             axios
@@ -65,32 +83,38 @@ const CityInfoScreen: React.FC<CityInfoScreenProps> = ({ route }) => {
         }
     }, [data]);
 
-    console.log("CityInfoScreen.tsx - city :", city);
     return (
-        <View style={styles.container}>
-            <CityDescription
-                cityName={name}
-                description={CityDescriptionData}
-            />
-            <Image source={{ uri: image }} style={styles.cityImage} />
+        <LinearGradient
+        colors={['rgba(2, 0, 36, 1)', 'rgba(23, 52, 114, 1)', 'rgba(236, 93, 92, 1)']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.gradient}
+    >
+            <View style={styles.container}>
+                <CityDescription
+                    cityName={name}
+                    description={CityDescriptionData}
+                />
+                <Image source={{ uri: image }} style={styles.cityImage} />
 
-            <View style={styles.cityMapContainer}>
-                <MapView
-                    provider={PROVIDER_GOOGLE}
-                    style={styles.cityMap}
-                    region={mapRegion}
-                >
-                    <Marker
-                        coordinate={{
-                            latitude: 47.2009456,
-                            longitude: 0.6327305,
-                        }}
-                        title={name}
-                        // image={require("../assets/images/starred.png")}
-                    />
-                </MapView>
+                <View style={styles.cityMapContainer}>
+                    <MapView
+                        provider={PROVIDER_GOOGLE}
+                        style={styles.cityMap}
+                        region={mapRegion}
+                    >
+                        <Marker
+                            coordinate={{
+                                latitude: 47.2009456,
+                                longitude: 0.6327305,
+                            }}
+                            title={name}
+                            // image={require("../assets/images/starred.png")}
+                        />
+                    </MapView>
+                </View>
             </View>
-        </View>
+        </LinearGradient>
     );
 };
 
@@ -99,11 +123,11 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "flex-start",
         width: "100%",
-        backgroundColor: "black",
+        // backgroundColor: "white",
     },
     cityTitle: {
         fontSize: 25,
-        color: "#EC5D5B",
+        color: "red",
         textAlign: "center",
     },
 
@@ -117,6 +141,11 @@ const styles = StyleSheet.create({
     cityMap: {
         flex: 1, // Utilisez un flex de 1 pour que la carte prenne une part sur trois
         width: "100%",
+    },
+    gradient: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
     },
 });
 

@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import * as React from "react";
-import Svg, { G, Rect } from "react-native-svg";
+
 import {
   Button,
   StyleSheet,
@@ -215,18 +215,20 @@ const styles = StyleSheet.create({
     color: "#173472",
   },
   text: {
-    fontSize: 16,
+    fontSize: 12,
     fontWeight: "bold",
     color: "#173472",
   },
   Mdp: {
-    fontSize: 16,
+    fontSize: 12,
     fontWeight: "bold",
     color: "#173472",
-    marginRight: 60,
+    marginRight: 20,
+   
   },
   box: {
     flexDirection: "row",
+    padding: 20,
   },
   mainName: {
     color: "#F5DEB3",

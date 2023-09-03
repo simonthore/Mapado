@@ -27,7 +27,6 @@ const styles = StyleSheet.create({
         padding: 0,
         marginBottom: 10,
         borderRadius: 5,
-        backgroundColor: "black",
     },
     topLine: {
         height: 1,

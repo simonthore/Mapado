@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableHighlight, Dimensions, TextInput, StatusBar, ScrollView, RefreshControl, Pressable, Alert, Button, TouchableOpacity } from "react-native";
-import Svg, { G, Rect } from "react-native-svg";
+import { View, Text, StyleSheet, Image, TextInput, StatusBar, ScrollView, RefreshControl, Pressable, Alert, Button, TouchableOpacity } from "react-native";
 import { useState } from 'react';
 import { useCreateUserMutation } from '../gql/generated/schema';
 import * as ImagePicker from 'expo-image-picker';
@@ -180,7 +179,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 5,
-    fontSize: 16,
+    fontSize: 12,
+    textAlign: "center",
     backgroundColor: '#fff',
     color: '#333',
     shadowColor: '#000',
@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#173472', // Couleur du texte du bouton
-    fontSize: 16, // Taille de la police du texte
+    fontSize: 12, // Taille de la police du texte
     fontWeight: 'bold', // Poids de la police du texte
     textAlign: 'center', // Alignement du texte
   },

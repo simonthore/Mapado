@@ -1,9 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableHighlight, Dimensions, TextInput, StatusBar, ScrollView, RefreshControl, Pressable, Alert, Button, TouchableOpacity } from "react-native";
-import Svg, { G, Rect } from "react-native-svg";
 import { useState } from 'react';
-import { useCreateUserMutation } from '../gql/generated/schema';
-import * as ImagePicker from 'expo-image-picker';
 import { LinearGradient } from "expo-linear-gradient";
 
 

@@ -253,6 +253,10 @@ export type GetCityQuery = {
         latitude?: number | null;
         longitude?: number | null;
         poi?: Array<{
+            photo: string;
+            rating: number;
+            description: string;
+            category: any;
             __typename?: "Poi";
             id: number;
             name: string;

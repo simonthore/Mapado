@@ -46,7 +46,6 @@ export default function CitiesScreen({ navigation }) {
                     value={text}
                     placeholder={"Recherchez une ville"}
                 ></TextInput>
-                <Button title="Appuyez-moi" onPress={handleButtonPress} />
                 <FlatList
                     style={styles.list}
                     keyExtractor={(item) => item.id.toString()}
@@ -91,7 +90,6 @@ const styles = StyleSheet.create({
     },
     list: {
         width: "60%",
-        marginLeft: "20%",
     },
     image: {
         flex: 1,

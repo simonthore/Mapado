@@ -2,7 +2,6 @@ import client from "./gql/client";
 import { ApolloProvider } from "@apollo/client";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Ionicons from "@expo/vector-icons/Ionicons";
 import CitiesScreen from "./screens/CitiesScreen";
 import CityInfoScreen from "./screens/CityInfoScreen";
@@ -12,10 +11,10 @@ import UserRegister from "./screens/Register";
 import ForgotPassword from "./screens/ForgotPassword";
 import { Button, Image, Pressable, Text, View } from "react-native";
 import { useState } from "react";
-import { useQuery, gql } from "@apollo/client";
 import { useGetProfileQuery } from "./gql/generated/schema";
 import { useEffect } from "react";
-//
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -69,12 +68,13 @@ function Cities() {
             }}
         >
             <Stack.Screen name="Home" component={CitiesScreen} />
-            <Stack.Screen name="Info" component={CityInfoScreen}/>
+            <Stack.Screen name="Info" component={CityInfoScreen} />
             {/* <Stack.Screen name="Profile" component={UserProfile} /> */}
             <Stack.Screen name="Forgot" component={ForgotPassword} />
             <Stack.Screen name="Register" component={UserRegister} />
             <Stack.Screen name="Login" component={LoginScreen} />
         </Stack.Navigator>
+
     );
 }
 export default function App() {
@@ -121,8 +121,8 @@ export default function App() {
                         tabBarInactiveTintColor: "gray",
                         tabBarStyle: { height: 60, paddingBottom: 10 },
                         headerStyle: {
-                            backgroundColor: '#051944', // Couleur de fond du header pour tous les écrans empilés dans `Cities`
-                          },
+                            backgroundColor: '#051944',
+                        },
                     })}
                 >
                     {/* nom de la page reliée à chaque composant */}
@@ -132,9 +132,9 @@ export default function App() {
                         options={{ headerShown: false }}
                     />
                     <Tab.Screen name="login" component={LoginScreen}
-                     options={{
-                        headerTitleStyle:{color:'#ec5d5c'},
-                    }} />
+                        options={{
+                            headerTitleStyle: { color: '#ec5d5c' },
+                        }} />
                 </Tab.Navigator>
             </NavigationContainer>
         </ApolloProvider>
